@@ -6,6 +6,7 @@ body {
   max-width: 500px;
 }
 #root {
+  position: relative;
   margin: 0;
   box-sizing: border-box;
   max-width: 500px;
