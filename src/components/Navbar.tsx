@@ -10,9 +10,9 @@ const Navbar = () => {
         <Outlet />
       </div>
       <div className='sticky bottom-0 flex items-end text-2xl w-full h-[100px]'>
-        <div className='flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-4'>
+        <div className='flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
           <Link to='#'>
-            <GoBell size={50} className='text-slate-500' />
+            <GoBell size={40} className='text-slate-500' />
           </Link>
           <div className='absolute top-[-20px] bg-hanaGreen rounded-full w-32 h-32 flex justify-center items-center '>
             <Link to='#'>
@@ -20,7 +20,7 @@ const Navbar = () => {
             </Link>
           </div>
           <Link to='#'>
-            <GoPerson size={50} className='text-slate-500' />
+            <GoPerson size={40} className='text-slate-500' />
           </Link>
         </div>
       </div>

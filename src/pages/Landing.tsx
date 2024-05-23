@@ -6,7 +6,10 @@ import { Home } from './main/Home';
 export const Landing = () => {
   return (
     <>
-      <AlertModal children={<Home />} onClose={() => alert('ㅎㅇ')} />
+      <AlertModal
+        children={<div>1단계 미션 완료</div>}
+        onClose={() => alert('ㅎㅇ')}
+      />
       <div>gd</div>
     </>
   );
