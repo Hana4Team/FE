@@ -57,12 +57,14 @@ body {
   font-size: 10px;
   max-width: 500px;
   background-color: #e4e4e4;
+  min-height: 100vh;
 }
 #root {
   margin: 0;
   box-sizing: border-box;
   max-width: 500px;
   background-color: #f2f2f2;
+  min-height: 100vh;
 }
 li {
   list-style: none;
