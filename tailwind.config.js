@@ -17,6 +17,12 @@ export default {
         hanaGray: '#F2F2F2',
         white: '#FFFFFF',
       },
+      dropShadow: {
+        '3xl': ['1px 0px 3px rgba(0, 0, 0, 0.2)'],
+      },
+    },
+    minHeight: {
+      'real-screen': 'calc(100vh - 100px)',
     },
   },
   plugins: [],

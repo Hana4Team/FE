@@ -1,9 +1,9 @@
 import React from 'react';
-
+import Topbar from '../../components/molecules/Topbar';
 export const Home = () => {
   return (
     <>
-      <div>Home</div>
+      <Topbar title='적금가입' />
     </>
   );
 };
