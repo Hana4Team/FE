@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Landing } from './pages/Landing.tsx';
 import { Home } from './pages/main/Home.tsx';
+import Navbar from './components/Navbar.tsx';
 
 const router = createBrowserRouter([
   {
@@ -12,13 +13,13 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Landing /> },
-      { path: 'home', element: <Home /> },
+      { element: <Navbar />, children: [{ path: 'home', element: <Home /> }] },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
