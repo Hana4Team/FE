@@ -6,7 +6,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Landing } from './pages/Landing.tsx';
 import { Home } from './pages/main/Home.tsx';
 import Navbar from './components/Navbar.tsx';
-import { AlarmPage } from './pages/alarm/AlarmPage.tsx';
+import { MyPage } from './pages/main/MyPage.tsx';
+import { AlarmPage } from './pages/main/AlarmPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'home', element: <Home /> },
           { path: 'alarm', element: <AlarmPage /> },
+          { path: 'my', element: <MyPage /> },
         ],
       },
     ],
