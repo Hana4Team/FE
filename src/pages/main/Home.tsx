@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/organisms/AlertModal';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export const Home = () => {
         <div className='w-full flex items-center pt-24 px-10'>
           <img
             src={isExistToken ? 'icons/moneybox_icon.svg' : 'icons/person.svg'}
-            className='w-16 h-16 object-contain'
+            className='w-16 h-16'
           />
           <p
             className='flex items-center text-3xl font-hanaMedium ml-5 cursor-pointer'
@@ -52,7 +52,7 @@ export const Home = () => {
         <div className='w-full flex flex-col px-10 py-16 gap-5'>
           <div className='w-full flex justify-center gap-5'>
             <div
-              className='bg-[#5CB6B7] flex flex-col justify-between w-3/5 pl-8 pr-3 pt-10 pb-2 border border-none rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+              className='bg-[#5CB6B7] flex flex-col justify-between w-3/5 pl-8 pr-3 pt-10 pb-2 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
               onClick={() => navigatePageHandler('/')}
             >
               <div className='flex flex-col'>
@@ -73,7 +73,7 @@ export const Home = () => {
               </div>
             </div>
             <div
-              className='bg-[#F2777E] flex flex-col justify-between w-2/5 pl-8 pr-3 pt-7 pb-2 border border-none rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+              className='bg-[#F2777E] flex flex-col justify-between w-2/5 pl-8 pr-3 pt-7 pb-2 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
               onClick={() => navigatePageHandler('/')}
             >
               <div className='flex flex-col'>
@@ -98,7 +98,7 @@ export const Home = () => {
             </div>
           </div>
           <div
-            className='bg-[#437C6E] flex justify-between items-center w-full px-8 py-10 border border-none rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+            className='bg-[#437C6E] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
             onClick={() => navigatePageHandler('/')}
           >
             <div className='flex flex-col'>
@@ -118,7 +118,7 @@ export const Home = () => {
             </div>
           </div>
           <div
-            className='bg-[#9ED2B6] flex justify-between items-center w-full px-8 py-10 border border-none rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+            className='bg-[#9ED2B6] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
             onClick={() => navigatePageHandler('/')}
           >
             <div className='flex flex-col'>
