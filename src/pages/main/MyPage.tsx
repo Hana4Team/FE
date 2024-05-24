@@ -1,6 +1,29 @@
 import { FaChevronRight } from 'react-icons/fa';
 import { AccountSummaryItem } from '../../components/molecules/AccountSummaryItem';
-import { removeCookie, setCookie } from '../../utils/cookie';
+import { removeCookie } from '../../utils/cookie';
+
+type itemType = {
+  title: string;
+  money: number;
+};
+const items = [
+  {
+    title: '하나머니',
+    money: 100000000,
+  },
+  {
+    title: '머니박스',
+    money: 100000000,
+  },
+  {
+    title: '100일 적금',
+    money: 100000000,
+  },
+  {
+    title: '청년 도약 계좌',
+    money: 100000000,
+  },
+];
 
 export const MyPage = () => {
   return (
@@ -23,26 +46,19 @@ export const MyPage = () => {
         </div>
       </div>
       <div className='flex flex-col items-center gap-7'>
-        <AccountSummaryItem
-          title='하나머니'
-          totalMoney={100000000}
-          icons='icons/piggybank.svg'
-        />
-        <AccountSummaryItem
-          title='머니박스'
-          totalMoney={100000000}
-          icons='icons/moneybox_icon.svg'
-        />
-        <AccountSummaryItem
-          title='100일 적금'
-          totalMoney={100000000}
-          icons='icons/bankbook.svg'
-        />
-        <AccountSummaryItem
-          title='청년 도약 계좌'
-          totalMoney={100000000}
-          icons='icons/bankbook.svg'
-        />
+        {items.map((item) => (
+          <AccountSummaryItem
+            title={item.title}
+            totalMoney={item.money}
+            icons={
+              item.title == '하나머니'
+                ? 'icons/piggybank.svg'
+                : item.title == '머니박스'
+                  ? 'icons/moneybox_icon.svg'
+                  : 'icons/bankbook.svg'
+            }
+          />
+        ))}
       </div>
     </>
   );
