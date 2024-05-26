@@ -20,6 +20,19 @@ export default {
       dropShadow: {
         '3xl': ['1px 0px 3px rgba(0, 0, 0, 0.2)'],
       },
+      keyframes: {
+        'fade-in': {
+          '0%': {
+            opacity: 0,
+          },
+          '100%': {
+            opacity: 1,
+          },
+        },
+      },
+      animation: {
+        fadein: 'fade-in 1s ease-in-out 0.25s 1',
+      },
     },
     minHeight: {
       'real-screen': 'calc(100vh - 100px)',
