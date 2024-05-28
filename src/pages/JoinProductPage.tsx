@@ -6,10 +6,12 @@ type productData = {
   name: string;
   type: string;
   title: string;
-  summary1: string;
-  summary2: string;
+  summary: string;
+  interest1: number;
+  interest2: number;
   period: string;
-  payment: string;
+  payment1: number; // 1천원 단위
+  payment2: number;
   desc1: string;
   desc_detail1: string;
   desc_image1: string;
@@ -23,10 +25,12 @@ const data: productData = {
   name: '100일 적금',
   type: '적금',
   title: '100일 동안 꾸준히 모으기',
-  summary1: '연(세전, 1개월)',
-  summary2: '기본 2.00%~최고 6.00%',
+  summary: '연(세전, 1개월)',
+  interest1: 2.0,
+  interest2: 6.0,
   period: '1년,2년,3년',
-  payment: '분기별 1만원~300만원',
+  payment1: 1,
+  payment2: 300,
   desc1: '최고 연 6.00%',
   desc_detail1: '50일 이상 저축 + 머니박스의 저축 금액 초기 납입 + 만기 해지시',
   desc_image1: 'images/logo.png',
@@ -46,22 +50,30 @@ export const JoinProductPage = () => {
           <h1 className='font-hanaBold text-5xl'>{data.title}</h1>
         </div>
         <div className='flex flex-col justify-center gap-3'>
-          <p className='font-hanaRegular text-2xl'>{data.summary1}</p>
-          <p className='font-hanaBold text-4xl'>
-            {data.summary2.split('~')[0]}~
-            <span className='text-5xl'>{data.summary2.split('~')[1]}</span>
+          <p className='font-hanaRegular text-2xl'>{data.summary}</p>
+          <p className='font-hanaBold text-[2rem]'>
+            {data.type === '머니박스' ? '파킹 ' : '기본 '}
+            {data.interest1.toFixed(2)}%~
+            <span className='text-5xl'>
+              {data.type === '머니박스' ? '저축 ' : '최고 '}
+              {data.interest2.toFixed(2)}%
+            </span>
           </p>
           <div className='flex items-center gap-7'>
-            <p className='font-hanaRegular text-lg leading-loose'>
+            <p className='font-hanaRegular text-lg leading-[3rem]'>
               가입기간
               <br />
               <span className='font-hanaMedium text-xl'>{data.period}</span>
             </p>
             <div className='border-[0.01px] h-16 border-[#68C5BC]'></div>
-            <p className='font-hanaRegular text-lg leading-loose'>
+            <p className='font-hanaRegular text-lg leading-[3rem]'>
               가입금액
               <br />
-              <span className='font-hanaMedium text-xl'>{data.payment}</span>
+              <span className='font-hanaMedium text-xl'>
+                분기별 {data.payment1}
+                {data.payment1 < 10 ? '천원' : '만원'}~{data.payment2}
+                {data.payment2 < 10 ? '천원' : '만원'}
+              </span>
             </p>
           </div>
         </div>
