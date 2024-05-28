@@ -24,6 +24,7 @@ export default {
     },
     minHeight: {
       'real-screen': 'calc(100vh - 100px)',
+      'real-screen2': 'calc(100vh - 82.5px)',
     },
   },
   plugins: [],

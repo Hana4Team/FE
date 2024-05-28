@@ -3,28 +3,58 @@ import { MoneyBoxItem } from '../../components/molecules/MoneyBoxItem';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { useState } from 'react';
 import { MoneyBoxMoveItem } from '../../components/molecules/MoneyBoxMoveItem';
+import { useNavigate } from 'react-router-dom';
 
 export const MoneyBox = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  // state로 클릭한것 저장해야함
+  const [clickedName, setClickedName] = useState<string>();
 
   const showModalHandler = () => setShowModal(!showModal);
+
+  const clickMove = (name: string) => {
+    setClickedName(name);
+    setShowModal(!showModal);
+  };
+
+  const moveHandler = (receiveName: string, sendAccountNumber?: string) => {
+    const sendAccount = sendAccountNumber ? sendAccountNumber : '';
+    navigate('/sending', {
+      state: {
+        sendName: clickedName,
+        receiveName: receiveName,
+        sendAccount: sendAccount,
+        receiveAccount: '111-111-111111',
+      },
+    });
+  };
+
+  const navigate = useNavigate();
 
   return (
     <>
       {showModal && (
-        // title 변경 필요
-        <ChoiceMenu title='소비에서' onClose={() => showModalHandler()}>
+        <ChoiceMenu
+          title={`${clickedName}에서`}
+          onClose={() => showModalHandler()}
+        >
           <div className='flex flex-row justify-center gap-5'>
             <MoneyBoxMoveItem
-              color='9CDAB8'
-              text='저축'
-              imageSrc='icons/piggybank2.svg'
+              color={clickedName == '파킹' ? 'FFB2B7' : '9BDEDF'}
+              text={clickedName == '파킹' ? '소비' : '파킹'}
+              imageSrc={
+                clickedName == '파킹' ? 'icons/wallet.svg' : 'icons/safebox.svg'
+              }
+              onClick={() => {
+                clickedName == '파킹'
+                  ? moveHandler('소비', '111-111-111111')
+                  : moveHandler('파킹', '111-111-111111');
+              }}
             />
             <MoneyBoxMoveItem
               color='9CDAB8'
               text='저축'
               imageSrc='icons/piggybank2.svg'
+              onClick={() => moveHandler('저축', '111-111-111111')}
             />
           </div>
         </ChoiceMenu>
@@ -34,7 +64,10 @@ export const MoneyBox = () => {
       <div className='flex flex-col bg-white p-8 font-hanaMedium mb-4'>
         <div className='flex justify-between'>
           <p className='text-2xl'>출금계좌번호</p>
-          <div className='flex flex-col w-24 h-12 text-center justify-center align-middle bg-hanaGreen text-white rounded-[10rem]'>
+          <div
+            className='flex flex-col w-24 h-12 text-center justify-center align-middle bg-hanaGreen text-white rounded-[10rem] cursor-pointer'
+            onClick={() => moveHandler('파킹')}
+          >
             이체
           </div>
         </div>
@@ -56,14 +89,14 @@ export const MoneyBox = () => {
           balance={5000}
           color1='9BDEDF'
           color2='5CB6B7'
-          onClick={() => showModalHandler()}
+          onClick={() => clickMove('파킹')}
         />
         <MoneyBoxItem
           title='소비'
           balance={5000}
           color1='FFB2B7'
           color2='F2777E'
-          onClick={() => showModalHandler()}
+          onClick={() => clickMove('소비')}
         />
         <MoneyBoxItem
           title='저축'
