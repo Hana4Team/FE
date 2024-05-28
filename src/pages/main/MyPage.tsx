@@ -32,7 +32,7 @@ export const MyPage = () => {
         <img
           src='images/별돌이1.png'
           alt='profile'
-          className='w-32 drop-shadow-xl'
+          className='w-32 drop-shadow-under'
         />
         <div className='flex flex-col gap-2 ml-5'>
           <h1 className='font-hanaBold text-[2.7rem]'>별길돌</h1>

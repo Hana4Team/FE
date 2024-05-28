@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { PasswordForm } from '../../components/molecules/PasswordForm';
-import { ConfirmCard } from '../../components/organisms/ConfirmCard';
-import Topbar from '../../components/molecules/Topbar';
+import { ConfirmCard } from '../../components/molecules/ConfirmCard';
+import Topbar from '../../components/Topbar';
 import { CertiNumber } from '../../components/molecules/CertiNumber';
 
 interface inputsProps {
@@ -34,6 +34,7 @@ export const Join = () => {
   const [isPhone, setIsPhone] = useState<boolean>(true);
   const [isPwdCorrect, setIsPwdCorrect] = useState<boolean>(true);
   const [re, setRe] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   const phoneReg = /^[0-9]{10,11}$/;
 
@@ -58,17 +59,21 @@ export const Join = () => {
     if (step === 1 && isName) {
       setInputs({ ...inputs, name: nameRef.current!.value });
       setStep((prev) => prev + 1);
+      //setIsActive(false);
     }
     if (step === 2 && isBirth) {
       setInputs({ ...inputs, birth: birthRef.current!.value });
       setStep((prev) => prev + 1);
+      //setIsActive(false);
     }
     if (step === 3 && isPhone) {
       setInputs({ ...inputs, phoneNumber: phoneRef.current!.value });
       setStep((prev) => prev + 1);
+      //setIsActive(false);
     }
     if (step === 4) {
       setStep((prev) => prev + 1);
+      //setIsActive(false);
     }
     if (step === 5) {
       if (pwdRef.current.map((p) => p?.value).join('').length === 6) {
@@ -77,6 +82,7 @@ export const Join = () => {
           pwd: pwdRef.current.map((p) => p?.value).join(''),
         });
         setStep((prev) => prev + 1);
+        //setIsActive(false);
       }
     }
     if (step === 6) {
@@ -98,7 +104,10 @@ export const Join = () => {
               placeholder='이름'
               type='text'
               ref={nameRef}
-              onBlur={() => setIsName(!!nameRef.current?.value.length)}
+              onBlur={() => {
+                setIsName(!!nameRef.current?.value.length);
+                setIsActive(true);
+              }}
             />
             {!isName && (
               <div className='font-hanaMedium mt-2 text-gray-400'>
@@ -115,7 +124,10 @@ export const Join = () => {
               type='date'
               placeholder='생년월일'
               className='w-full font-hanaMedium text-2xl border-b-[1px] border-black mt-12 p-2'
-              onBlur={() => setIsBirth(birthRef.current?.value !== '')}
+              onBlur={() => {
+                setIsBirth(birthRef.current?.value !== '');
+                setIsActive(true);
+              }}
               ref={birthRef}
             />
             {!isBirth && (
@@ -171,10 +183,10 @@ export const Join = () => {
             re={re}
           />
         ) : (
-          <ConfirmCard text='회원가입 완료' url='/login' />
+          <ConfirmCard text='회원가입 완료' />
         )}
 
-        <Button text='다음' onClick={() => nextStep()} />
+        <Button text='다음' onClick={() => nextStep()} isActive={isActive} />
       </div>
     </div>
   );

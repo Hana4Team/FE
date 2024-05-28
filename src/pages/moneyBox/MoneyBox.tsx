@@ -1,4 +1,4 @@
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 import { MoneyBoxItem } from '../../components/molecules/MoneyBoxItem';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { useState } from 'react';

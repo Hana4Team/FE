@@ -1,7 +1,7 @@
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 import { BsArrowRightCircleFill } from 'react-icons/bs';
 
 export const Mission2StartPage = () => {

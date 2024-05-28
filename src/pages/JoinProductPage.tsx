@@ -1,4 +1,4 @@
-import Topbar from '../components/molecules/Topbar';
+import Topbar from '../components/Topbar';
 import { Button } from '../components/ui/Button';
 
 type productData = {

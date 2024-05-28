@@ -1,5 +1,5 @@
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 import { RecommendProductList } from '../../components/organisms/RecommendProductList';
 import { test } from '../mission4/Mission4StartPage';
 

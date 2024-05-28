@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { PasswordForm } from '../../components/molecules/PasswordForm';
 import { Button } from '../../components/ui/Button';
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {

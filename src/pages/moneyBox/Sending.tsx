@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { SelectAccount } from '../../components/molecules/SelectAccount';
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { AccountDetailItem } from '../../components/molecules/AccountDetailItem';
 

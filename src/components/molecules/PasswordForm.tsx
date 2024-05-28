@@ -55,18 +55,18 @@ export const PasswordForm: FC<IProps> = ({
     <div className='w-full flex flex-col items-center'>
       <div className='font-hanaBold text-4xl text-center'>{title}</div>
       {!isCorrect && (
-        <div className='font-hanaMedium mt-12 text-lg text-gray-500'>
+        <div className='font-hanaMedium mt-6 text-xl text-gray-500'>
           간편비밀번호를 다시 입력하세요
         </div>
       )}
-      <div className='my-12 flex'>
+      <div className='my-16 flex'>
         {Array.from({ length: 6 }).map((_, index) => (
           <input
             key={index}
             placeholder='●'
             type='password'
             maxLength={1}
-            className='text-4xl w-12 text-center mx-1'
+            className='text-4xl w-12 text-center mx-1 caret-transparent'
             ref={(el) => (inputRef.current[index] = el)}
             onChange={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}

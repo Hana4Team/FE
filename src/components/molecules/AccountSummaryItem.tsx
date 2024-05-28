@@ -15,13 +15,14 @@ export const AccountSummaryItem: FC<IProps> = ({
   const navigate = useNavigate();
 
   const movePageHandler = () => {
-    if (title === '머니박스') navigate('/');
-    else navigate('/');
+    if (title === '머니박스') navigate('/moneyBox');
+    else if (title === '하나머니') return;
+    else navigate('#');
   };
 
   return (
     <div
-      className={`w-11/12 h-36 ${title === '하나머니' ? 'bg-[#28B2A5]' : 'bg-[#9CDAB8]'} flex justify-between items-center p-8 rounded-[2rem] cursor-pointer`}
+      className={`w-11/12 h-36 ${title === '하나머니' ? 'bg-[#28B2A5]' : 'bg-[#9CDAB8] cursor-pointer'} flex justify-between items-center p-8 rounded-[2rem]`}
       onClick={movePageHandler}
     >
       <div className='text-white flex flex-col justify-center gap-3'>

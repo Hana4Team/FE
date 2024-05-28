@@ -1,7 +1,7 @@
 import { IoIosArrowForward } from 'react-icons/io';
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
-import Topbar from '../../components/molecules/Topbar';
+import Topbar from '../../components/Topbar';
 
 export const Mission3StartPage = () => {
   return (

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { AlertModal } from '../../components/organisms/AlertModal';
+import { AlertModal } from '../../components/AlertModal';
 import { getCookie } from '../../utils/cookie';
 
 export const Home = () => {
@@ -14,11 +14,11 @@ export const Home = () => {
 
   const navigatePageHandler = (url: string) => {
     if (isExistToken) navigate(`${url}`);
-    else navigate('/');
+    else navigate('/login');
   };
 
   const navigateMoneyBoxHandler = () => {
-    if (!isExistMoneyBox) navigate('/');
+    if (!isExistMoneyBox) navigate('/moneyBox');
     else setShowModal(true);
   };
 
@@ -42,7 +42,7 @@ export const Home = () => {
           <p
             className='flex items-center text-3xl font-hanaMedium ml-5 cursor-pointer'
             onClick={() =>
-              isExistToken ? navigateMoneyBoxHandler() : navigate('/')
+              isExistToken ? navigateMoneyBoxHandler() : navigate('/login')
             }
           >
             {isExistToken ? 'My 머니박스' : '로그인'}
@@ -52,14 +52,14 @@ export const Home = () => {
         <div className='w-full flex flex-col px-10 py-16 gap-5'>
           <div className='w-full flex justify-center gap-5'>
             <div
-              className='bg-[#5CB6B7] flex flex-col justify-between w-3/5 pl-8 pr-3 pt-10 pb-2 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+              className='bg-[#5CB6B7] flex flex-col justify-between w-3/5 pl-8 pr-3 pt-10 pb-2 rounded-[2.5rem] drop-shadow-under cursor-pointer'
               onClick={() => navigatePageHandler('/')}
             >
               <div className='flex flex-col'>
                 <h1 className='font-hanaMedium text-5xl text-white mb-5'>
                   이사미션
                 </h1>
-                <p className='font-hanaMedium text-lg text-white'>
+                <p className='font-hanaRegular text-xl text-white'>
                   재테크 미션을 클리어하고
                   <br />내 집을 마련해봐요
                 </p>
@@ -73,7 +73,7 @@ export const Home = () => {
               </div>
             </div>
             <div
-              className='bg-[#F2777E] flex flex-col justify-between w-2/5 pl-8 pr-3 pt-7 pb-2 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+              className='bg-[#F2777E] flex flex-col justify-between w-2/5 pl-8 pr-3 pt-7 pb-2 rounded-[2.5rem] drop-shadow-under cursor-pointer'
               onClick={() => navigatePageHandler('/')}
             >
               <div className='flex flex-col'>
@@ -82,7 +82,7 @@ export const Home = () => {
                   <br />
                   미션
                 </h1>
-                <p className='font-hanaMedium text-lg text-white mb-16'>
+                <p className='font-hanaRegular text-xl text-white mb-16'>
                   1건의 미션이
                   <br />
                   기다리고있어요
@@ -98,14 +98,14 @@ export const Home = () => {
             </div>
           </div>
           <div
-            className='bg-[#437C6E] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+            className='bg-[#437C6E] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-under cursor-pointer'
             onClick={() => navigatePageHandler('/')}
           >
             <div className='flex flex-col'>
               <h1 className='font-hanaMedium text-5xl text-white mb-3'>
                 이번달 소비
               </h1>
-              <p className='font-hanaMedium text-lg text-white'>
+              <p className='font-hanaRegular text-xl text-white'>
                 나의 소비패턴을 확인해봐요
               </p>
             </div>
@@ -118,14 +118,14 @@ export const Home = () => {
             </div>
           </div>
           <div
-            className='bg-[#9ED2B6] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-2xl cursor-pointer'
+            className='bg-[#9ED2B6] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-under cursor-pointer'
             onClick={() => navigatePageHandler('/')}
           >
             <div className='flex flex-col'>
               <h1 className='font-hanaMedium text-5xl text-white mb-3'>
                 우리집 가기
               </h1>
-              <p className='font-hanaMedium text-lg text-white'>
+              <p className='font-hanaRegular text-xl text-white'>
                 우리집으로 가자~
               </p>
             </div>

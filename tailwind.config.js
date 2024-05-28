@@ -20,6 +20,7 @@ export default {
       },
       dropShadow: {
         '3xl': ['1px 0px 3px rgba(0, 0, 0, 0.2)'],
+        under: ['4px 3px 3px rgba(0, 0, 0, 0.2)'],
       },
       keyframes: {
         'fade-in': {
