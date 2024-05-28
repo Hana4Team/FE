@@ -15,6 +15,7 @@ export default {
         hanaGreen: '#28B2A5',
         hanaRed: '#E90061',
         hanaGray: '#F2F2F2',
+        hanaLightGreen: '#9CDAB8',
         white: '#FFFFFF',
       },
       dropShadow: {
@@ -23,6 +24,7 @@ export default {
     },
     minHeight: {
       'real-screen': 'calc(100vh - 100px)',
+      'real-screen2': 'calc(100vh - 82.5px)',
     },
   },
   plugins: [],
