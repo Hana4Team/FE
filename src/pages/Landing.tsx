@@ -1,9 +1,17 @@
 import React from 'react';
-import { ConfirmCard } from '../components/organisms/ConfirmCard';
-import { AlertModal } from '../components/organisms/AlertModal';
-import { Home } from './main/Home';
-import { SelectAccount } from '../components/molecules/SelectAccount';
 
 export const Landing = () => {
-  return <></>;
+  return (
+    <div className='bg-white h-screen flex flex-col justify-center items-center'>
+      <img src='/images/logo.png' className='w-48' />
+      <div className='font-hanaBold text-5xl mb-2 text-hanaRed'>
+        똑똑<span className='text-hanaGreen'>하나</span>
+      </div>
+      <div className='font-hanaLight text-2xl text-hanaGreen'>
+        <span className='text-hanaRed font-hanaMedium'>재</span>테크{' '}
+        <span className='text-hanaRed font-hanaMedium'>습</span>관{' '}
+        <span className='text-hanaRed font-hanaMedium'>기</span>르기
+      </div>
+    </div>
+  );
 };

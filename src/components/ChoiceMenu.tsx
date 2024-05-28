@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 
 interface IProps {

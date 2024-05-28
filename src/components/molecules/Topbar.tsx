@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { GoChevronLeft } from 'react-icons/go';
 
-interface Irops {
+interface IProps {
   title: string;
 }
-const Topbar: FC<Irops> = ({ title }) => {
+const Topbar: FC<IProps> = ({ title }) => {
   return (
     <div className='sticky top-0 left-0 w-full flex justify-center items-center bg-white pt-20 pb-4'>
       <div className='absolute left-2'>
