@@ -3,14 +3,21 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Navbar from './components/Navbar.tsx';
 import { Landing } from './pages/Landing.tsx';
 import { Home } from './pages/main/Home.tsx';
+import { Join } from './pages/auth/Join.tsx';
+import { Login } from './pages/auth/Login.tsx';
 import Navbar from './components/Navbar.tsx';
 import { Mission2StartPage } from './pages/mission2/Mission2StartPage.tsx';
 import { Mission3StartPage } from './pages/mission3/Mission3StartPage.tsx';
 import { Mission4StartPage } from './pages/mission4/Mission4StartPage.tsx';
 import { Mission5StartPage } from './pages/mission5/Mission5StartPage.tsx';
 import { JoinProductPage } from './pages/JoinProductPage.tsx';
+import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
+import { Sending } from './pages/moneyBox/Sending.tsx';
+import { MyPage } from './pages/main/MyPage.tsx';
+import { AlarmPage } from './pages/main/AlarmPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +25,9 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Landing /> },
+      { path: 'sending', element: <Sending /> },
+      { path: 'join', element: <Join /> },
+      { path: 'login', element: <Login /> },
       {
         element: <Navbar />,
         children: [
@@ -27,6 +37,9 @@ const router = createBrowserRouter([
           { path: 'mission4', element: <Mission4StartPage /> },
           { path: 'mission5', element: <Mission5StartPage /> },
           { path: 'joinProduct', element: <JoinProductPage /> },
+          { path: 'moneyBox', element: <MoneyBox /> },
+          { path: 'alarm', element: <AlarmPage /> },
+          { path: 'mypage', element: <MyPage /> },
         ],
       },
     ],

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { GoChevronLeft } from 'react-icons/go';
 
-interface Irops {
+interface IProps {
   title: string;
   isModal?: boolean;
 }
