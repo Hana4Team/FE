@@ -1,16 +1,17 @@
 import React from 'react';
-import { ConfirmCard } from '../components/organisms/ConfirmCard';
-import { AlertModal } from '../components/organisms/AlertModal';
-import { Home } from './main/Home';
 
 export const Landing = () => {
   return (
-    <>
-      <AlertModal
-        children={<div>1단계 미션 완료</div>}
-        onClose={() => alert('ㅎㅇ')}
-      />
-      <div>gd</div>
-    </>
+    <div className='bg-white h-screen flex flex-col justify-center items-center'>
+      <img src='/images/logo.png' className='w-48' />
+      <div className='font-hanaBold text-5xl mb-2 text-hanaRed'>
+        똑똑<span className='text-hanaGreen'>하나</span>
+      </div>
+      <div className='font-hanaLight text-2xl text-hanaGreen'>
+        <span className='text-hanaRed font-hanaMedium'>재</span>테크{' '}
+        <span className='text-hanaRed font-hanaMedium'>습</span>관{' '}
+        <span className='text-hanaRed font-hanaMedium'>기</span>르기
+      </div>
+    </div>
   );
 };

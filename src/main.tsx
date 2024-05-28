@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Navbar from './components/Navbar.tsx';
 import { Landing } from './pages/Landing.tsx';
 import { Home } from './pages/main/Home.tsx';
-import Navbar from './components/Navbar.tsx';
+import { Join } from './pages/auth/Join.tsx';
+import { Login } from './pages/auth/Login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -13,6 +15,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Landing /> },
+      { path: 'join', element: <Join /> },
+      { path: 'login', element: <Login /> },
       { element: <Navbar />, children: [{ path: 'home', element: <Home /> }] },
     ],
   },
