@@ -17,6 +17,7 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { Mission2AccountOpening } from './pages/mission2/Mission2AccountOpening.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       { path: 'sending', element: <Sending /> },
       { path: 'join', element: <Join /> },
       { path: 'login', element: <Login /> },
+      {
+        path: 'mission2/account-opening',
+        element: <Mission2AccountOpening />,
+      },
       {
         element: <Navbar />,
         children: [
