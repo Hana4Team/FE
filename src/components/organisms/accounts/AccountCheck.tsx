@@ -5,8 +5,7 @@ interface IProps {
   period: string;
   interest: number;
   automatic_payment_date?: number;
-  automatic_payment_?: string;
-  outdrawAccountName: string;
+  automatic_payment_money?: string;
   outdrawAccountNumber: string;
 }
 
@@ -14,38 +13,40 @@ export const AccountCheck: FC<IProps> = ({
   money,
   period,
   interest,
-  outdrawAccountName,
+  automatic_payment_date,
+  automatic_payment_money,
   outdrawAccountNumber,
 }) => {
   return (
-    <div className='flex flex-col p-10'>
-      <h1 className='text-4xl font-hanaMedium mb-7'>이대로 가입하시겠어요?</h1>
-      <div>
-        <div>
-          <span>가입금액</span>
-          <span>{money}</span>
-        </div>
-        <div>
-          <span>가입기간</span>
-          <span>{period}</span>
-        </div>
-        <div>
-          <span>현재적용금리</span>
-          <span>{interest}</span>
-        </div>
-        {/* {automatic_payment && (
+    <div className='flex flex-col gap-10'>
+      <div className='flex justify-between font-hanaRegular text-2xl'>
+        가입금액
+        <span className='font-hanaLight'>
+          {money.toLocaleString('ko-KR')} 원
+        </span>
+      </div>
+      <div className='flex justify-between font-hanaRegular text-2xl'>
+        가입기간
+        <span className='font-hanaLight'>{period} 일</span>
+      </div>
+      <div className='flex justify-between font-hanaRegular text-2xl'>
+        현재적용금리
+        <span className='font-hanaBold text-hanaGreen'>
+          {interest.toFixed(2)} %
+        </span>
+      </div>
+      {/* {automatic_payment && (
           <div>
             <span>자동이체</span>
             <span>{automatic_payment}</span>
           </div>
         )} */}
-        <div>
-          <span>출금계좌</span>
-          <p>
-            <span>{outdrawAccountName}</span>
-            <span>{outdrawAccountNumber}</span>
-          </p>
-        </div>
+      <div className='flex justify-between font-hanaRegular text-2xl'>
+        출금계좌
+        <p className='font-hanaLight flex flex-col text-right gap-2'>
+          <span>하나은행</span>
+          <span>{outdrawAccountNumber}</span>
+        </p>
       </div>
     </div>
   );

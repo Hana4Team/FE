@@ -7,6 +7,7 @@ interface IProps {
   content1: string;
   content2: string;
   content3: string;
+  onClick: () => void;
 }
 
 export const BankBookIntro: FC<IProps> = ({
@@ -15,6 +16,7 @@ export const BankBookIntro: FC<IProps> = ({
   content1,
   content2,
   content3,
+  onClick,
 }) => {
   return (
     <div className='w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center'>
@@ -25,6 +27,7 @@ export const BankBookIntro: FC<IProps> = ({
           <BsArrowRightCircleFill
             color={'#D9D9D9'}
             size={24}
+            onClick={onClick}
             className='mb-16 mt-1 cursor-pointer'
           />
           <div className='font-hanaRegular text-2xl  whitespace-pre-line'>
@@ -33,7 +36,7 @@ export const BankBookIntro: FC<IProps> = ({
             <p className='text-[#666666] text-xl'>{content3}</p>
           </div>
         </div>
-        <img src='public/images/별돌이2.svg' alt='별돌이' className='h-64' />
+        <img src='/public/images/별돌이2.svg' alt='별돌이' className='h-64' />
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
-import Topbar from '../components/Topbar';
-import { Button } from '../components/ui/Button';
+import { FC } from 'react';
 
-type productData = {
+export type productData = {
   id: number;
   name: string;
   type: string;
@@ -20,30 +19,13 @@ type productData = {
   desc_image2: string;
 };
 
-const data: productData = {
-  id: 1,
-  name: '100일 적금',
-  type: '적금',
-  title: '100일 동안 꾸준히 모으기',
-  summary: '연(세전, 1개월)',
-  interest1: 2.0,
-  interest2: 6.0,
-  period: '1년,2년,3년',
-  payment1: 1,
-  payment2: 300,
-  desc1: '최고 연 6.00%',
-  desc_detail1: '50일 이상 저축 + 머니박스의 저축 금액 초기 납입 + 만기 해지시',
-  desc_image1: 'images/logo.png',
-  desc2: '알아서 예금 가입',
-  desc_detail2:
-    '재예치 시 하나의 정기예금 1년 만기\n적용 금리를 적용해 드려요.',
-  desc_image2: 'images/logo.png',
-};
+interface IProps {
+  data: productData;
+}
 
-export const JoinProductPage = () => {
+export const ProductJoinIntro: FC<IProps> = ({ data }) => {
   return (
     <>
-      <Topbar title={`${data.type}가입`} />
       <div className='bg-hanaGreen text-white py-14 px-7 flex flex-col justify-between'>
         <div className='flex flex-col justify-center gap-4 mb-28'>
           <p className='font-hanaRegular text-3xl'>{data.name}</p>
@@ -82,24 +64,22 @@ export const JoinProductPage = () => {
         <div className='w-11/12 bg-white py-10 px-10 rounded-3xl m-auto mt-10'>
           <h1 className='font-hanaBold text-5xl mb-5'>{data.desc1}</h1>
           {data.desc_detail1.split('+').map((content, index) => (
-            <p className='font-hanaRegular text-2xl leading-normal'>
+            <p key={index} className='font-hanaRegular text-2xl leading-normal'>
               {index > 0 ? (
                 <>
                   <span className='text-hanaRed font-hanaBold'>+</span>
                   {content}
                 </>
               ) : (
-                content
-                  .split(' ')
-                  .map((word, index) =>
-                    index == 0 ? (
-                      <span className='text-hanaRed font-hanaMedium'>
-                        {word}
-                      </span>
-                    ) : (
-                      <span>{word}</span>
-                    )
+                content.split(' ').map((word, index) =>
+                  index == 0 ? (
+                    <span key={index} className='text-hanaRed font-hanaMedium'>
+                      {word}
+                    </span>
+                  ) : (
+                    <span key={index}>{word}</span>
                   )
+                )
               )}
             </p>
           ))}
@@ -120,7 +100,6 @@ export const JoinProductPage = () => {
             className='w-56 m-auto'
           />
         </div>
-        <Button text='가입 신청하기' onClick={() => console.log('dd')} />
       </div>
     </>
   );

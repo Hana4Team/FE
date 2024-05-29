@@ -5,9 +5,11 @@ import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { ChoiceItem } from '../../components/molecules/ChoiceItem';
 import { SelectMenu } from '../../components/molecules/SelectMenu';
 import { phoneNumberAutoHyphen } from '../../utils/phoneNumberAutoHyphen';
-import { phoneNumberPattern, pwPattern } from '../../utils/checkValidation';
+import { phoneNumberPattern } from '../../utils/checkValidation';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { useNavigate } from 'react-router-dom';
+import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
+import { AccountPw } from '../../components/organisms/accounts/AccountPw';
 
 type userInfo = {
   name: string | null;
@@ -17,7 +19,7 @@ type userInfo = {
   job: string;
   asset_status: string;
   checkCard: boolean | null;
-  password: string | null;
+  password: string;
 };
 
 /**
@@ -28,7 +30,6 @@ export const Mission2AccountOpening = () => {
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [btnActive, setBtnActive] = useState<boolean>(true);
-  const [isPwCheck, setIsPwCheck] = useState<boolean>(true);
   const [info, setInfo] = useState<userInfo>({
     name: null,
     mobile_carrier: '',
@@ -37,14 +38,14 @@ export const Mission2AccountOpening = () => {
     job: '',
     asset_status: '',
     checkCard: null,
-    password: null,
+    password: '',
   });
+
+  console.log('info>>', info);
 
   const phoneInput = useRef<HTMLInputElement | null>(null);
   const nameInput = useRef<HTMLInputElement | null>(null);
   const certificationNumberInput = useRef<HTMLInputElement | null>(null);
-  const pwInput = useRef<HTMLInputElement | null>(null);
-  const pwCheckInput = useRef<HTMLInputElement | null>(null);
 
   const nextHandler = () => {
     if (currentNumber === 9) {
@@ -63,20 +64,20 @@ export const Mission2AccountOpening = () => {
   };
 
   // 1단계 유효성 체크
-  const checkEffectPhone = (prev: userInfo) => {
+  const checkEffectPhone = () => {
     if (phoneInput.current) {
       if (
         phoneInput.current?.value === '' ||
         phoneNumberPattern.test(phoneInput.current.value) === false
       ) {
         setInfo({
-          ...prev,
+          ...info,
           phone_number: '',
         });
         return;
       } else {
         setInfo({
-          ...prev,
+          ...info,
           phone_number: phoneInput.current?.value,
         });
         if (
@@ -89,17 +90,17 @@ export const Mission2AccountOpening = () => {
       }
     }
   };
-  const checkEffectName = (prev: userInfo) => {
+  const checkEffectName = () => {
     if (nameInput.current) {
       if (nameInput.current?.value === '') {
         setInfo({
-          ...prev,
+          ...info,
           name: '',
         });
         return;
       } else {
         setInfo({
-          ...prev,
+          ...info,
           name: nameInput.current?.value,
         });
         if (
@@ -114,12 +115,9 @@ export const Mission2AccountOpening = () => {
   };
 
   // 모달 선택 변경
-  const checkMobileCarrierModal = (
-    prev: userInfo,
-    name: 'SKT' | 'KT' | 'LG U+'
-  ) => {
+  const checkMobileCarrierModal = (name: 'SKT' | 'KT' | 'LG U+') => {
     setInfo({
-      ...prev,
+      ...info,
       mobile_carrier: name,
     });
     setShowModal(false);
@@ -133,9 +131,9 @@ export const Mission2AccountOpening = () => {
   };
 
   // 직업 선택 변경
-  const checkJobrModal = (prev: userInfo, job: string) => {
+  const checkJobrModal = (job: string) => {
     setInfo({
-      ...prev,
+      ...info,
       job: job,
     });
     setShowModal(false);
@@ -143,9 +141,9 @@ export const Mission2AccountOpening = () => {
   };
 
   // 자산 선택 변경
-  const checkAssetrModal = (prev: userInfo, asset: string) => {
+  const checkAssetrModal = (asset: string) => {
     setInfo({
-      ...prev,
+      ...info,
       asset_status: asset,
     });
     setShowModal(false);
@@ -153,17 +151,17 @@ export const Mission2AccountOpening = () => {
   };
 
   // 2단계 유효성 체크
-  const checkEffectCertification = (prev: userInfo) => {
+  const checkEffectCertification = () => {
     if (certificationNumberInput.current) {
       if (certificationNumberInput.current?.value === '') {
         setInfo({
-          ...prev,
+          ...info,
           certification_number: '',
         });
         return;
       } else {
         setInfo({
-          ...prev,
+          ...info,
           certification_number: certificationNumberInput.current?.value,
         });
         setBtnActive(true);
@@ -171,39 +169,12 @@ export const Mission2AccountOpening = () => {
     }
   };
 
-  const checkEffectPw = (prev: userInfo) => {
-    if (pwInput.current) {
-      if (
-        pwInput.current?.value === '' ||
-        pwPattern.test(pwInput.current?.value) === false
-      ) {
-        setInfo({
-          ...prev,
-          password: '',
-        });
-        return;
-      } else {
-        setInfo({
-          ...prev,
-          password: pwInput.current?.value,
-        });
-        setBtnActive(true);
-      }
-    }
-  };
-
-  const checkEffectPwCheck = () => {
-    if (pwCheckInput.current) {
-      if (
-        pwCheckInput.current?.value === '' ||
-        pwCheckInput.current?.value !== info.password
-      ) {
-        setIsPwCheck(false);
-        return;
-      }
-      setIsPwCheck(true);
-      setBtnActive(true);
-    }
+  const checkPwModal = (password: string) => {
+    setInfo({
+      ...info,
+      password: password,
+    });
+    setBtnActive(true);
   };
 
   return (
@@ -224,15 +195,15 @@ export const Mission2AccountOpening = () => {
               <>
                 <ChoiceItem
                   name='SKT'
-                  onClick={() => checkMobileCarrierModal(info, 'SKT')}
+                  onClick={() => checkMobileCarrierModal('SKT')}
                 />
                 <ChoiceItem
                   name='KT'
-                  onClick={() => checkMobileCarrierModal(info, 'KT')}
+                  onClick={() => checkMobileCarrierModal('KT')}
                 />
                 <ChoiceItem
                   name='LG U+'
-                  onClick={() => checkMobileCarrierModal(info, 'LG U+')}
+                  onClick={() => checkMobileCarrierModal('LG U+')}
                 />
               </>
             )}
@@ -240,31 +211,31 @@ export const Mission2AccountOpening = () => {
               <>
                 <ChoiceItem
                   name='급여소득자'
-                  onClick={() => checkJobrModal(info, '급여소득자')}
+                  onClick={() => checkJobrModal('급여소득자')}
                 />
                 <ChoiceItem
                   name='전문직'
-                  onClick={() => checkJobrModal(info, '전문직')}
+                  onClick={() => checkJobrModal('전문직')}
                 />
                 <ChoiceItem
                   name='공무원'
-                  onClick={() => checkJobrModal(info, '공무원')}
+                  onClick={() => checkJobrModal('공무원')}
                 />
                 <ChoiceItem
                   name='연금소득자'
-                  onClick={() => checkJobrModal(info, '연금소득자')}
+                  onClick={() => checkJobrModal('연금소득자')}
                 />
                 <ChoiceItem
                   name='주부'
-                  onClick={() => checkJobrModal(info, '주부')}
+                  onClick={() => checkJobrModal('주부')}
                 />
                 <ChoiceItem
                   name='학생'
-                  onClick={() => checkJobrModal(info, '학생')}
+                  onClick={() => checkJobrModal('학생')}
                 />
                 <ChoiceItem
                   name='기타'
-                  onClick={() => checkJobrModal(info, '기타')}
+                  onClick={() => checkJobrModal('기타')}
                 />
               </>
             )}
@@ -272,25 +243,19 @@ export const Mission2AccountOpening = () => {
               <>
                 <ChoiceItem
                   name='1,000만원 ~ 1억원 미만'
-                  onClick={() =>
-                    checkAssetrModal(info, '1,000만원 ~ 1억원 미만')
-                  }
+                  onClick={() => checkAssetrModal('1,000만원 ~ 1억원 미만')}
                 />
                 <ChoiceItem
                   name='1억원 ~ 10억원 미만'
-                  onClick={() => checkAssetrModal(info, '1억원 ~ 10억원 미만')}
+                  onClick={() => checkAssetrModal('1억원 ~ 10억원 미만')}
                 />
                 <ChoiceItem
                   name='10억원 ~ 100억원 미만'
-                  onClick={() =>
-                    checkAssetrModal(info, '10억원 ~ 100억원 미만')
-                  }
+                  onClick={() => checkAssetrModal('10억원 ~ 100억원 미만')}
                 />
                 <ChoiceItem
                   name='100억원 ~ 1,000억원 미만'
-                  onClick={() =>
-                    checkAssetrModal(info, '100억원 ~ 1,000억원 미만')
-                  }
+                  onClick={() => checkAssetrModal('100억원 ~ 1,000억원 미만')}
                 />
               </>
             )}
@@ -301,22 +266,19 @@ export const Mission2AccountOpening = () => {
         <Topbar title='머니박스 가입' />
         <div className='flex flex-col justify-between items-center w-full h-full py-10'>
           <div className='flex flex-col px-10 w-full'>
-            {currentNumber !== 0 && (
-              <h1 className='text-4xl font-hanaMedium mb-7 whitespace-pre-line leading-snug'>
-                {currentNumber === 1 && '정보를 확인해주세요'}
-                {currentNumber === 2 &&
-                  `휴대폰으로 전송된 인증번호\n 6자리를 입력해주세요`}
-                {currentNumber === 3 &&
-                  `${info.name}님의 직업을\n 선택해주세요`}
-                {currentNumber === 4 &&
-                  `${info.name}님의 자산현황을\n 선택해주세요`}
-                {currentNumber === 5 &&
-                  `안전한 금융거래를 위해\n 확인해 주세요`}
-                {(currentNumber === 6 || currentNumber === 7) &&
-                  '머니박스 통장을 만들게요'}
-                {currentNumber === 8 && `신청내역을\n 확인해주세요`}
-              </h1>
-            )}
+            <h1 className='text-4xl font-hanaMedium mb-7 whitespace-pre-line leading-snug'>
+              {currentNumber === 1 && '정보를 확인해주세요'}
+              {currentNumber === 2 &&
+                `휴대폰으로 전송된 인증번호\n 6자리를 입력해주세요`}
+              {currentNumber === 3 && `${info.name}님의 직업을\n 선택해주세요`}
+              {currentNumber === 4 &&
+                `${info.name}님의 자산현황을\n 선택해주세요`}
+              {currentNumber === 5 && `안전한 금융거래를 위해\n 확인해 주세요`}
+              {(currentNumber === 6 || currentNumber === 7) &&
+                '머니박스 통장을 만들게요'}
+              {currentNumber === 8 && `신청내역을\n 확인해주세요`}
+            </h1>
+
             {currentNumber === 0 && (
               <div className='flex flex-col justify-center items-center mt-24 w-full gap-16'>
                 <h1 className='font-hanaMedium text-3xl text-center'>
@@ -344,7 +306,7 @@ export const Mission2AccountOpening = () => {
                     ref={phoneInput}
                     maxLength={13}
                     onInput={phoneInputHandler}
-                    onBlur={() => checkEffectPhone(info)}
+                    onBlur={checkEffectPhone}
                     className='border-b-[0.05rem] border-black py-3'
                   />
                   {info.phone_number === '' && (
@@ -366,7 +328,7 @@ export const Mission2AccountOpening = () => {
                   <input
                     type='text'
                     ref={nameInput}
-                    onBlur={() => checkEffectName(info)}
+                    onBlur={checkEffectName}
                     className='border-b-[0.05rem] border-black py-3'
                   />
                   {info.name === '' && (
@@ -387,7 +349,7 @@ export const Mission2AccountOpening = () => {
                     type='text'
                     placeholder='인증번호'
                     ref={certificationNumberInput}
-                    onBlur={() => checkEffectCertification(info)}
+                    onBlur={checkEffectCertification}
                     className='w-full border-b-[0.05rem] border-black py-3 placeholder-[#979797] font-hanaMedium text-2xl'
                   />
                   <button className='bg-[#D9D9D9] font-hanaMedium text-lg px-3 w-24 h-12 rounded-lg cursor-pointer'>
@@ -477,40 +439,12 @@ export const Mission2AccountOpening = () => {
                 </div>
               </div>
             )}
-            {currentNumber === 6 && (
-              <div className='w-full flex flex-col gap-10 font-hanaMedium'>
-                <div className='flex flex-col gap-1 text-2xl'>
-                  <label className='text-[#979797]'>계좌비밀번호</label>
-                  <input
-                    type='text'
-                    ref={pwInput}
-                    maxLength={4}
-                    placeholder='숫자 4자리 입력'
-                    onBlur={() => checkEffectPw(info)}
-                    className='border-b-[0.05rem] border-black py-3 placeholder:text-[#D1D1D1]'
-                  />
-                </div>
-              </div>
-            )}
+            {currentNumber === 6 && <AccountPw onClick={checkPwModal} />}
             {currentNumber === 7 && (
-              <div className='w-full flex flex-col font-hanaMedium'>
-                <div className='flex flex-col gap-1 text-2xl'>
-                  <label className='text-[#979797]'>계좌비밀번호 확인</label>
-                  <input
-                    type='text'
-                    ref={pwCheckInput}
-                    maxLength={4}
-                    placeholder='숫자 4자리 입력'
-                    onBlur={checkEffectPwCheck}
-                    className='border-b-[0.05rem] border-black py-3 placeholder:text-[#D1D1D1]'
-                  />
-                </div>
-                {!isPwCheck && (
-                  <span className='font-hanaLight text-lg text-red-600 mt-2'>
-                    비밀번호가 일치하지 않습니다.
-                  </span>
-                )}
-              </div>
+              <AccountPwCheck
+                password={info.password}
+                onClick={() => setBtnActive(true)}
+              />
             )}
             {currentNumber === 8 && (
               <div className='w-full flex flex-col justify-center gap-7'>

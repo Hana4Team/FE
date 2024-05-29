@@ -1,10 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
 import Topbar from '../../components/Topbar';
-import { BsArrowRightCircleFill } from 'react-icons/bs';
 
 export const Mission2StartPage = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Topbar title='이사미션' />
@@ -46,6 +47,7 @@ export const Mission2StartPage = () => {
           content1='최고 연 3.00%'
           content2={`저축 3.00%\n파킹 2.00%`}
           content3='1개월 기준 세전'
+          onClick={() => navigate('/mission2/product')}
         />
       </div>
     </>
