@@ -9,6 +9,7 @@ export const Login = () => {
   const pwdRef = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
   const [isPwdCorrect, setIsPwdCorrect] = useState<boolean>(true);
   const [re, setRe] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   return (
     <div className='bg-white h-screen flex flex-col items-center'>
@@ -19,6 +20,7 @@ export const Login = () => {
           inputRef={pwdRef}
           isCorrect={isPwdCorrect}
           re={re}
+          checkPwdCondition={() => setIsActive(true)}
         />
 
         <Button
@@ -26,6 +28,7 @@ export const Login = () => {
           onClick={() => {
             navigate('/home');
           }}
+          isActive={isActive}
         />
       </div>
     </div>
