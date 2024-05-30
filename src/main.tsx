@@ -18,6 +18,11 @@ import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
 
+import Termination from './pages/mission4/Termination.tsx';
+import { RoadMap4 } from './pages/mission4/RoadMap4.tsx';
+import { RoadMap5 } from './pages/mission5/RoadMap5.tsx';
+import MyHome from './pages/MyHome.tsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -27,6 +32,8 @@ const router = createBrowserRouter([
       { path: 'sending', element: <Sending /> },
       { path: 'join', element: <Join /> },
       { path: 'login', element: <Login /> },
+      { path: 'termination', element: <Termination /> },
+      { path: 'myhome/capture', element: <MyHome /> },
       {
         element: <Navbar />,
         children: [
@@ -35,10 +42,13 @@ const router = createBrowserRouter([
           { path: 'mission3', element: <Mission3StartPage /> },
           { path: 'mission4', element: <Mission4StartPage /> },
           { path: 'mission5', element: <Mission5StartPage /> },
+          { path: 'roadmap4', element: <RoadMap4 /> },
+          { path: 'roadmap5', element: <RoadMap5 /> },
           { path: 'joinProduct', element: <JoinProductPage /> },
           { path: 'moneyBox', element: <MoneyBox /> },
           { path: 'alarm', element: <AlarmPage /> },
           { path: 'mypage', element: <MyPage /> },
+          { path: 'myhome', element: <MyHome /> },
         ],
       },
     ],

@@ -12,7 +12,7 @@ const Topbar: FC<IProps> = ({ title, isModal }) => {
 
   return (
     <div
-      className={`sticky top-0 left-0 w-full flex justify-center items-center ${isModal ? 'bg-black bg-opacity-50' : 'bg-white'} pt-20 pb-4`}
+      className={`sticky top-0 left-0 w-full flex justify-center items-center ${isModal ? 'bg-black bg-opacity-50' : 'bg-white'} pt-20 pb-4 z-50`}
     >
       <div
         className='absolute left-2 cursor-pointer'
