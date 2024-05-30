@@ -11,7 +11,7 @@ export const ChoiceMenu: FC<IProps> = ({ title, children, onClose }) => {
   return (
     <>
       <div
-        className='fixed flex flex-col items-center justify-center bg-black bg-opacity-50 w-[500px] h-full z-10 top-0 left-0'
+        className='absolute flex flex-col items-center justify-center bg-black bg-opacity-50 w-full h-full z-10 top-0 left-0'
         onClick={onClose}
       ></div>
       <div className='absolute z-20 bottom-0 left-0 bg-white w-full h-auto pt-3 pb-10 border border-none rounded-t-[3rem]'>

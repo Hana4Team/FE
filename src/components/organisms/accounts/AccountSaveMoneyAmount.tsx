@@ -4,7 +4,7 @@ import { calMaturitDate } from '../../../utils/calMaturitDate';
 interface IProps {
   period: string;
   payment1: number;
-  payment2: number;
+  payment2?: number;
   onClick: (maturitDate: string, initMoney: number) => void;
 }
 
@@ -58,7 +58,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
 
   const inputMoneyHandler = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (initMoney.current?.value) {
+    if (payment2 && initMoney.current?.value) {
       if (
         +initMoney.current?.value < payment1 * 1000 ||
         +initMoney.current?.value > payment2 * 1000
@@ -108,16 +108,20 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
           <input
             type='number'
             ref={initMoney}
-            placeholder={`${payment1}${
-              payment1 < 10 ? '천원' : '만원'
-            }~${payment2}${payment2 < 10 ? '천원' : '만원'}`}
+            placeholder={
+              payment2
+                ? `${payment1}${
+                    payment1 < 10 ? '천원' : '만원'
+                  }~${payment2}${payment2 < 10 ? '천원' : '만원'}`
+                : `${payment1.toLocaleString('ko-KR')}원`
+            }
             onBlur={inputMoneyHandler}
             className='border-b-[0.6px] border-black py-2 w-44 text-center placeholder-[#979797] bg-transparent mr-2 focus:outline-none'
           />
           {initMoney.current?.value && '원 '}
           가입하기
         </p>
-        {alertMoneyMessage && (
+        {payment2 && alertMoneyMessage && (
           <p className='text-red-600 font-hanaRegular text-lg'>
             {payment1}
             {payment1 < 10 ? '천원' : '만원'}부터 {payment2}

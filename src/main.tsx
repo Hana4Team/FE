@@ -22,6 +22,8 @@ import { Mission3Product } from './pages/mission3/Mission3Product.tsx';
 import { Mission3AccountOpening } from './pages/mission3/Mission3AccountOpening.tsx';
 import { Mission4AccountOpening } from './pages/mission4/Mission4AccountOpening.tsx';
 import { Mission4Product } from './pages/mission4/Mission4Product.tsx';
+import { Mission5AccountOpening } from './pages/mission5/Mission5AccountOpening.tsx';
+import { Mission5Product } from './pages/mission5/Mission5Product.tsx';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
         element: <Mission4AccountOpening />,
       },
       {
+        path: 'mission5/account-opening',
+        element: <Mission5AccountOpening />,
+      },
+      {
         element: <Navbar />,
         children: [
           { path: 'home', element: <Home /> },
@@ -64,6 +70,10 @@ const router = createBrowserRouter([
             element: <Mission4Product />,
           },
           { path: 'mission5', element: <Mission5StartPage /> },
+          {
+            path: 'mission5/product',
+            element: <Mission5Product />,
+          },
           { path: 'moneyBox', element: <MoneyBox /> },
           { path: 'alarm', element: <AlarmPage /> },
           { path: 'mypage', element: <MyPage /> },

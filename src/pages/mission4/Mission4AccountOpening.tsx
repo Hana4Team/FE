@@ -125,11 +125,11 @@ export const Mission4AccountOpening = () => {
           <div className='flex flex-col justify-center gap-5'>
             {currentNumber === 1 && (
               <div className='flex flex-col justify-center items-center gap-7'>
-                <div className='flex justify-center items-center gap-20 font-hanaRegular text-3xl'>
-                  <p className='bg-[#F2F2F2] w-48 p-8 rounded-2xl text-center'>
+                <div className='w-5/6 flex justify-between items-center font-hanaRegular text-3xl gap-20'>
+                  <p className='bg-[#F2F2F2] w-1/2 p-8 rounded-2xl text-center'>
                     매월
                   </p>
-                  <p className='flex justify-center items-center bg-[#F2F2F2] w-48 p-8 rounded-2xl text-center'>
+                  <p className='flex justify-center items-center bg-[#F2F2F2] w-1/2 p-8 rounded-2xl text-center'>
                     <input
                       type='number'
                       ref={regularDayInput}

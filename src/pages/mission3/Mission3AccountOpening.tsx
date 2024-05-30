@@ -130,20 +130,23 @@ export const Mission3AccountOpening = () => {
               </div>
             )}
             {currentNumber === 1 && (
-              <>
-                <input
-                  type='text'
-                  ref={savingMoneyInput}
-                  placeholder={`${data?.payment1}${data?.payment1 < 10 ? '천원' : '만원'} ~ ${data?.payment2}${data?.payment2 < 10 ? '천원' : '만원'} `}
-                  onBlur={() => checkEffectSavingMoney(info)}
-                  className='w-52 border-b-[0.05rem] font-hanaMedium border-black py-3 placeholder:text-[#979797] text-2xl -mt-5'
-                />
+              <div>
+                <p className='flex justify-center w-60 border-b-[0.05rem] text-2xl font-hanaMedium border-black py-3'>
+                  <input
+                    type='text'
+                    ref={savingMoneyInput}
+                    placeholder={`${data?.payment1}${data?.payment1 < 10 ? '천원' : '만원'} ~ ${data?.payment2}${data?.payment2 < 10 ? '천원' : '만원'} `}
+                    onBlur={() => checkEffectSavingMoney(info)}
+                    className='w-52 placeholder:text-[#979797] text-2xl'
+                  />
+                  {savingMoneyInput.current?.value && '원'}
+                </p>
                 {info.savingMoney === 0 && (
                   <span className='font-hanaLight text-lg text-red-600 mt-2'>
                     범위의 금액을 입력해주세요
                   </span>
                 )}
-              </>
+              </div>
             )}
             {currentNumber === 2 && (
               <div className='w-full'>
@@ -172,7 +175,9 @@ export const Mission3AccountOpening = () => {
                 />
               </div>
             )}
-            {currentNumber === 7 && <ConfirmCard text='100일 적금 가입 완료' />}
+            {currentNumber === 7 && (
+              <ConfirmCard text={`100일 적금\n 가입 완료`} />
+            )}
           </div>
           <Button
             text={currentNumber === 7 ? '완료' : '다음'}
