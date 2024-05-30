@@ -4,6 +4,8 @@ import { MissionStartHeader } from '../../components/molecules/MissionStartHeade
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
 import Topbar from '../../components/Topbar';
 
+const productId = 1;
+
 export const Mission2StartPage = () => {
   const navigate = useNavigate();
   return (
@@ -47,7 +49,9 @@ export const Mission2StartPage = () => {
           content1='최고 연 3.00%'
           content2={`저축 3.00%\n파킹 2.00%`}
           content3='1개월 기준 세전'
-          onClick={() => navigate('/mission2/product')}
+          onClick={() =>
+            navigate('/mission2/product', { state: { productId: productId } })
+          }
         />
       </div>
     </>

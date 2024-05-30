@@ -60,46 +60,42 @@ export const ProductJoinIntro: FC<IProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col items-center gap-10'>
-        <div className='w-11/12 bg-white py-10 px-10 rounded-3xl m-auto mt-10'>
-          <h1 className='font-hanaBold text-5xl mb-5'>{data.desc1}</h1>
-          {data.desc_detail1.split('+').map((content, index) => (
-            <p key={index} className='font-hanaRegular text-2xl leading-normal'>
-              {index > 0 ? (
-                <>
-                  <span className='text-hanaRed font-hanaBold'>+</span>
-                  {content}
-                </>
-              ) : (
-                content.split(' ').map((word, index) =>
-                  index == 0 ? (
-                    <span key={index} className='text-hanaRed font-hanaMedium'>
-                      {word}
-                    </span>
-                  ) : (
-                    <span key={index}>{word}</span>
-                  )
+      <div className='w-11/12 flex flex-col bg-white py-10 px-10 rounded-3xl m-auto mt-10'>
+        <h1 className='font-hanaBold text-5xl mb-5'>{data.desc1}</h1>
+        {data.desc_detail1.split('+').map((content, index) => (
+          <p key={index} className='font-hanaRegular text-2xl leading-normal'>
+            {index > 0 ? (
+              <>
+                <span className='text-hanaRed font-hanaBold'>+</span>
+                {content}
+              </>
+            ) : (
+              content.split(' ').map((word, index) =>
+                index == 0 ? (
+                  <span key={index} className='text-hanaRed font-hanaMedium'>
+                    {word}
+                  </span>
+                ) : (
+                  <span key={index}>{word}</span>
                 )
-              )}
-            </p>
-          ))}
-          <img
-            src={`${data.desc_image1}`}
-            alt='productImg'
-            className='w-56 m-auto'
-          />
-          <h1 className='font-hanaBold text-5xl my-5 float-right'>
-            {data.desc2}
-          </h1>
-          <p className='font-hanaRegular whitespace-pre-line text-xl leading-normal float-right text-right'>
-            {data.desc_detail2}
+              )
+            )}
           </p>
-          <img
-            src={`${data.desc_image2}`}
-            alt='productImg'
-            className='w-56 m-auto'
-          />
-        </div>
+        ))}
+        <img
+          src={`${data.desc_image1}`}
+          alt='productImg'
+          className='w-56 m-auto'
+        />
+        <h1 className='font-hanaBold text-5xl my-5 text-right'>{data.desc2}</h1>
+        <p className='font-hanaRegular whitespace-pre-line text-xl leading-normal float-right text-right'>
+          {data.desc_detail2}
+        </p>
+        <img
+          src={`${data.desc_image2}`}
+          alt='productImg'
+          className='w-56 m-auto'
+        />
       </div>
     </>
   );

@@ -50,7 +50,7 @@ export const Mission3AccountOpening = () => {
     initMoney: dummyData.initMoney,
     savingMoney: -1,
     outdrawAccountNumber: '',
-    savingDate: '100',
+    savingDate: '100일',
     interest: data.interest1,
     password: '',
   });

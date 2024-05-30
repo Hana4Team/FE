@@ -5,7 +5,7 @@ interface IProps {
   period: string;
   interest: number;
   automatic_payment_date?: number;
-  automatic_payment_money?: string;
+  automatic_payment_money?: number;
   outdrawAccountNumber: string;
 }
 
@@ -27,7 +27,7 @@ export const AccountCheck: FC<IProps> = ({
       </div>
       <div className='flex justify-between font-hanaRegular text-2xl'>
         가입기간
-        <span className='font-hanaLight'>{period} 일</span>
+        <span className='font-hanaLight'>{period}</span>
       </div>
       <div className='flex justify-between font-hanaRegular text-2xl'>
         현재적용금리
@@ -35,12 +35,15 @@ export const AccountCheck: FC<IProps> = ({
           {interest.toFixed(2)} %
         </span>
       </div>
-      {/* {automatic_payment && (
-          <div>
-            <span>자동이체</span>
-            <span>{automatic_payment}</span>
-          </div>
-        )} */}
+      {automatic_payment_date && (
+        <div className='flex justify-between font-hanaRegular text-2xl'>
+          자동이체
+          <span className='font-hanaLight'>
+            매월 {automatic_payment_date}일(
+            {automatic_payment_money?.toLocaleString('ko-KR')}원)
+          </span>
+        </div>
+      )}
       <div className='flex justify-between font-hanaRegular text-2xl'>
         출금계좌
         <p className='font-hanaLight flex flex-col text-right gap-2'>

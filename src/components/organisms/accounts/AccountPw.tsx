@@ -25,7 +25,7 @@ export const AccountPw: FC<IProps> = ({ onClick }) => {
       <div className='flex flex-col gap-1 text-2xl'>
         <label className='text-[#979797]'>계좌비밀번호</label>
         <input
-          type='text'
+          type='password'
           ref={pwInput}
           maxLength={4}
           placeholder='숫자 4자리 입력'

@@ -28,7 +28,7 @@ export const AccountPwCheck: FC<IProps> = ({ password, onClick }) => {
       <div className='flex flex-col gap-1 text-2xl'>
         <label className='text-[#979797]'>계좌비밀번호 확인</label>
         <input
-          type='text'
+          type='password'
           ref={pwCheckInput}
           maxLength={4}
           placeholder='숫자 4자리 입력'

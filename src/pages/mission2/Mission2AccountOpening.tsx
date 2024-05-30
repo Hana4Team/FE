@@ -41,8 +41,6 @@ export const Mission2AccountOpening = () => {
     password: '',
   });
 
-  console.log('info>>', info);
-
   const phoneInput = useRef<HTMLInputElement | null>(null);
   const nameInput = useRef<HTMLInputElement | null>(null);
   const certificationNumberInput = useRef<HTMLInputElement | null>(null);
@@ -414,25 +412,25 @@ export const Mission2AccountOpening = () => {
                 <div className='flex justify-between items-center gap-10'>
                   <button
                     onClick={() => {
-                      setInfo((prev: userInfo) => ({
-                        ...prev,
+                      setInfo({
+                        ...info,
                         checkCard: true,
-                      }));
+                      });
                       setBtnActive(true);
                     }}
-                    className={`w-1/2 border border-[#C0C0C0] rounded-xl font-hanaRegular py-4 text-2xl box-border ${info.checkCard && 'border-[0.2rem] border-[#008485] text-[#008485]'}`}
+                    className={`w-1/2 border rounded-xl font-hanaRegular py-4 text-2xl box-border ${info.checkCard ? 'border-[0.2rem] border-[#008485] text-[#008485]' : 'border-[#C0C0C0]'}`}
                   >
                     신청
                   </button>
                   <button
                     onClick={() => {
-                      setInfo((prev: userInfo) => ({
-                        ...prev,
+                      setInfo({
+                        ...info,
                         checkCard: false,
-                      }));
+                      });
                       setBtnActive(true);
                     }}
-                    className={`w-1/2 border border-[#C0C0C0] rounded-xl font-hanaRegular py-4 text-2xl box-border ${info.checkCard !== null && !info.checkCard && 'border-[0.2rem] border-[#008485] text-[#008485]'}`}
+                    className={`w-1/2 border rounded-xl font-hanaRegular py-4 text-2xl box-border ${info.checkCard !== null && !info.checkCard ? 'border-[0.2rem] border-[#008485] text-[#008485]' : 'border-[#C0C0C0]'}`}
                   >
                     미신청
                   </button>

@@ -4,6 +4,8 @@ import { MissionStartHeader } from '../../components/molecules/MissionStartHeade
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 
+const productId = 1;
+
 export const Mission3StartPage = () => {
   const navigate = useNavigate();
   return (
@@ -35,7 +37,9 @@ export const Mission3StartPage = () => {
           content1='최고 연 5.00%'
           content2='기본 2.00%'
           content3='1개월 기준 세전'
-          onClick={() => navigate('/mission3/product')}
+          onClick={() =>
+            navigate('/mission3/product', { state: { productId: productId } })
+          }
         />
       </div>
     </>
