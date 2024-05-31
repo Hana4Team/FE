@@ -50,11 +50,22 @@ const items = [
   },
 ];
 
+const categories = [
+  '금융',
+  '경제',
+  '경영',
+  '재테크',
+  '글로벌',
+  '금융디지털',
+  '부동산',
+  '은행',
+];
+
 export const NewsList = () => {
-  const [category, setCategory] = useState<string>('금융');
+  const [choiceCategory, setChoiceCategory] = useState<string>('금융');
 
   const changeCategory = (keyword: string) => {
-    setCategory(keyword);
+    setChoiceCategory(keyword);
   };
 
   return (
@@ -70,36 +81,14 @@ export const NewsList = () => {
           id='news-list'
           className='w-11/12 flex gap-3 overflow-x-scroll whitespace-nowrap'
         >
-          <NewsCategory
-            categoryName='금융'
-            isClicked={category === '금융'}
-            onClick={changeCategory}
-          />
-          <NewsCategory
-            categoryName='경제'
-            isClicked={category === '경제'}
-            onClick={changeCategory}
-          />
-          <NewsCategory
-            categoryName='재테크'
-            isClicked={category === '재테크'}
-            onClick={changeCategory}
-          />
-          <NewsCategory
-            categoryName='먕'
-            isClicked={category === '먕'}
-            onClick={changeCategory}
-          />
-          <NewsCategory
-            categoryName='코인'
-            isClicked={category === '코인'}
-            onClick={changeCategory}
-          />
-          <NewsCategory
-            categoryName='하나은행'
-            isClicked={category === '하나은행'}
-            onClick={changeCategory}
-          />
+          {categories.map((category, index) => (
+            <NewsCategory
+              key={index}
+              categoryName={category}
+              isClicked={choiceCategory === category}
+              onClick={changeCategory}
+            />
+          ))}
         </div>
         {items.map((item, index) => (
           <NewsItem
@@ -108,7 +97,7 @@ export const NewsList = () => {
             desc={item.description}
             pubDate={`${new Date(item.pubDate).getFullYear()}-${(new Date(item.pubDate).getMonth() + 1).toString().padStart(2, '0')}-
               ${new Date(item.pubDate).getDate().toString().padStart(2, '0')}`}
-            keyword={category}
+            keyword={choiceCategory}
             link={item.originallink}
           />
         ))}
