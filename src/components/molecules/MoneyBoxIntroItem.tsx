@@ -5,6 +5,7 @@ interface IProps {
   title: string;
   icon: string;
   children: ReactNode;
+  className?: string;
 }
 
 export const MoneyBoxIntroItem: FC<IProps> = ({
@@ -12,10 +13,11 @@ export const MoneyBoxIntroItem: FC<IProps> = ({
   title,
   icon,
   children,
+  className,
 }) => {
   return (
     <div
-      className={`w-11/12 bg-white py-7 px-10 rounded-3xl m-auto flex items-center gap-10 animate-fadein`}
+      className={`w-11/12 bg-white py-7 px-10 rounded-3xl m-auto flex items-center gap-10 ${className}`}
     >
       <img src={`icons/${icon}`} alt='icon' className='w-20' />
       <div className='flex flex-col justify-center'>

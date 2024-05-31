@@ -7,6 +7,7 @@ interface IProps {
   content1: string;
   content2: string;
   content3: string;
+  className?: string;
   onClick: () => void;
 }
 
@@ -16,10 +17,13 @@ export const BankBookIntro: FC<IProps> = ({
   content1,
   content2,
   content3,
+  className,
   onClick,
 }) => {
   return (
-    <div className='w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center'>
+    <div
+      className={`w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center ${className}`}
+    >
       <p className='font-hanaRegular text-2xl'>{subTitle}</p>
       <h1 className='font-hanaBold text-[2.7rem]'>{title}</h1>
       <div className='flex justify-between'>
