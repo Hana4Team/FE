@@ -1,14 +1,20 @@
 import { FC, FormEvent, useRef, useState } from 'react';
 import { calMaturitDate } from '../../../utils/calMaturitDate';
+import {
+  checkAmountUnitMoney,
+  checkAmountUnitNumber,
+} from '../../../utils/checkAmountUnit';
 
 interface IProps {
+  type: boolean; // 적금: true: 예금: false
   period: string;
   payment1: number;
-  payment2?: number;
+  payment2: number;
   onClick: (maturitDate: string, initMoney: number) => void;
 }
 
 export const AccountSaveMoneyAmount: FC<IProps> = ({
+  type,
   period,
   payment1,
   payment2,
@@ -32,7 +38,6 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
     if (maturitDate.current?.value) {
       setShowMaturitScope(true);
       if (maturitDatePeriods.scope === '개월') {
-        console.log('>>');
         if (
           +maturitDate.current?.value < +maturitDatePeriods.periodList[0] ||
           +maturitDate.current?.value > +maturitDatePeriods.periodList[1]
@@ -58,10 +63,12 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
 
   const inputMoneyHandler = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (payment2 && initMoney.current?.value) {
+    if (initMoney.current?.value) {
       if (
-        +initMoney.current?.value < payment1 * 1000 ||
-        +initMoney.current?.value > payment2 * 1000
+        +initMoney.current?.value <
+          (type ? checkAmountUnitNumber(payment1) : payment1) ||
+        +initMoney.current?.value >
+          (type ? checkAmountUnitNumber(payment2) : payment2)
       ) {
         setAlertMoneyMessage(true);
         initMoney.current?.focus();
@@ -109,11 +116,11 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
             type='number'
             ref={initMoney}
             placeholder={
-              payment2
-                ? `${payment1}${
-                    payment1 < 10 ? '천원' : '만원'
-                  }~${payment2}${payment2 < 10 ? '천원' : '만원'}`
-                : `${payment1.toLocaleString('ko-KR')}원`
+              type
+                ? `${payment1}${checkAmountUnitMoney(
+                    payment1
+                  )}~${payment2}${checkAmountUnitMoney(payment2)}`
+                : `${payment2.toLocaleString('ko-KR')}원`
             }
             onBlur={inputMoneyHandler}
             className='border-b-[0.6px] border-black py-2 w-44 text-center placeholder-[#979797] bg-transparent mr-2 focus:outline-none'
@@ -123,9 +130,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
         </p>
         {payment2 && alertMoneyMessage && (
           <p className='text-red-600 font-hanaRegular text-lg'>
-            {payment1}
-            {payment1 < 10 ? '천원' : '만원'}부터 {payment2}
-            {payment2 < 10 ? '천원' : '만원'}사이의 금액을 입력해주세요!
+            {`${type ? payment1 : payment1.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment1) : '원'}부터 ${type ? payment2 : payment2.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment2) : '원'}사이의 금액을 입력해주세요!`}
           </p>
         )}
       </div>

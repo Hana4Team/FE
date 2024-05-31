@@ -79,8 +79,10 @@ export const Mission5AccountOpening = () => {
           </h1>
           {currentNumber === 0 && (
             <AccountSaveMoneyAmount
+              type={false}
               period={data.period}
-              payment1={data.payment1}
+              payment1={1000000}
+              payment2={1500000}
               onClick={checkinitMoneyAndMaturitDateModal}
             />
           )}
@@ -95,11 +97,7 @@ export const Mission5AccountOpening = () => {
               </div>
             </div>
           )}
-          {currentNumber === 2 && (
-            <div className='w-full'>
-              <AccountMaturitChoice />
-            </div>
-          )}
+          {currentNumber === 2 && <AccountMaturitChoice />}
           {currentNumber === 3 && <AccountPw onClick={checkPwModal} />}
           {currentNumber === 4 && (
             <AccountPwCheck
@@ -108,14 +106,12 @@ export const Mission5AccountOpening = () => {
             />
           )}
           {currentNumber === 5 && (
-            <div className='w-full'>
-              <AccountCheck
-                money={info.initMoney}
-                period={info.maturitDate}
-                interest={info.interest}
-                outdrawAccountNumber={info.outdrawAccountNumber}
-              />
-            </div>
+            <AccountCheck
+              money={info.initMoney}
+              period={info.maturitDate}
+              interest={info.interest}
+              outdrawAccountNumber={info.outdrawAccountNumber}
+            />
           )}
           {currentNumber === 6 && (
             <ConfirmCard text={`${data.name}\n가입 완료`} />

@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { checkAmountUnitMoney } from '../../utils/checkAmountUnit';
 
 export type productData = {
   id: number;
@@ -10,7 +11,7 @@ export type productData = {
   interest2: number;
   period: string;
   payment1: number; // 1천원 단위
-  payment2: number;
+  payment2?: number;
   desc1: string;
   desc_detail1: string;
   desc_image1: string;
@@ -52,9 +53,9 @@ export const ProductJoinIntro: FC<IProps> = ({ data }) => {
               가입금액
               <br />
               <span className='font-hanaMedium text-xl'>
-                분기별 {data.payment1}
-                {data.payment1 < 10 ? '천원' : '만원'}~{data.payment2}
-                {data.payment2 < 10 ? '천원' : '만원'}
+                {data.payment2
+                  ? `분기별 ${data.payment1}${checkAmountUnitMoney(data.payment1)}~${data.payment2}${checkAmountUnitMoney(data.payment2)}`
+                  : `${data.payment1}${checkAmountUnitMoney(data.payment1)} 이상`}
               </span>
             </p>
           </div>

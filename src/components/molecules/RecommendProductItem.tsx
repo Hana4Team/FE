@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { RecommendList } from '../organisms/RecommendProductList';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface IProps {
   item: RecommendList;
@@ -8,9 +8,12 @@ interface IProps {
 
 export const RecommendProductItem: FC<IProps> = ({ item }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const moveProductDetail = (productId: number) => {
-    navigate('/mission4/product', { state: { productId: productId } });
+    navigate(`${location.pathname}/product`, {
+      state: { productId: productId },
+    });
   };
 
   return (

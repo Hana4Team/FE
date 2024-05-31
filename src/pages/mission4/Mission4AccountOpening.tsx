@@ -11,6 +11,10 @@ import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
 import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
+import {
+  checkAmountUnitMoney,
+  checkAmountUnitNumber,
+} from '../../utils/checkAmountUnit';
 type userInfo = {
   maturitDate: string;
   initMoney: number;
@@ -66,19 +70,17 @@ export const Mission4AccountOpening = () => {
 
   const regularDayEffect = () => {
     if (regularDayInput.current) {
-      if (+regularDayInput.current.value < 0) {
+      if (regularDayInput.current.value === '') return;
+      if (+regularDayInput.current.value < 1)
         regularDayInput.current.value = '1';
-      } else if (+regularDayInput.current.value > 31) {
+      else if (+regularDayInput.current.value > 31)
         regularDayInput.current.value = '31';
-      }
     }
   };
 
   const checkRegularDay = () => {
     if (regularDayInput.current) {
       if (regularDayInput.current.value === '') return;
-      if (+regularDayInput.current.value === 0)
-        regularDayInput.current.value = '1';
       setInfo({ ...info, regularDay: +regularDayInput.current.value });
       setShowModal(!showModal);
     }
@@ -88,8 +90,8 @@ export const Mission4AccountOpening = () => {
     if (moneyInput.current) {
       if (
         moneyInput.current.value === '' ||
-        +moneyInput.current.value < data.payment1 * 1000 ||
-        +moneyInput.current.value > data.payment2 * 1000
+        +moneyInput.current.value < checkAmountUnitNumber(data.payment1) ||
+        +moneyInput.current.value > checkAmountUnitNumber(data.payment2)
       ) {
         setInfo({ ...info, money: 0 });
         return;
@@ -161,6 +163,7 @@ export const Mission4AccountOpening = () => {
             </h1>
             {currentNumber === 0 && (
               <AccountSaveMoneyAmount
+                type={true}
                 period={data.period}
                 payment1={data.payment1}
                 payment2={data.payment2}
@@ -187,24 +190,16 @@ export const Mission4AccountOpening = () => {
                 </p>
                 {info.money === 0 && (
                   <span className='font-hanaLight text-lg text-red-600 -mt-3'>
-                    {data.payment1}
-                    {data.payment1 < 10 ? '천원' : '만원'}~{data.payment2}
-                    {data.payment2 < 10 ? '천원' : '만원'}사이의 금액을
-                    입력해주세요
+                    {`${data.payment1}${checkAmountUnitMoney(data.payment1)}~${data.payment2}${checkAmountUnitMoney(data.payment2)}사이의 금액을
+                    입력해주세요`}
                   </span>
                 )}
               </div>
             )}
             {currentNumber === 2 && (
-              <div className='w-full'>
-                <AccountOutputChoice onClick={checkOutdrawAccountModal} />
-              </div>
+              <AccountOutputChoice onClick={checkOutdrawAccountModal} />
             )}
-            {currentNumber === 3 && (
-              <div className='w-full'>
-                <AccountMaturitChoice />
-              </div>
-            )}
+            {currentNumber === 3 && <AccountMaturitChoice />}
             {currentNumber === 4 && <AccountPw onClick={checkPwModal} />}
             {currentNumber === 5 && (
               <AccountPwCheck
@@ -213,16 +208,14 @@ export const Mission4AccountOpening = () => {
               />
             )}
             {currentNumber === 6 && (
-              <div className='w-full'>
-                <AccountCheck
-                  money={info.initMoney}
-                  period={info.maturitDate}
-                  interest={info.interest}
-                  automatic_payment_date={info.regularDay}
-                  automatic_payment_money={info.money}
-                  outdrawAccountNumber={info.outdrawAccountNumber}
-                />
-              </div>
+              <AccountCheck
+                money={info.initMoney}
+                period={info.maturitDate}
+                interest={info.interest}
+                automatic_payment_date={info.regularDay}
+                automatic_payment_money={info.money}
+                outdrawAccountNumber={info.outdrawAccountNumber}
+              />
             )}
             {currentNumber === 7 && (
               <ConfirmCard text={`${data.name}\n가입 완료`} />
