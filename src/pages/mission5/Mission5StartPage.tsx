@@ -8,6 +8,7 @@ export const Mission5StartPage = () => {
     <>
       <Topbar title='이사미션' />
       <MissionStartHeader
+        icon='icons/blub.svg'
         title={`모은 목돈으로 새롭게\n 예금에 가입해보아요`}
       />
       <RecommendProductList list={test} />

@@ -44,7 +44,10 @@ export const Mission4StartPage = () => {
   return (
     <>
       <Topbar title='이사미션' />
-      <MissionStartHeader title={`원하는 적금에 가입해서\n목돈을 모아보아요`} />
+      <MissionStartHeader
+        icon='icons/blub.svg'
+        title={`원하는 적금에 가입해서\n목돈을 모아보아요`}
+      />
       <RecommendProductList list={test} />
     </>
   );
