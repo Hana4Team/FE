@@ -17,6 +17,7 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { MissionMain } from './pages/MissionMain.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
           { path: 'home', element: <Home /> },
+          { path: 'mission', element: <MissionMain /> },
           { path: 'mission2', element: <Mission2StartPage /> },
           { path: 'mission3', element: <Mission3StartPage /> },
           { path: 'mission4', element: <Mission4StartPage /> },
