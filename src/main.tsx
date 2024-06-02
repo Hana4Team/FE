@@ -17,6 +17,9 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { Mission1StartPage } from './pages/mission1/Mission1StartPage.tsx';
+import { ConsumePattern } from './pages/consume/ConsumePattern.tsx';
+import { ConsumeEdit } from './pages/consume/ConsumeEdit.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,7 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
           { path: 'home', element: <Home /> },
+          { path: 'mission1', element: <Mission1StartPage /> },
           { path: 'mission2', element: <Mission2StartPage /> },
           { path: 'mission3', element: <Mission3StartPage /> },
           { path: 'mission4', element: <Mission4StartPage /> },
@@ -39,6 +43,8 @@ const router = createBrowserRouter([
           { path: 'moneyBox', element: <MoneyBox /> },
           { path: 'alarm', element: <AlarmPage /> },
           { path: 'mypage', element: <MyPage /> },
+          { path: 'consume', element: <ConsumePattern /> },
+          { path: 'consumeEdit', element: <ConsumeEdit /> },
         ],
       },
     ],

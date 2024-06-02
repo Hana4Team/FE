@@ -9,7 +9,7 @@ const Navbar = () => {
       <div className='min-h-real-screen'>
         <Outlet />
       </div>
-      <div className='sticky bottom-0 flex items-end text-2xl w-full h-[100px]'>
+      <div className='sticky bottom-0 flex items-end text-2xl w-full z-20 h-[100px]'>
         <div className='flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
           <Link to='/alarm'>
             <GoBell size={40} className='text-slate-500' />
