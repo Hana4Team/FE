@@ -18,7 +18,7 @@ export const PasswordForm: FC<IProps> = ({
   checkPwdCondition,
 }) => {
   useEffect(() => {
-    if (step === 6) {
+    if (step === 6 || step == undefined) {
       inputRef.current.forEach((input) => {
         if (input) {
           input.value = '';
@@ -61,12 +61,12 @@ export const PasswordForm: FC<IProps> = ({
     <div className='w-full flex flex-col items-center'>
       <div className='font-hanaBold text-4xl text-center'>{title}</div>
       {!isCorrect && (
-        <div className='font-hanaMedium mt-6 text-xl text-gray-500'>
-          간편비밀번호를 다시 입력하세요
+        <div className='font-hanaMedium mt-6 text-xl text-hanaRed'>
+          비밀번호를 다시 입력하세요
         </div>
       )}
       <div className='my-16 flex'>
-        {Array.from({ length: 6 }).map((_, index) => (
+        {Array.from({ length: inputRef.current.length }).map((_, index) => (
           <input
             key={index}
             placeholder='●'
