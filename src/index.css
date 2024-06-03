@@ -81,3 +81,11 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+#news-list::-webkit-scrollbar {
+  display: none;
+}
+
+b {
+  font-family: 'Hana-Bold';
+}

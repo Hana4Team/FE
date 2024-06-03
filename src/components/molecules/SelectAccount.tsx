@@ -9,7 +9,7 @@ interface Iprops {
 export const SelectAccount: FC<Iprops> = ({ onClick, account }) => {
   return (
     <div
-      className='flex flex-col w-3/5 cursor-pointer'
+      className='flex flex-col w-full cursor-pointer'
       onClick={() => onClick()}
     >
       <div className='flex m-full justify-between flex-row'>

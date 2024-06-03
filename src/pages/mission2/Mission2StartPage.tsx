@@ -1,16 +1,43 @@
+import { useNavigate } from 'react-router-dom';
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
 import Topbar from '../../components/Topbar';
-import { BsArrowRightCircleFill } from 'react-icons/bs';
+import { useEffect, useRef, useState } from 'react';
+
+const productId = 1;
 
 export const Mission2StartPage = () => {
+  const navigate = useNavigate();
+  const [animation, setAnimation] = useState<number>(0);
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setAnimation((prev) => prev + 1);
+    }, 700);
+    const timeoutId = setTimeout(() => {
+      clearInterval(timerId);
+    }, 3500);
+    return () => {
+      clearInterval(timerId);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <>
       <Topbar title='이사미션' />
-      <MissionStartHeader title={`직접 머니박스 통장을\n 만들어보아요`} />
+      <MissionStartHeader
+        icon='icons/blub.svg'
+        title={`직접 머니박스 통장을\n 만들어보아요`}
+      />
       <div className='flex flex-col gap-7'>
-        <MoneyBoxIntroItem id={1} title='파킹' icon='safebox.svg'>
+        <MoneyBoxIntroItem
+          id={1}
+          title='파킹'
+          icon='safebox.svg'
+          className={`${animation <= 1 ? 'opacity-0' : 'opacity-1'} animate-fadein1`}
+        >
           <p className='font-hanaMedium text-2xl whitespace-pre-line leading-normal'>
             <span className='text-hanaRed'>자유롭게 </span>
             넣고 빼고
@@ -20,7 +47,12 @@ export const Mission2StartPage = () => {
             </span>
           </p>
         </MoneyBoxIntroItem>
-        <MoneyBoxIntroItem id={2} title='소비' icon='wallet.svg'>
+        <MoneyBoxIntroItem
+          id={2}
+          title='소비'
+          icon='wallet.svg'
+          className={`${animation <= 2 ? 'opacity-0' : 'opacity-1'} animate-fadein2`}
+        >
           <p className='font-hanaMedium text-2xl whitespace-pre-line leading-normal'>
             <span className='font-hanaRegular'>
               내 소비패턴 확인하고
@@ -30,7 +62,12 @@ export const Mission2StartPage = () => {
             지출하기
           </p>
         </MoneyBoxIntroItem>
-        <MoneyBoxIntroItem id={3} title='저축' icon='piggybank2.svg'>
+        <MoneyBoxIntroItem
+          id={3}
+          title='저축'
+          icon='piggybank2.svg'
+          className={`${animation <= 3 ? 'opacity-0' : 'opacity-1'} animate-fadein3`}
+        >
           <p className='font-hanaMedium text-2xl whitespace-pre-line leading-normal'>
             <span className='font-hanaRegular'>
               자신이 정한 목표로
@@ -46,6 +83,10 @@ export const Mission2StartPage = () => {
           content1='최고 연 3.00%'
           content2={`저축 3.00%\n파킹 2.00%`}
           content3='1개월 기준 세전'
+          className={`${animation <= 4 ? 'opacity-0' : 'opacity-1'} animate-fadein4`}
+          onClick={() =>
+            navigate('/mission2/product', { state: { productId: productId } })
+          }
         />
       </div>
     </>
