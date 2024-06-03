@@ -12,6 +12,7 @@ export const Mission3StartPage = () => {
     <>
       <Topbar title='이사미션' />
       <MissionStartHeader
+        icon='icons/blub.svg'
         title={`머니박스의 저축공간 돈을\n적금에 넣어 보아요`}
       />
       <div className='flex flex-col gap-7'>

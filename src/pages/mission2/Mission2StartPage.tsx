@@ -27,7 +27,10 @@ export const Mission2StartPage = () => {
   return (
     <>
       <Topbar title='이사미션' />
-      <MissionStartHeader title={`직접 머니박스 통장을\n 만들어보아요`} />
+      <MissionStartHeader
+        icon='icons/blub.svg'
+        title={`직접 머니박스 통장을\n 만들어보아요`}
+      />
       <div className='flex flex-col gap-7'>
         <MoneyBoxIntroItem
           id={1}
