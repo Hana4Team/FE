@@ -231,6 +231,7 @@ export const Join = () => {
                 className='w-full font-hanaMedium text-2xl border-b-[1px] border-black mt-12 pb-2'
                 placeholder='휴대폰 번호'
                 type='tel'
+                maxLength={13}
                 ref={phoneRef}
                 onBlur={() => checkCondition('phone')}
                 onChange={(e) => handlePhone(e)}
