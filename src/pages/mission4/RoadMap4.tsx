@@ -32,11 +32,11 @@ export const RoadMap4 = () => {
           </div>
 
           <img
-            src='/images/cloud.png'
+            src='/images/cloud.svg'
             className='absolute top-[90px] w-80 right-0'
           />
           <img
-            src='/images/cloud.png'
+            src='/images/cloud.svg'
             className='absolute top-[200px] w-80 -left-44'
           />
 
@@ -71,23 +71,23 @@ export const RoadMap4 = () => {
 
           <div>
             <img
-              src='/images/pin_gray.png'
+              src='/images/pin_gray.svg'
               className='absolute w-24 top-[315px] left-[125px]'
             />
             <img
-              src='/images/pin_red.png'
+              src='/images/pin_red.svg'
               className='absolute w-24 top-[400px] right-[90px]'
             />
             <img
-              src='/images/pin_green.png'
+              src='/images/pin_green.svg'
               className='absolute w-24 top-[500px] left-[72px]'
             />
             <img
-              src='/images/pin_green.png'
+              src='/images/pin_green.svg'
               className='absolute w-24 top-[578px] right-[34px]'
             />
             <img
-              src='/images/pin_green.png'
+              src='/images/pin_green.svg'
               className='absolute w-24 top-[640px] left-[42px]'
             />
           </div>

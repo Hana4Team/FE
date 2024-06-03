@@ -30,7 +30,7 @@ export const MyPage = () => {
     <>
       <div className='pt-20 w-11/12 flex items-center m-auto mb-12'>
         <img
-          src='images/별돌이1.png'
+          src='images/profile.svg'
           alt='profile'
           className='w-32 drop-shadow-under'
         />

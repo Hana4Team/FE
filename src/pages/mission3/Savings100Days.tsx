@@ -52,7 +52,7 @@ export const Savings100Days = () => {
                 </div>
               </div>
             </div>
-            <img src='/images/별돌이하트.png' className='w-32 mr-12' />
+            <img src='/images/별돌이하트.svg' className='w-32 mr-12' />
           </div>
           <div className='flex w-full justify-center'>
             <button

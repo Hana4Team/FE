@@ -6,8 +6,10 @@ import Topbar from '../../components/Topbar';
 import { CertiNumber } from '../../components/molecules/CertiNumber';
 import { SelectMenu } from '../../components/molecules/SelectMenu';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
-import { AccountDetailItem } from '../../components/molecules/AccountDetailItem';
 import { useNavigate } from 'react-router-dom';
+import { phoneNumberPattern } from '../../utils/checkValidation';
+import { ChoiceItem } from '../../components/molecules/ChoiceItem';
+import { phoneNumberAutoHyphen } from '../../utils/phoneNumberAutoHyphen';
 
 interface inputsProps {
   name: string;
@@ -17,8 +19,6 @@ interface inputsProps {
   pwd: string;
 }
 
-const telecomArr = ['SKT', 'KT', 'LG U+'];
-
 export const Join = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
@@ -26,7 +26,6 @@ export const Join = () => {
   const birthRef = useRef<HTMLInputElement | null>(null);
   const [telecom, setTelecom] = useState<string>('');
   const phoneRef = useRef<HTMLInputElement | null>(null);
-  const [phoneNum, setPhoneNum] = useState<string>('');
   const pwdRef = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
   const confirmPwdRef = useRef<(HTMLInputElement | null)[]>(
     Array(6).fill(null)
@@ -69,7 +68,7 @@ export const Join = () => {
         setIsName(true);
         setIsActive(true);
       } else {
-        setIsPhone(false);
+        setIsName(false);
         setIsActive(false);
       }
     }
@@ -78,12 +77,12 @@ export const Join = () => {
         setIsBirth(true);
         setIsActive(true);
       } else {
-        setIsPhone(false);
+        setIsBirth(false);
         setIsActive(false);
       }
     }
     if (title === 'phone') {
-      if (phoneRef.current!.value.length === 13) {
+      if (phoneNumberPattern.test(phoneRef.current!.value)) {
         setIsPhone(true);
         setIsActive(true);
       } else {
@@ -92,38 +91,20 @@ export const Join = () => {
       }
     }
     if (title === 'pwd') {
-      if (pwdRef.current.map((p) => p?.value).join('').length === 6) {
+      if (pwdRef.current.map((p) => p?.value).join('').length === 6)
         setIsActive(true);
-      }
+      else setIsActive(false);
     }
     if (title === 'confirmPwd') {
       if (confirmPwdRef.current.map((p) => p?.value).join('').length === 6)
         setIsActive(true);
+      else setIsActive(false);
     }
   };
 
-  const handlePhone = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = phoneRef.current?.value.replace(/\D+/g, '');
-    const numberLength = 11;
-
-    let result = '';
-
-    for (let i = 0; i < value!.length && i < numberLength; i += 1) {
-      switch (i) {
-        case 3:
-          result += '-';
-          break;
-        case 7:
-          result += '-';
-          break;
-        default:
-          break;
-      }
-      result += value?.[i];
-    }
-    phoneRef.current!.value = result;
-
-    setPhoneNum(e.target.value);
+  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatttedPhoneNumber = phoneNumberAutoHyphen(e.target.value);
+    if (phoneRef.current) phoneRef.current.value = formatttedPhoneNumber;
   };
 
   const pwdCheck = () => {
@@ -184,19 +165,18 @@ export const Join = () => {
   return (
     <>
       {showModal && (
-        <ChoiceMenu title='통신사 선택' onClose={() => showModalHandler()}>
-          <div className='flex flex-col items-start'>
-            {telecomArr &&
-              telecomArr.map((item) => (
-                <button
-                  className='py-3 text-lg font-hanaCM'
-                  onClick={() => onClicktelecom(item)}
-                >
-                  {item}
-                </button>
-              ))}
-          </div>
-        </ChoiceMenu>
+        <>
+          <ChoiceMenu title='통신사 선택' onClose={() => showModalHandler()}>
+            <div className='flex flex-col gap-5'>
+              <ChoiceItem name='SKT' onClick={() => onClicktelecom('SKT')} />
+              <ChoiceItem name='KT' onClick={() => onClicktelecom('KT')} />
+              <ChoiceItem
+                name='LG U+'
+                onClick={() => onClicktelecom('LG U+')}
+              />
+            </div>
+          </ChoiceMenu>
+        </>
       )}
       <div className='bg-white h-screen flex flex-col items-center'>
         <Topbar title='회원가입' onClick={prevStep} />
@@ -212,7 +192,7 @@ export const Join = () => {
                 onBlur={() => checkCondition('name')}
               />
               {!isName && (
-                <div className='font-hanaMedium mt-2 text-gray-400'>
+                <div className='font-hanaMedium mt-2 text-lg text-red-600'>
                   이름을 입력해주세요
                 </div>
               )}
@@ -230,7 +210,7 @@ export const Join = () => {
                 ref={birthRef}
               />
               {!isBirth && (
-                <div className='font-hanaMedium mt-2 text-gray-400'>
+                <div className='font-hanaMedium  mt-2 text-lg text-red-600'>
                   생년월일을 입력해주세요
                 </div>
               )}
@@ -251,13 +231,12 @@ export const Join = () => {
                 className='w-full font-hanaMedium text-2xl border-b-[1px] border-black mt-12 pb-2'
                 placeholder='휴대폰 번호'
                 type='tel'
-                value={phoneNum}
                 ref={phoneRef}
                 onBlur={() => checkCondition('phone')}
                 onChange={(e) => handlePhone(e)}
               />
               {!isPhone && (
-                <div className='font-hanaMedium text-gray-400'>
+                <div className='font-hanaMedium mt-2 text-lg text-red-600'>
                   휴대폰번호를 정확히 입력해주세요
                 </div>
               )}
