@@ -2,8 +2,12 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import Topbar from '../../components/Topbar';
+import { useNavigate } from 'react-router-dom';
+
+const productId = 1;
 
 export const Mission3StartPage = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Topbar title='이사미션' />
@@ -17,7 +21,7 @@ export const Mission3StartPage = () => {
               지난 달 내가 저축한 금액
             </h2>
             <p className='flex items-center gap-2 font-hanaBold text-hanaRed text-3xl'>
-              <img src='icons/dollarbox.svg' alt='dollar' className='w-11' />
+              <img src='/icons/dollarbox.svg' alt='dollar' className='w-11' />
               120,300
               <span className='font-hanaMedium text-xl text-black mt-2'>
                 원
@@ -33,6 +37,9 @@ export const Mission3StartPage = () => {
           content1='최고 연 5.00%'
           content2='기본 2.00%'
           content3='1개월 기준 세전'
+          onClick={() =>
+            navigate('/mission3/product', { state: { productId: productId } })
+          }
         />
       </div>
     </>

@@ -36,7 +36,10 @@ export default {
         },
       },
       animation: {
-        fadein: 'fade-in 1s ease-in-out 0.25s 1',
+        fadein1: 'fade-in 1.5s ease-in-out 0.5s 1',
+        fadein2: 'fade-in 1.5s ease-in-out 1s 1',
+        fadein3: 'fade-in 1.5s ease-in-out 1.5s 1',
+        fadein4: 'fade-in 1.5s ease-in-out 2s 1',
       },
     },
     minHeight: {
