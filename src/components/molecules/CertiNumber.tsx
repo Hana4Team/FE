@@ -20,6 +20,9 @@ export const CertiNumber: FC<IProps> = ({ telecom, phoneNumber }) => {
         <input
           className='font-hanaMedium text-2xl border-b-[1px] border-black w-9/12'
           placeholder='인증번호'
+          maxLength={6}
+          type='text'
+          pattern='/d*'
         />
         <button className='px-6 py-4 bg-gray-200 ml-5 rounded-xl font-hanaRegular text-lg'>
           재요청

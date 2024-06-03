@@ -3,7 +3,7 @@ import React from 'react';
 export const Landing = () => {
   return (
     <div className='bg-white h-screen flex flex-col justify-center items-center'>
-      <img src='/images/logo.png' className='w-48' />
+      <img src='/images/별돌이logo.svg' className='w-48' />
       <div className='font-hanaBold text-5xl mb-2 text-hanaRed'>
         똑똑<span className='text-hanaGreen'>하나</span>
       </div>

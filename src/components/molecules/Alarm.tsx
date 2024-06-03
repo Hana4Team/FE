@@ -9,7 +9,7 @@ export const Alarm: FC<IProps> = ({ message }) => {
     <div className='w-11/12 h-24 border border-none rounded-3xl bg-white m-auto flex justify-center drop-shadow-under'>
       <div className='w-28 h-20 my-auto'>
         <img
-          src='images/logo.png'
+          src='images/별돌이logo.svg'
           alt='alert_logo'
           className='w-full h-full object-contain'
         />

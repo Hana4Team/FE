@@ -44,6 +44,8 @@ export const PasswordForm: FC<IProps> = ({
     } else {
       event.target.value = '';
     }
+
+    checkPwdCondition?.();
   };
 
   const handleKeyDown = (
@@ -76,7 +78,6 @@ export const PasswordForm: FC<IProps> = ({
             ref={(el) => (inputRef.current[index] = el)}
             onChange={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            onBlur={() => checkPwdCondition?.()}
           />
         ))}
       </div>

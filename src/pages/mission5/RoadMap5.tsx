@@ -34,7 +34,7 @@ export const RoadMap5 = () => {
 
         <div className='relative top-[153px] flex flex-col items-center justify-center z-10'>
           <img
-            src='/images/별돌이3.png'
+            src='/images/별돌이까꿍.svg'
             className='absolute left-[20%] -top-[70px] w-32 z-10 rotate-90 '
           />
           <div className='h-3 w-11/12 rounded-xl bg-blue-950'></div>
