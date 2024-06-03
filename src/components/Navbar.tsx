@@ -7,7 +7,7 @@ import { FC } from 'react';
 const Navbar = () => {
   const location = useLocation();
 
-  const fixedList = ['/roadmap4', '/roadmap5', '/myhome'];
+  const fixedList = ['/roadmap4', '/roadmap5', '/myhome', '/savings100Days'];
 
   return (
     <div>
@@ -15,7 +15,7 @@ const Navbar = () => {
         <Outlet />
       </div>
       <div
-        className={`bottom-0 z-10 flex items-end text-2xl w-full h-[100px] ${fixedList.includes(location.pathname) ? 'fixed' : 'sticky'} ${location.pathname == 'roadmap' && 'bg-hanaSky'}`}
+        className={`bottom-0 z-20 flex items-end text-2xl w-full h-[100px] ${fixedList.includes(location.pathname) ? 'fixed' : 'sticky'} ${location.pathname == 'roadmap' && 'bg-hanaSky'}`}
       >
         <div className='flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
           <Link to='/alarm'>

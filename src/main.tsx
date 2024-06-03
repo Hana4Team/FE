@@ -16,6 +16,9 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { Mission1StartPage } from './pages/mission1/Mission1StartPage.tsx';
+import { ConsumePattern } from './pages/consume/ConsumePattern.tsx';
+import { ConsumeEdit } from './pages/consume/ConsumeEdit.tsx';
 import { AccountHistory } from './pages/main/AccountHistory.tsx';
 import { NewsList } from './pages/news/NewsList.tsx';
 import { MissionMain } from './pages/MissionMain.tsx';
@@ -65,12 +68,13 @@ const router = createBrowserRouter([
         children: [
           { path: 'home', element: <Home /> },
           { path: 'mission', element: <MissionMain /> },
+          { path: 'mission1', element: <Mission1StartPage /> },
           { path: 'mission2', element: <Mission2StartPage /> },
           {
             path: 'mission2/product',
             element: <Mission2Product />,
           },
-          { path: 'Savings100Days', element: <Savings100Days /> },
+          { path: 'savings100Days', element: <Savings100Days /> },
           { path: 'mission3', element: <Mission3StartPage /> },
           {
             path: 'mission3/product',
@@ -92,6 +96,8 @@ const router = createBrowserRouter([
           { path: 'moneyBox', element: <MoneyBox /> },
           { path: 'alarm', element: <AlarmPage /> },
           { path: 'mypage', element: <MyPage /> },
+          { path: 'consume', element: <ConsumePattern /> },
+          { path: 'consumeEdit', element: <ConsumeEdit /> },
           { path: 'account', element: <AccountHistory /> },
           { path: 'news', element: <NewsList /> },
           { path: 'myhome', element: <MyHome /> },
