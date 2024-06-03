@@ -17,6 +17,7 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { Savings100Days } from './pages/mission3/Savings100Days.tsx';
 
 import Termination from './pages/mission4/Termination.tsx';
 import { RoadMap4 } from './pages/mission4/RoadMap4.tsx';
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'home', element: <Home /> },
           { path: 'mission2', element: <Mission2StartPage /> },
+          { path: 'Savings100Days', element: <Savings100Days /> },
           { path: 'mission3', element: <Mission3StartPage /> },
           { path: 'mission4', element: <Mission4StartPage /> },
           { path: 'mission5', element: <Mission5StartPage /> },

@@ -16,6 +16,8 @@ export default {
         hanaRed: '#E90061',
         hanaGray: '#F2F2F2',
         hanaLightGreen: '#9CDAB8',
+        hanaDeepGreen: '#008485',
+        hanaAqua: '#EAF3F2',
         hanaSky: '#F1FFFE',
         white: '#FFFFFF',
       },
