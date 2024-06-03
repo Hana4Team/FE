@@ -6,6 +6,7 @@ interface IProps {
   step?: number;
   isCorrect: boolean;
   re: boolean;
+  checkPwdCondition?: () => void;
 }
 
 export const PasswordForm: FC<IProps> = ({
@@ -14,6 +15,7 @@ export const PasswordForm: FC<IProps> = ({
   step,
   isCorrect,
   re,
+  checkPwdCondition,
 }) => {
   useEffect(() => {
     if (step === 6) {
@@ -23,6 +25,10 @@ export const PasswordForm: FC<IProps> = ({
         }
       });
     }
+  }, [step, re]);
+
+  useEffect(() => {
+    inputRef.current[0]?.focus();
   }, [step, re]);
 
   const handleInput = (
@@ -70,6 +76,7 @@ export const PasswordForm: FC<IProps> = ({
             ref={(el) => (inputRef.current[index] = el)}
             onChange={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}
+            onBlur={() => checkPwdCondition?.()}
           />
         ))}
       </div>
