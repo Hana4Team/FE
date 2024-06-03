@@ -2,10 +2,10 @@ import { FC, useRef, useState } from 'react';
 
 interface IProps {
   password: string;
-  onClick: () => void;
+  isBtnDisabled: (disable: boolean) => void;
 }
 
-export const AccountPwCheck: FC<IProps> = ({ password, onClick }) => {
+export const AccountPwCheck: FC<IProps> = ({ password, isBtnDisabled }) => {
   const [isPwCheck, setIsPwCheck] = useState<boolean>(true);
   const pwCheckInput = useRef<HTMLInputElement | null>(null);
 
@@ -16,10 +16,11 @@ export const AccountPwCheck: FC<IProps> = ({ password, onClick }) => {
         pwCheckInput.current?.value !== password
       ) {
         setIsPwCheck(false);
+        isBtnDisabled(false);
         return;
       }
       setIsPwCheck(true);
-      onClick();
+      isBtnDisabled(true);
     }
   };
 
@@ -32,7 +33,7 @@ export const AccountPwCheck: FC<IProps> = ({ password, onClick }) => {
           ref={pwCheckInput}
           maxLength={4}
           placeholder='숫자 4자리 입력'
-          onBlur={checkEffectPwCheck}
+          onChange={checkEffectPwCheck}
           className='border-b-[0.05rem] border-black py-3 placeholder:text-[#D1D1D1]'
         />
       </div>

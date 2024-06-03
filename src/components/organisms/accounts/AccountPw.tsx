@@ -3,9 +3,10 @@ import { pwPattern } from '../../../utils/checkValidation';
 
 interface IProps {
   onClick: (password: string) => void;
+  isBtnDisabled: (disable: boolean) => void;
 }
 
-export const AccountPw: FC<IProps> = ({ onClick }) => {
+export const AccountPw: FC<IProps> = ({ onClick, isBtnDisabled }) => {
   const pwInput = useRef<HTMLInputElement | null>(null);
 
   const checkEffectPw = () => {
@@ -14,8 +15,10 @@ export const AccountPw: FC<IProps> = ({ onClick }) => {
         pwInput.current?.value === '' ||
         pwPattern.test(pwInput.current?.value) === false
       ) {
+        isBtnDisabled(false);
         return;
       }
+      isBtnDisabled(true);
       onClick(pwInput.current?.value);
     }
   };
@@ -29,7 +32,7 @@ export const AccountPw: FC<IProps> = ({ onClick }) => {
           ref={pwInput}
           maxLength={4}
           placeholder='숫자 4자리 입력'
-          onBlur={checkEffectPw}
+          onChange={checkEffectPw}
           className='border-b-[0.05rem] border-black py-3 placeholder:text-[#D1D1D1]'
         />
       </div>
