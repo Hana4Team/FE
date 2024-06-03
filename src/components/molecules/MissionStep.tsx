@@ -35,14 +35,13 @@ export const MissionStep: FC<IProps> = ({ step, title, text, status }) => {
           </div>
           <div className='mt-2 text-gray-600'>{text}</div>
         </div>
-        <MiniButton text={status} />
-
-        <div className='absolute left-0 top-0 w-full h-full '>
+        <MiniButton step={step} text={status} />
+        {/* <div className='absolute left-0 top-0 w-full h-full '>
           <div className='absolute top-1/4 left-1/3 -rotate-12 z-10 font-hanaHeavy text-hanaRed text-5xl'>
             미션 성공
           </div>
           <div className='absolute bg-white opacity-50 w-full h-full  rounded-2xl text-black'></div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

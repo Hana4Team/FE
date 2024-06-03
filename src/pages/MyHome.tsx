@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function MyHome() {
+export const MyHome = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -38,4 +38,4 @@ export default function MyHome() {
       )}
     </>
   );
-}
+};

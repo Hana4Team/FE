@@ -47,7 +47,7 @@ export const Mission4AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 7) {
-      navigate('/home');
+      navigate('/roadmap4');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
@@ -181,10 +181,12 @@ export const Mission4AccountOpening = () => {
                 </p>
                 <p className='flex items-center font-hanaMedium text-[1.8rem]'>
                   <input
-                    type='number'
+                    type='text'
+                    pattern='\d*'
+                    maxLength={8}
                     ref={moneyInput}
                     onBlur={checkMoney}
-                    className='w-28 border-b-[0.1rem] border-black px-1 pt-1 pb-2 text-hanaGreen font-hanaBold text-2xl mr-3'
+                    className='w-28 border-b-[0.1rem] border-black px-1 pt-1 pb-2 text-hanaGreen font-hanaBold text-2xl mr-3 text-end'
                   />
                   {moneyInput.current?.value && '원'}씩 저축하기
                 </p>

@@ -3,9 +3,15 @@ import { MoneyBoxItem } from '../../components/molecules/MoneyBoxItem';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { useState } from 'react';
 import { MoneyBoxMoveItem } from '../../components/molecules/MoneyBoxMoveItem';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const MoneyBox = () => {
+  const location = useLocation();
+
+  const locationState = location.state as {
+    prev: boolean;
+  };
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [clickedName, setClickedName] = useState<string>();
 
@@ -27,6 +33,15 @@ export const MoneyBox = () => {
         receiveAccount: '111-111-111111',
       },
     });
+  };
+
+  const onClickBack = () => {
+    if (locationState != null && locationState.prev) {
+      navigate('/mission');
+      return;
+    }
+
+    navigate(-1);
   };
 
   const navigate = useNavigate();
@@ -60,7 +75,7 @@ export const MoneyBox = () => {
           </div>
         </ChoiceMenu>
       )}
-      <Topbar title='머니박스' />
+      <Topbar title='머니박스' onClick={() => onClickBack()} />
       {/* 출금 계좌번호 공간 */}
       <div className='flex flex-col bg-white p-8 font-hanaMedium mb-4'>
         <div className='flex justify-between'>

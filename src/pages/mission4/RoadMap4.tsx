@@ -1,7 +1,6 @@
 import React from 'react';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
-import Termination from './Termination';
 
 export const RoadMap4 = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export const RoadMap4 = () => {
 
   return (
     <>
-      <Topbar title='청년도약계좌' />
+      <Topbar title='청년도약계좌' onClick={() => navigate('/mission')} />
       <div className='bg-hanaSky min-h-real-screen'>
         <div>
           <div className='absolute top-[100px] left-[15px] w-[150px]'>
@@ -53,15 +52,18 @@ export const RoadMap4 = () => {
           </div>
 
           <img
-            src='/images/roadmap.png'
+            src='/images/roadmap.svg'
             className='absolute top-[180px] w-full right-0'
           />
 
-          <button className='absolute top-[210px] right-[10px] font-hanaCM text-lg border px-10 py-2 bg-white rounded-2xl'>
+          <button
+            className='absolute top-[210px] right-[10px] font-hanaCM text-lg border px-10 py-2 bg-white rounded-2xl'
+            onClick={() => navigate('/account')}
+          >
             상세조회
           </button>
           <button
-            className='font-hanaMedium absolute top-[730px] right-10 text-lg cursor-pointer p-2 z-20'
+            className='font-hanaMedium absolute top-[730px] right-10 text-lg cursor-pointer p-2 z-30'
             onClick={moveToTermination}
           >
             해지하기

@@ -72,11 +72,6 @@ export const ConsumePattern = () => {
           </div>
           <CategoryItem color='#28B2A5' name='지출' balance={100000} />
           <CategoryItem color='#B5B5B5' name='남은 예산' balance={400000} />
-          {/* 하루에 50000원 이하로 써야 목표를 달성할 수 있어요 영역
-          <div
-            className='flex w-full mt-7 h-14 justify-center items-center border font-hanaRegular text-2xl rounded-xl'
-            onClick={() => onClickButton()}
-          ></div> */}
           <div
             className='flex w-full mt-7 h-14 justify-center items-center border font-hanaRegular text-2xl rounded-xl'
             onClick={() => onClickButton()}

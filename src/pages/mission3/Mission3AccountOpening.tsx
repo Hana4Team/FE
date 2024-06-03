@@ -5,7 +5,6 @@ import { Button } from '../../components/ui/Button';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
 import { AccountMaturitChoice } from '../../components/organisms/accounts/AccountMaturitChoice';
-import { userInfo } from 'os';
 import { AccountPw } from '../../components/organisms/accounts/AccountPw';
 import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
 import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
@@ -63,7 +62,7 @@ export const Mission3AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 7) {
-      navigate('/home');
+      navigate('/savings100Days');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
@@ -127,21 +126,23 @@ export const Mission3AccountOpening = () => {
           </h1>
           {currentNumber === 0 && (
             <div className='w-full flex items-center font-hanaMedium text-[1.7rem]'>
-              <span className='mr-10'>
+              <span className='mr-2 text-hanaDeepGreen font-hanaBold'>
                 {dummyData.initMoney.toLocaleString('ko-KR')}
               </span>
-              가입하기
+              원 가입하기
             </div>
           )}
           {currentNumber === 1 && (
             <div>
               <p className='flex w-52 border-b-[0.05rem] border-black py-3 text-2xl font-hanaMedium'>
                 <input
-                  type='number'
+                  type='text'
+                  pattern='\d*'
+                  maxLength={9}
                   ref={savingMoneyInput}
                   placeholder={`${data?.payment1}${checkAmountUnitMoney(data?.payment1)} ~ ${data?.payment2}${checkAmountUnitMoney(data?.payment2)} `}
                   onBlur={() => checkEffectSavingMoney(info)}
-                  className='w-48 placeholder:text-[#979797]'
+                  className='w-48 placeholder:text-[#979797] text-end pr-2'
                 />
                 {savingMoneyInput.current?.value && '원'}
               </p>

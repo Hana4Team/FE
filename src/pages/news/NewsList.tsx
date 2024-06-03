@@ -70,7 +70,7 @@ export const NewsList = () => {
 
   return (
     <>
-      <Topbar title='일일미션' />
+      <Topbar title='오늘의 금융' />
       <MissionStartHeader
         icon='icons/news.svg'
         title={`금융 컨텐츠를 읽고\n하나머니를 받아요`}

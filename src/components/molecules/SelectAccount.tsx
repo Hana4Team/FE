@@ -4,9 +4,10 @@ import { IoIosArrowDown } from 'react-icons/io';
 interface Iprops {
   onClick: () => void;
   account?: string;
+  isDeposit?: boolean;
 }
 
-export const SelectAccount: FC<Iprops> = ({ onClick, account }) => {
+export const SelectAccount: FC<Iprops> = ({ onClick, account, isDeposit }) => {
   return (
     <div
       className='flex flex-col w-full cursor-pointer'
@@ -18,7 +19,9 @@ export const SelectAccount: FC<Iprops> = ({ onClick, account }) => {
           <p
             className={`flex my-auto font-hanaLight text-xl pt-2 ${account == null ? 'text-gray-400' : ''}`}
           >
-            {account == '' ? '출금할 계좌를 선택해주세요.' : account}
+            {account == ''
+              ? `${isDeposit ? '입금' : '출금'}할 계좌를 선택해주세요.`
+              : account}
           </p>
         </div>
         <div className='flex justify-center items-center pt-2'>

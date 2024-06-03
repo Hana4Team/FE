@@ -20,7 +20,7 @@ export const RoadMap5 = () => {
 
   return (
     <>
-      <Topbar title='청년도약예금' />
+      <Topbar title='청년도약예금' onClick={() => navigate('/mission')} />
       <div className='bg-hanaSky min-h-real-screen'>
         <img
           src='/images/pado.svg'

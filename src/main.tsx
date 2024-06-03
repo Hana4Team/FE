@@ -92,7 +92,6 @@ const router = createBrowserRouter([
           },
           { path: 'roadmap4', element: <RoadMap4 /> },
           { path: 'roadmap5', element: <RoadMap5 /> },
-          { path: 'joinProduct', element: <JoinProductPage /> },
           { path: 'moneyBox', element: <MoneyBox /> },
           { path: 'alarm', element: <AlarmPage /> },
           { path: 'mypage', element: <MyPage /> },

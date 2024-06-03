@@ -53,7 +53,7 @@ export const Home = () => {
           <div className='w-full flex justify-center gap-5'>
             <div
               className='bg-[#5CB6B7] flex flex-col justify-between w-3/5 pl-8 pr-3 pt-10 pb-2 rounded-[2.5rem] drop-shadow-under cursor-pointer'
-              onClick={() => navigatePageHandler('/')}
+              onClick={() => navigatePageHandler('/mission')}
             >
               <div className='flex flex-col'>
                 <h1 className='font-hanaMedium text-5xl text-white mb-5'>
@@ -74,16 +74,16 @@ export const Home = () => {
             </div>
             <div
               className='bg-[#F2777E] flex flex-col justify-between w-2/5 pl-8 pr-3 pt-7 pb-2 rounded-[2.5rem] drop-shadow-under cursor-pointer'
-              onClick={() => navigatePageHandler('/')}
+              onClick={() => navigatePageHandler('/news')}
             >
               <div className='flex flex-col'>
                 <h1 className='font-hanaMedium text-5xl text-white mb-1.5 leading-snug'>
-                  일일
+                  오늘의
                   <br />
-                  미션
+                  금융
                 </h1>
                 <p className='font-hanaRegular text-xl text-white mb-16'>
-                  1건의 미션이
+                  새로운 금융 뉴스가
                   <br />
                   기다리고있어요
                 </p>
@@ -99,7 +99,7 @@ export const Home = () => {
           </div>
           <div
             className='bg-[#437C6E] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-under cursor-pointer'
-            onClick={() => navigatePageHandler('/')}
+            onClick={() => navigatePageHandler('/consume')}
           >
             <div className='flex flex-col'>
               <h1 className='font-hanaMedium text-5xl text-white mb-3'>
@@ -119,7 +119,7 @@ export const Home = () => {
           </div>
           <div
             className='bg-[#9ED2B6] flex justify-between items-center w-full px-8 py-10 rounded-[2.5rem] drop-shadow-under cursor-pointer'
-            onClick={() => navigatePageHandler('/')}
+            onClick={() => navigatePageHandler('/myhome')}
           >
             <div className='flex flex-col'>
               <h1 className='font-hanaMedium text-5xl text-white mb-3'>

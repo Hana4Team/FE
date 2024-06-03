@@ -47,7 +47,11 @@ export const Mission2AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 9) {
-      navigate('/home');
+      navigate('/moneyBox', {
+        state: {
+          prev: true,
+        },
+      });
       return;
     }
     setCurrentNumber((prev) => prev + 1);
@@ -240,6 +244,10 @@ export const Mission2AccountOpening = () => {
             {currentNumber === 4 && (
               <>
                 <ChoiceItem
+                  name='1,000만원 미만'
+                  onClick={() => checkAssetrModal('1,000만원 미만')}
+                />
+                <ChoiceItem
                   name='1,000만원 ~ 1억원 미만'
                   onClick={() => checkAssetrModal('1,000만원 ~ 1억원 미만')}
                 />
@@ -250,10 +258,6 @@ export const Mission2AccountOpening = () => {
                 <ChoiceItem
                   name='10억원 ~ 100억원 미만'
                   onClick={() => checkAssetrModal('10억원 ~ 100억원 미만')}
-                />
-                <ChoiceItem
-                  name='100억원 ~ 1,000억원 미만'
-                  onClick={() => checkAssetrModal('100억원 ~ 1,000억원 미만')}
                 />
               </>
             )}
@@ -283,10 +287,7 @@ export const Mission2AccountOpening = () => {
                   비대면 실명 확인을 위해
                   <br /> 준비해 주세요
                 </h1>
-                <div
-                  className='flex w-11/12 bg-[#EBEBEB] p-8 rounded-xl cursor-pointer'
-                  onClick={() => nextHandler()}
-                >
+                <div className='flex w-11/12 bg-[#EBEBEB] p-8 rounded-xl'>
                   <img src='/icons/call.svg' alt='call' className='w-13' />
                   <div className='font-hanaMedium text-xl ml-3'>
                     휴대폰

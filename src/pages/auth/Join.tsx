@@ -177,7 +177,7 @@ export const Join = () => {
       }
     }
     if (step === 7) {
-      navigate('/login');
+      navigate('/home');
     }
   };
 

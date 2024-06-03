@@ -18,7 +18,7 @@ interface RequestType {
   receiveAccount: string;
 }
 
-export default function Termination() {
+export const Termination = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
@@ -48,7 +48,7 @@ export default function Termination() {
 
   const showModalHandler = () => setShowModal(!showModal);
   const nextStep = () => {
-    if (step === 3) navigate(-1);
+    if (step === 3) navigate('/mission');
     else setStep((prev) => prev + 1);
   };
   const clickAccount = (clikedAccount: string) => {
@@ -64,7 +64,7 @@ export default function Termination() {
   return (
     <div className='bg-white h-screen flex flex-col items-center'>
       {showModal && (
-        <ChoiceMenu title='출금계좌선택' onClose={() => showModalHandler()}>
+        <ChoiceMenu title='입금계좌선택' onClose={() => showModalHandler()}>
           <div className='flex flex-col'>
             <AccountDetailItem
               title='영하나플러스통장'
@@ -101,6 +101,7 @@ export default function Termination() {
               <SelectAccount
                 onClick={() => showModalHandler()}
                 account={data.receiveAccount}
+                isDeposit
               />
             </div>
             <div className='m-5 font-hanaLight text-lg border p-5'>
@@ -123,15 +124,15 @@ export default function Termination() {
       ) : step === 2 ? (
         <div className='flex flex-col justify-between items-center w-full h-full p-10'>
           <div className='w-full'>
-            <div className='font-hanaMedium text-2xl mb-2'>
+            <div className='font-hanaMedium text-3xl mb-10'>
               즉시해지 정보확인
             </div>
-            <div className='m-5 font-hanaLight text-lg border p-5'>
-              <div className='flex justify-between mb-2'>
+            <div className='flex flex-col font-hanaLight text-xl border px-7 py-5 gap-2'>
+              <div className='flex justify-between'>
                 <p>해지계좌종류</p>
                 <p>{data.accountType}</p>
               </div>
-              <div className='flex justify-between mb-2'>
+              <div className='flex justify-between'>
                 <p>해지계좌번호</p>
                 <p>{data.sendAccount}</p>
               </div>
@@ -139,11 +140,11 @@ export default function Termination() {
                 <p>만기일</p>
                 <p>{data.terminationDate}</p>
               </div>
-              <div className='flex justify-between mb-2'>
+              <div className='flex justify-between'>
                 <p>해지구분</p>
                 <p>{data.terminationType}</p>
               </div>
-              <div className='flex justify-between mb-2'>
+              <div className='flex justify-between'>
                 <p>원금</p>
                 <p>{data.principal}</p>
               </div>
@@ -151,7 +152,7 @@ export default function Termination() {
                 <p>받으실금액</p>
                 <p>{data.totalAmount}</p>
               </div>
-              <div className='flex justify-between mb-2'>
+              <div className='flex justify-between'>
                 <p>입금계좌번호</p>
                 <p>{data.receiveAccount}</p>
               </div>
@@ -167,4 +168,4 @@ export default function Termination() {
       )}
     </div>
   );
-}
+};

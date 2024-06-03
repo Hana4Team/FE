@@ -4,16 +4,10 @@ import { RiPencilFill } from 'react-icons/ri';
 interface Iprops {
   month: number;
   balance: number;
-  isMission?: boolean;
   lastSpend?: number;
 }
 
-export const BudgetInfo: FC<Iprops> = ({
-  month,
-  balance,
-  isMission,
-  lastSpend,
-}) => {
+export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
   const [isEdit, SetIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState(balance.toLocaleString());
 
@@ -40,14 +34,12 @@ export const BudgetInfo: FC<Iprops> = ({
       {!isEdit && (
         <div className='flex flex-row mt-2 mb-3 items-center gap-2'>
           <p className='font-hanaHeavy text-5xl'>{value.toLocaleString()}원</p>
-          {isMission && (
-            <RiPencilFill
-              size={25}
-              color='545454'
-              onClick={() => onClickPencil()}
-              className='cursor-pointer'
-            />
-          )}
+          <RiPencilFill
+            size={25}
+            color='545454'
+            onClick={() => onClickPencil()}
+            className='cursor-pointer'
+          />
         </div>
       )}
       {/* 수정 모드 */}

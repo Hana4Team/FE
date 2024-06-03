@@ -23,6 +23,7 @@ export const BankBookIntro: FC<IProps> = ({
   return (
     <div
       className={`w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center ${className}`}
+      onClick={() => onClick()}
     >
       <p className='font-hanaRegular text-2xl'>{subTitle}</p>
       <h1 className='font-hanaBold text-[2.7rem]'>{title}</h1>
@@ -31,7 +32,6 @@ export const BankBookIntro: FC<IProps> = ({
           <BsArrowRightCircleFill
             color={'#D9D9D9'}
             size={24}
-            onClick={onClick}
             className='mb-16 mt-1 cursor-pointer'
           />
           <div className='font-hanaRegular text-2xl  whitespace-pre-line'>

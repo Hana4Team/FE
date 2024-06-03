@@ -18,9 +18,9 @@ export const AccountHistoryItem: FC<Iprops> = ({
   return (
     <div className='flex my-5 w-full justify-between'>
       <div className='flex flex-row'>
-        <p className='font-hanaBold text-3xl mr-6 tracking-tighter'>{date}</p>
+        <p className='font-hanaBold text-2xl mr-6 tracking-tighter'>{date}</p>
         <div className='flex flex-col font-hanaMedium gap-2'>
-          <p className='font-hanaMedium text-3xl'>{name}</p>
+          <p className='font-hanaMedium text-[1.7rem] leading-8'>{name}</p>
           <p className='text-2xl text-gray-400'>{time}</p>
         </div>
       </div>

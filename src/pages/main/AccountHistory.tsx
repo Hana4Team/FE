@@ -41,7 +41,7 @@ export const AccountHistory = () => {
           <p className='font-hanaRegular text-2xl mb-6'>
             하나은행 111-111-111111
           </p>
-          <p className='h-full flex flex-col justify-center font-hanaCM text-5xl'>
+          <p className='h-full flex flex-col justify-center font-hanaCM text-4xl'>
             600,000원
           </p>
         </div>
@@ -53,7 +53,7 @@ export const AccountHistory = () => {
               className={`my-auto ${year === 2000 && month === 1 && 'text-gray-400'}`}
               onClick={() => onClickArrow(-1)}
             />
-            <p className='font-hanaBold text-[2rem] leading-9 mx-5'>
+            <p className='font-hanaCM text-3xl leading-9 mx-5'>
               {year}년 {month}월
             </p>
             <IoIosArrowForward

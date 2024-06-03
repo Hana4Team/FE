@@ -94,7 +94,9 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
       <div className='flex flex-col gap-1'>
         <p className='flex items-center'>
           <input
-            type='number'
+            type='text'
+            pattern='\d*'
+            maxLength={2}
             ref={maturitDate}
             placeholder={
               maturitDatePeriods.minPeriod + maturitDatePeriods.scope
@@ -113,7 +115,9 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
       <div className='flex flex-col gap-1'>
         <p className='flex items-center'>
           <input
-            type='number'
+            type='text'
+            pattern='\d*'
+            maxLength={8}
             ref={initMoney}
             placeholder={
               type

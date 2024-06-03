@@ -23,10 +23,11 @@ export const Mission1StartPage = () => {
     <>
       <Topbar title='이사미션' />
       <MissionStartHeader
+        icon='icons/blub.svg'
         title={`지난 달 지출을 확인하고\n이번 달 예산을 입력해보아요`}
       />
       <div className='flex flex-col gap-6'>
-        <BudgetInfo month={dateMonth} balance={500000} isMission />
+        <BudgetInfo month={dateMonth} balance={500000} />
         <CategorySpendCard
           datas={datas}
           year={dateYear}

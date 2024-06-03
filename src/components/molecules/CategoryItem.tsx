@@ -13,7 +13,7 @@ export const CategoryItem: FC<IProps> = ({ color, name, balance }) => {
         <div className={`h-4 w-4 rounded-full bg-[${color}]`} />
         <p className='font-hanaMedium text-2xl'>{name}</p>
       </div>
-      <p className='font-hanaMedium text-3xl'>{balance.toLocaleString()}원</p>
+      <p className='font-hanaCM text-2xl'>{balance.toLocaleString()}원</p>
     </div>
   );
 };

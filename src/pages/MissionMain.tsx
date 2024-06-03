@@ -1,4 +1,3 @@
-import React from 'react';
 import { MissionStep } from '../components/molecules/MissionStep';
 import Topbar from '../components/Topbar';
 import { MissionStartHeader } from '../components/molecules/MissionStartHeader';
@@ -21,10 +20,14 @@ export const MissionMain = () => {
   return (
     <>
       <Topbar title='이사미션' />
-      <MissionStartHeader title={`더 큰 집으로\n이사가볼까요?`} />
+      <MissionStartHeader
+        icon='icons/blub.svg'
+        title={`더 큰 집으로\n이사가볼까요?`}
+      />
       {step.map((s, index) => (
         <div className='px-8 py-3'>
           <MissionStep
+            key={index}
             step={index + 1}
             title={s.title}
             text={s.text}

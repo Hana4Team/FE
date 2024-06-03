@@ -69,8 +69,8 @@ export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
       {choiceAccount.money !== 0 && (
         <p className='flex gap-2 text-lg'>
           <span className='font-hanaRegular text-[#838383]'>출금가능금액</span>
-          <span className='font-hanaCM'>
-            {choiceAccount.money.toLocaleString('ko-KR')}
+          <span className='font-hanaCM flex justify-center items-center'>
+            {choiceAccount.money.toLocaleString('ko-KR')} 원
           </span>
         </p>
       )}

@@ -21,7 +21,7 @@ export const Savings100Days = () => {
 
   return (
     <>
-      <Topbar title='100일 적금 관리' />
+      <Topbar title='100일 적금 관리' onClick={() => navigate('/mission')} />
       <div className='bg-hanaAqua pb-[100px]'>
         <div className='bg-white font-hanaMedium p-8'>
           <div className='text-3xl mb-2'>생활비</div>
@@ -56,7 +56,7 @@ export const Savings100Days = () => {
           </div>
           <div className='flex w-full justify-center'>
             <button
-              onClick={() => navigate('#')}
+              onClick={() => navigate('/account')}
               className='absolute bg-white font-hanaMedium text-2xl rounded-xl py-5 px-20 border-2 cursor-pointer'
             >
               상세조회
