@@ -16,6 +16,7 @@ import { MoneyBox } from './pages/moneyBox/MoneyBox.tsx';
 import { Sending } from './pages/moneyBox/Sending.tsx';
 import { MyPage } from './pages/main/MyPage.tsx';
 import { AlarmPage } from './pages/main/AlarmPage.tsx';
+import { MissionMain } from './pages/MissionMain.tsx';
 import { Mission2AccountOpening } from './pages/mission2/Mission2AccountOpening.tsx';
 import { Mission2Product } from './pages/mission2/Mission2Product.tsx';
 import { Mission3Product } from './pages/mission3/Mission3Product.tsx';
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
           { path: 'home', element: <Home /> },
+          { path: 'mission', element: <MissionMain /> },
           { path: 'mission2', element: <Mission2StartPage /> },
           {
             path: 'mission2/product',
