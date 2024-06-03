@@ -31,17 +31,12 @@ export const Mission5AccountOpening = () => {
   });
 
   const nextHandler = () => {
-    if (currentNumber === 6) {
+    if (currentNumber === 4) {
       navigate('/home');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
-    currentNumber === 0 ||
-    currentNumber === 1 ||
-    currentNumber === 4 ||
-    currentNumber === 5
-      ? setBtnActive(true)
-      : setBtnActive(false);
+    setBtnActive(true);
   };
 
   const checkinitMoneyAndMaturitDateModal = (
@@ -56,14 +51,6 @@ export const Mission5AccountOpening = () => {
     setBtnActive(true);
   };
 
-  const checkPwModal = (password: string) => {
-    setInfo({
-      ...info,
-      password: password,
-    });
-    setBtnActive(true);
-  };
-
   return (
     <div className='bg-white flex flex-col items-center h-screen w-full'>
       <Topbar title='예금가입' />
@@ -73,8 +60,6 @@ export const Mission5AccountOpening = () => {
             {currentNumber === 0 && '얼마를 저축할까요?'}
             {currentNumber === 1 && '정보를 확인해주세요'}
             {currentNumber === 2 && '만기 시 어떻게 할까요?'}
-            {currentNumber === 3 && '계좌 비밀번호를 입력해주세요'}
-            {currentNumber === 4 && '계좌 비밀번호를\n 한 번 더 입력해주세요'}
             {currentNumber === 5 && `이대로 가입하시겠어요?`}
           </h1>
           {currentNumber === 0 && (
@@ -98,14 +83,7 @@ export const Mission5AccountOpening = () => {
             </div>
           )}
           {currentNumber === 2 && <AccountMaturitChoice />}
-          {currentNumber === 3 && <AccountPw onClick={checkPwModal} />}
-          {currentNumber === 4 && (
-            <AccountPwCheck
-              password={info.password}
-              onClick={() => setBtnActive(true)}
-            />
-          )}
-          {currentNumber === 5 && (
+          {currentNumber === 3 && (
             <AccountCheck
               money={info.initMoney}
               period={info.maturitDate}
@@ -113,12 +91,12 @@ export const Mission5AccountOpening = () => {
               outdrawAccountNumber={info.outdrawAccountNumber}
             />
           )}
-          {currentNumber === 6 && (
+          {currentNumber === 4 && (
             <ConfirmCard text={`${data.name}\n가입 완료`} />
           )}
         </div>
         <Button
-          text={currentNumber === 6 ? '완료' : '다음'}
+          text={currentNumber === 4 ? '완료' : '다음'}
           onClick={() => nextHandler()}
           isActive={btnActive}
         />

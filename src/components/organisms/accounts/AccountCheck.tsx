@@ -51,6 +51,9 @@ export const AccountCheck: FC<IProps> = ({
           <span>{outdrawAccountNumber}</span>
         </p>
       </div>
+      <div className='text-center text-xl font-hanaCM text-hanaDeepGreen'>
+        신규 비밀번호는 출금 계좌 비밀번호와 동일하게 설정됩니다
+      </div>
     </div>
   );
 };

@@ -6,11 +6,9 @@ import { AccountSaveMoneyAmount } from '../../components/organisms/accounts/Acco
 import { IoIosArrowDown } from 'react-icons/io';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
 import { AccountMaturitChoice } from '../../components/organisms/accounts/AccountMaturitChoice';
-import { AccountPw } from '../../components/organisms/accounts/AccountPw';
 import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
-import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
 import {
   checkAmountUnitMoney,
   checkAmountUnitNumber,
@@ -22,7 +20,6 @@ type userInfo = {
   money: number;
   outdrawAccountNumber: string;
   interest: number;
-  password: string;
 };
 
 export const Mission4AccountOpening = () => {
@@ -39,19 +36,18 @@ export const Mission4AccountOpening = () => {
     money: -1,
     outdrawAccountNumber: '',
     interest: data.interest1,
-    password: '',
   });
 
   const regularDayInput = useRef<HTMLInputElement | null>(null);
   const moneyInput = useRef<HTMLInputElement | null>(null);
 
   const nextHandler = () => {
-    if (currentNumber === 7) {
+    if (currentNumber === 5) {
       navigate('/roadmap4');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
-    currentNumber === 2 || currentNumber === 5 || currentNumber === 6
+    currentNumber === 2 || currentNumber === 3 || currentNumber === 4
       ? setBtnActive(true)
       : setBtnActive(false);
   };
@@ -109,14 +105,6 @@ export const Mission4AccountOpening = () => {
     setBtnActive(true);
   };
 
-  const checkPwModal = (password: string) => {
-    setInfo({
-      ...info,
-      password: password,
-    });
-    setBtnActive(true);
-  };
-
   return (
     <>
       {showModal && (
@@ -157,8 +145,6 @@ export const Mission4AccountOpening = () => {
               {currentNumber === 1 && '정기적으로 저축할까요?'}
               {currentNumber === 2 && '어느 계좌에서 출금할까요?'}
               {currentNumber === 3 && '만기 시 어떻게 할까요?'}
-              {currentNumber === 4 && '계좌 비밀번호를 입력해주세요'}
-              {currentNumber === 5 && '계좌 비밀번호를\n 한 번 더 입력해주세요'}
               {currentNumber === 6 && `이대로 가입하시겠어요?`}
             </h1>
             {currentNumber === 0 && (
@@ -202,14 +188,7 @@ export const Mission4AccountOpening = () => {
               <AccountOutputChoice onClick={checkOutdrawAccountModal} />
             )}
             {currentNumber === 3 && <AccountMaturitChoice />}
-            {currentNumber === 4 && <AccountPw onClick={checkPwModal} />}
-            {currentNumber === 5 && (
-              <AccountPwCheck
-                password={info.password}
-                onClick={() => setBtnActive(true)}
-              />
-            )}
-            {currentNumber === 6 && (
+            {currentNumber === 4 && (
               <AccountCheck
                 money={info.initMoney}
                 period={info.maturitDate}
@@ -219,12 +198,12 @@ export const Mission4AccountOpening = () => {
                 outdrawAccountNumber={info.outdrawAccountNumber}
               />
             )}
-            {currentNumber === 7 && (
+            {currentNumber === 5 && (
               <ConfirmCard text={`${data.name}\n가입 완료`} />
             )}
           </div>
           <Button
-            text={currentNumber === 7 ? '완료' : '다음'}
+            text={currentNumber === 5 ? '완료' : '다음'}
             onClick={() => nextHandler()}
             isActive={btnActive}
           />

@@ -176,7 +176,6 @@ export const Mission2AccountOpening = () => {
       ...info,
       password: password,
     });
-    setBtnActive(true);
   };
 
   return (
@@ -438,11 +437,16 @@ export const Mission2AccountOpening = () => {
                 </div>
               </div>
             )}
-            {currentNumber === 6 && <AccountPw onClick={checkPwModal} />}
+            {currentNumber === 6 && (
+              <AccountPw
+                onClick={checkPwModal}
+                isBtnDisabled={(disable: boolean) => setBtnActive(disable)}
+              />
+            )}
             {currentNumber === 7 && (
               <AccountPwCheck
                 password={info.password}
-                onClick={() => setBtnActive(true)}
+                isBtnDisabled={(disable: boolean) => setBtnActive(disable)}
               />
             )}
             {currentNumber === 8 && (

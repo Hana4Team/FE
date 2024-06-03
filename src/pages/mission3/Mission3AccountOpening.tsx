@@ -5,8 +5,6 @@ import { Button } from '../../components/ui/Button';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
 import { AccountMaturitChoice } from '../../components/organisms/accounts/AccountMaturitChoice';
-import { AccountPw } from '../../components/organisms/accounts/AccountPw';
-import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
 import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
 import {
   checkAmountUnitMoney,
@@ -40,7 +38,6 @@ type userInfo = {
   outdrawAccountNumber: string;
   savingDate: string;
   interest: number;
-  password: string;
 };
 
 export const Mission3AccountOpening = () => {
@@ -55,18 +52,17 @@ export const Mission3AccountOpening = () => {
     outdrawAccountNumber: '',
     savingDate: '100일',
     interest: data.interest1,
-    password: '',
   });
 
   const savingMoneyInput = useRef<HTMLInputElement | null>(null);
 
   const nextHandler = () => {
-    if (currentNumber === 7) {
+    if (currentNumber === 5) {
       navigate('/savings100Days');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
-    currentNumber === 2 || currentNumber === 5 || currentNumber === 6
+    currentNumber === 2 || currentNumber === 3 || currentNumber === 4
       ? setBtnActive(true)
       : setBtnActive(false);
   };
@@ -101,14 +97,6 @@ export const Mission3AccountOpening = () => {
     setBtnActive(true);
   };
 
-  const checkPwModal = (password: string) => {
-    setInfo({
-      ...info,
-      password: password,
-    });
-    setBtnActive(true);
-  };
-
   return (
     <div className='bg-white flex flex-col items-center h-screen w-full'>
       <Topbar title='100일 적금 가입' />
@@ -120,9 +108,7 @@ export const Mission3AccountOpening = () => {
             {currentNumber === 1 && `얼마를 저축할까요?`}
             {currentNumber === 2 && '어느 계좌에서 출금할까요?'}
             {currentNumber === 3 && '만기 시 어떻게 할까요?'}
-            {currentNumber === 4 && '계좌 비밀번호를 입력해주세요'}
-            {currentNumber === 5 && '계좌 비밀번호를\n 한 번 더 입력해주세요'}
-            {currentNumber === 6 && `이대로 가입하시겠어요?`}
+            {currentNumber === 4 && `이대로 가입하시겠어요?`}
           </h1>
           {currentNumber === 0 && (
             <div className='w-full flex items-center font-hanaMedium text-[1.7rem]'>
@@ -157,14 +143,7 @@ export const Mission3AccountOpening = () => {
             <AccountOutputChoice onClick={checkOutdrawAccountModal} />
           )}
           {currentNumber === 3 && <AccountMaturitChoice />}
-          {currentNumber === 4 && <AccountPw onClick={checkPwModal} />}
-          {currentNumber === 5 && (
-            <AccountPwCheck
-              password={info.password}
-              onClick={() => setBtnActive(true)}
-            />
-          )}
-          {currentNumber === 6 && (
+          {currentNumber === 4 && (
             <AccountCheck
               money={info.initMoney}
               period={info.savingDate}
@@ -172,12 +151,12 @@ export const Mission3AccountOpening = () => {
               outdrawAccountNumber={info.outdrawAccountNumber}
             />
           )}
-          {currentNumber === 7 && (
+          {currentNumber === 5 && (
             <ConfirmCard text={`100일 적금\n 가입 완료`} />
           )}
         </div>
         <Button
-          text={currentNumber === 7 ? '완료' : '다음'}
+          text={currentNumber === 5 ? '완료' : '다음'}
           onClick={() => nextHandler()}
           isActive={btnActive}
         />
