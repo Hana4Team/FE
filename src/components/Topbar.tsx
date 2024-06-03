@@ -5,18 +5,21 @@ import { useNavigate } from 'react-router-dom';
 interface IProps {
   title: string;
   isModal?: boolean;
+  onClick?: () => void;
 }
 
-const Topbar: FC<IProps> = ({ title, isModal }) => {
+const Topbar: FC<IProps> = ({ title, isModal, onClick }) => {
   const navigate = useNavigate();
 
   return (
     <div
-      className={`sticky top-0 left-0 w-full flex justify-center items-center ${isModal ? 'bg-black bg-opacity-50' : 'bg-white'} pt-20 pb-4`}
+      className={`sticky top-0 left-0 w-full flex justify-center items-center ${isModal ? 'bg-black bg-opacity-50' : 'bg-white'} pt-20 pb-4 z-50`}
     >
       <div
         className='absolute left-2 cursor-pointer'
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          onClick ? onClick() : navigate(-1);
+        }}
       >
         <GoChevronLeft size={25} />
       </div>

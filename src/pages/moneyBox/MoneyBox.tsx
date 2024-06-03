@@ -20,6 +20,7 @@ export const MoneyBox = () => {
     const sendAccount = sendAccountNumber ? sendAccountNumber : '';
     navigate('/sending', {
       state: {
+        initialBalance: 1000000,
         sendName: clickedName,
         receiveName: receiveName,
         sendAccount: sendAccount,

@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import { BsArrowRightCircleFill } from 'react-icons/bs';
 import { RecommendProductItem } from '../molecules/RecommendProductItem';
+import { useNavigate } from 'react-router-dom';
 
 export type RecommendList = {
+  id: number;
   subTitle: string;
   title: string;
   year: number;
@@ -15,6 +17,8 @@ interface IProps {
 }
 
 export const RecommendProductList: FC<IProps> = ({ list }) => {
+  const navigate = useNavigate();
+
   return (
     <div className='w-11/12 bg-white py-10 px-10 rounded-3xl m-auto'>
       <div className='flex justify-between items-end'>
@@ -25,6 +29,11 @@ export const RecommendProductList: FC<IProps> = ({ list }) => {
             color={'#D9D9D9'}
             size={24}
             className='mb-24 cursor-pointer'
+            onClick={() =>
+              navigate(`${location.pathname}/product`, {
+                state: { productId: list[0].id },
+              })
+            }
           />
         </div>
         <img src='icons/dollar_circle.svg' alt='dollar' className='w-36 mb-5' />
@@ -32,7 +41,8 @@ export const RecommendProductList: FC<IProps> = ({ list }) => {
       <hr className='mt-5 mb-10' />
       <div className='flex flex-col justify-center gap-10'>
         {list.map(
-          (item, index) => index > 0 && <RecommendProductItem item={item} />
+          (item, index) =>
+            index > 0 && <RecommendProductItem key={index} item={item} />
         )}
       </div>
     </div>

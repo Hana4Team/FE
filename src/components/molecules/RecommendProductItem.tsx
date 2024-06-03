@@ -1,13 +1,26 @@
 import { FC } from 'react';
 import { RecommendList } from '../organisms/RecommendProductList';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface IProps {
   item: RecommendList;
 }
 
 export const RecommendProductItem: FC<IProps> = ({ item }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const moveProductDetail = (productId: number) => {
+    navigate(`${location.pathname}/product`, {
+      state: { productId: productId },
+    });
+  };
+
   return (
-    <div className='flex justify-between items-end cursor-pointer'>
+    <div
+      className='flex justify-between items-end cursor-pointer'
+      onClick={() => moveProductDetail(item.id)}
+    >
       <div className='flex flex-col gap-3'>
         <h3 className='font-hanaBold text-2xl'>{item.title}</h3>
         <p className='font-hanaRegular text-xl text-[#838383]'>
