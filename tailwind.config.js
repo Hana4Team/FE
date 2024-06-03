@@ -18,6 +18,7 @@ export default {
         hanaLightGreen: '#9CDAB8',
         hanaDeepGreen: '#008485',
         hanaAqua: '#EAF3F2',
+        hanaSky: '#F1FFFE',
         white: '#FFFFFF',
       },
       dropShadow: {
@@ -41,6 +42,7 @@ export default {
     minHeight: {
       'real-screen': 'calc(100vh - 100px)',
       'real-screen2': 'calc(100vh - 82.5px)',
+      'real-screen3': 'calc(100vh - 182.5px)',
     },
   },
   plugins: [],
