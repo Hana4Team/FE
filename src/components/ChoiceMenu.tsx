@@ -26,7 +26,9 @@ export const ChoiceMenu: FC<IProps> = ({ title, children, onClose }) => {
           />
         </div>
         <hr className='mt-0.5 divide-hanaGray' />
-        <div className='px-7 mt-7 h-full'>{children}</div>
+        <div className='px-7 mt-7 max-h-[30rem] overflow-y-auto'>
+          {children}
+        </div>
       </div>
     </>
   );
