@@ -30,7 +30,7 @@ export const MissionStep: FC<IProps> = ({ step, title, text, status }) => {
             <div>Step {step}</div>
             <div className='font-hanaBold'>{title}</div>
             <button onClick={showModalHandler}>
-              <GoQuestion />
+              <GoQuestion color='#E90061' />
             </button>
           </div>
           <div className='mt-2 text-gray-600'>{text}</div>

@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 
 interface IProps {
-  id: number;
   title: string;
   icon: string;
   children: ReactNode;
@@ -9,7 +8,6 @@ interface IProps {
 }
 
 export const MoneyBoxIntroItem: FC<IProps> = ({
-  id,
   title,
   icon,
   children,

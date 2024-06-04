@@ -33,7 +33,6 @@ export const Mission2StartPage = () => {
       />
       <div className='flex flex-col gap-7'>
         <MoneyBoxIntroItem
-          id={1}
           title='파킹'
           icon='safebox.svg'
           className={`${animation <= 1 ? 'opacity-0' : 'opacity-1'} animate-fadein1`}
@@ -48,7 +47,6 @@ export const Mission2StartPage = () => {
           </p>
         </MoneyBoxIntroItem>
         <MoneyBoxIntroItem
-          id={2}
           title='소비'
           icon='wallet.svg'
           className={`${animation <= 2 ? 'opacity-0' : 'opacity-1'} animate-fadein2`}
@@ -63,7 +61,6 @@ export const Mission2StartPage = () => {
           </p>
         </MoneyBoxIntroItem>
         <MoneyBoxIntroItem
-          id={3}
           title='저축'
           icon='piggybank2.svg'
           className={`${animation <= 3 ? 'opacity-0' : 'opacity-1'} animate-fadein3`}
