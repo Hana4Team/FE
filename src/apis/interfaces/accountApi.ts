@@ -1,4 +1,4 @@
-import { AccountDetailType } from '../../types/account';
+import { AccountReqType, AccountType, AccountDetailType } from '../../types/account';
 
 export interface accountApi {
   getAccountDetail(
@@ -6,4 +6,5 @@ export interface accountApi {
     year: number,
     month: number
   ): Promise<AccountDetailType>;
+  getAccount(type: AccountReqType): Promise<AccountType[]>;
 }

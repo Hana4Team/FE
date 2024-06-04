@@ -3,3 +3,7 @@ export type StepType = {
   step: number;
   stepStatus: number;
 };
+export type SavePointType = {
+  step: number;
+  points: number;
+};
