@@ -4,11 +4,16 @@ import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
 import { UserType, SavePointType, StepType } from '../types/users';
-import { AccountReqType, AccountType, AccountDetailType } from '../types/account';
+import {
+  AccountReqType,
+  AccountType,
+  AccountDetailType,
+} from '../types/account';
+import { alarmApi } from './interfaces/alarmApi';
 
-const ACCESSTOKEN = getCookie('token');
+const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi {
+export class ApiClient implements usersApi, accountApi, alarmApi {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -21,7 +26,15 @@ export class ApiClient implements usersApi, accountApi {
     const response = await this.axiosInstance.request<StepType>({
       method: 'put',
       url: `/users/start`,
-      });
+    });
+    return response.data;
+  }
+
+  async updateMissionCheck() {
+    const response = await this.axiosInstance.request<StepType>({
+      method: 'put',
+      url: `/users/check`,
+    });
     return response.data;
   }
 
@@ -34,14 +47,6 @@ export class ApiClient implements usersApi, accountApi {
     return response.data;
   }
 
-  async updateMissionCheck() {
-    const response = await this.axiosInstance.request<StepType>({
-      method: 'put',
-      url: `/users/check`,
-      });
-    return response.data;
-  }
-
   async postMessage(phoneNumber: string) {
     const response = await this.axiosInstance.request<number>({
       method: 'post',
@@ -51,21 +56,11 @@ export class ApiClient implements usersApi, accountApi {
     return response.data;
   }
 
-  //---------account---------
-  async getAccountDetail(accountId: number, year: number, month: number) {
-    const response = await this.axiosInstance.request<AccountDetailType>({
-      method: 'get',
-      url: `/account/${accountId}
-      ?year=${year}&month=${month}`,
-      });
-    return response.data;
-  }
-
-  async getAccount(type: AccountReqType) {
-    const response = await this.axiosInstance.request<AccountType[]>({
-      method: 'get',
-      url: '/account',
-      data: type,
+  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/users/msgCheck',
+      data: { code: code, input: inputCode },
     });
     return response.data;
   }
@@ -78,20 +73,31 @@ export class ApiClient implements usersApi, accountApi {
     return response.data;
   }
 
-  async postAlarm(content: string) {
-    const response = await this.axiosInstance.request<string>({
-      method: 'post',
-      url: '/alarm',
-      data: { contents: content },
+  //---------account---------
+  async getAccount(type: AccountReqType) {
+    const response = await this.axiosInstance.request<AccountType[]>({
+      method: 'get',
+      url: '/account',
+      data: type,
     });
     return response.data;
   }
 
-  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
+  async getAccountDetail(accountId: number, year: number, month: number) {
+    const response = await this.axiosInstance.request<AccountDetailType>({
+      method: 'get',
+      url: `/account/${accountId}
+      ?year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
+  //---------alarm---------
+  async postAlarm(contents: string) {
     const response = await this.axiosInstance.request<string>({
       method: 'post',
-      url: '/users/msgCheck',
-      data: { code: code, input: inputCode },
+      url: '/alarm',
+      data: contents,
     });
     return response.data;
   }
@@ -121,8 +127,8 @@ export class ApiClient implements usersApi, accountApi {
 
     newInstance.interceptors.request.use(
       (config) => {
-        if (ACCESSTOKEN) {
-          config.headers['Authorization'] = `${ACCESSTOKEN}`;
+        if (TOKEN) {
+          config.headers['Authorization'] = `${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';
