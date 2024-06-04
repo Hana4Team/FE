@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { ArcElement, Chart } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
@@ -34,15 +34,12 @@ export const CategorySpendCard: FC<Iprops> = ({
 
   Chart.register(ArcElement);
 
-  const extra = useMemo(() => {
-    return datas.length <= 4
+  const extra =
+    datas.length <= 4
       ? null
       : datas.slice(5).reduce((acc, val) => acc + val.balance, 0);
-  }, []);
 
-  const colors = useMemo(() => {
-    return ['#28B2A5', '#E90061', '#FFC700', '#AD9A5F', '#B5B5B5'];
-  }, []);
+  const colors = ['#28B2A5', '#E90061', '#FFC700', '#AD9A5F', '#B5B5B5'];
 
   const data = {
     labels: [
