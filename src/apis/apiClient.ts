@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_BASE_URL } from './url';
 import { getCookie } from '../utils/cookie';
+import { SavePointType } from '../types/users';
+import { AccountReqType, AccountType } from '../types/account';
 
 const ACCESSTOKEN = getCookie('token');
 
@@ -12,14 +14,32 @@ export class ApiClient {
     this.axiosInstance = this.createAxiosInstance();
   }
 
-  // API 작성 시 아래 처럼 작성해야함
-  //   async getMenuList() {
-  //     const response = await this.axiosInstance.request<MenuType[]>({
-  //       method: "get",
-  //       url: `/products`,
-  //     });
-  //     return response.data;
-  //   }
+  async updatePoint(isMission: boolean) {
+    const response = await this.axiosInstance.request<SavePointType>({
+      method: 'put',
+      url: `/users/point`,
+      data: isMission,
+    });
+    return response.data;
+  }
+
+  async postMessage(phoneNumber: string) {
+    const response = await this.axiosInstance.request<number>({
+      method: 'post',
+      url: '/users/message',
+      data: phoneNumber,
+    });
+    return response.data;
+  }
+
+  async getAccount(type: AccountReqType) {
+    const response = await this.axiosInstance.request<AccountType[]>({
+      method: 'get',
+      url: '/account',
+      data: type,
+    });
+    return response.data;
+  }
 
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
