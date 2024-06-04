@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { API_BASE_URL } from './url';
 import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
@@ -10,6 +9,7 @@ import {
   AccountDetailType,
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
+import { API_BASE_URL } from './url';
 
 const TOKEN = getCookie('token');
 
