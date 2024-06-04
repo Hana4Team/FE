@@ -1,17 +1,28 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_BASE_URL } from './url';
 import { getCookie } from '../utils/cookie';
-import { UserType, SavePointType } from '../types/users';
-import { AccountReqType, AccountType } from '../types/account';
+import { usersApi } from './interfaces/usersApi';
+import { accountApi } from './interfaces/accountApi';
+import { UserType, SavePointType, StepType } from '../types/users';
+import { AccountReqType, AccountType, AccountDetailType } from '../types/account';
 
 const ACCESSTOKEN = getCookie('token');
 
-export class ApiClient {
+export class ApiClient implements usersApi, accountApi {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
   constructor() {
     this.axiosInstance = this.createAxiosInstance();
+  }
+
+  //---------users---------
+  async updateMissionStart() {
+    const response = await this.axiosInstance.request<StepType>({
+      method: 'put',
+      url: `/users/start`,
+      });
+    return response.data;
   }
 
   async updatePoint(isMission: boolean) {
@@ -23,12 +34,30 @@ export class ApiClient {
     return response.data;
   }
 
+  async updateMissionCheck() {
+    const response = await this.axiosInstance.request<StepType>({
+      method: 'put',
+      url: `/users/check`,
+      });
+    return response.data;
+  }
+
   async postMessage(phoneNumber: string) {
     const response = await this.axiosInstance.request<number>({
       method: 'post',
       url: '/users/message',
       data: phoneNumber,
     });
+    return response.data;
+  }
+
+  //---------account---------
+  async getAccountDetail(accountId: number, year: number, month: number) {
+    const response = await this.axiosInstance.request<AccountDetailType>({
+      method: 'get',
+      url: `/account/${accountId}
+      ?year=${year}&month=${month}`,
+      });
     return response.data;
   }
 
