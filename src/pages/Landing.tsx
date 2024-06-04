@@ -1,6 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getCookie } from '../utils/cookie';
+import { useNavigate } from 'react-router-dom';
 
 export const Landing = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (getCookie('phone')) {
+        navigate('/home');
+      } else {
+        navigate('/join');
+      }
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <div className='bg-white h-screen flex flex-col justify-center items-center'>
       <img src='/images/별돌이logo.svg' className='w-48' />

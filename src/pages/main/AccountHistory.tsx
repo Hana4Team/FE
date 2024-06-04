@@ -1,23 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { AccountHistoryItem } from '../../components/molecules/AccountHistoryItem';
+import { dateMonth, dateYear } from '../../utils/getDate';
 
 export const AccountHistory = () => {
-  const date = useMemo(() => {
-    const today = new Date();
-    return {
-      dateYear: today.getFullYear(),
-      dateMonth: today.getMonth() + 1,
-    };
-  }, []);
-
-  const [year, setYear] = useState<number>(date.dateYear);
-  const [month, setMonth] = useState<number>(date.dateMonth);
+  const [year, setYear] = useState<number>(dateYear);
+  const [month, setMonth] = useState<number>(dateMonth);
 
   const onClickArrow = (value: number) => {
-    if (year === date.dateYear && month === date.dateMonth && value === 1)
-      return;
+    if (year === dateYear && month === dateMonth && value === 1) return;
     if (year === 2000 && month === 1 && value === -1) return;
 
     if (month + value == 0) {
@@ -58,7 +50,7 @@ export const AccountHistory = () => {
             </p>
             <IoIosArrowForward
               size={20}
-              className={`my-auto ${year === date.dateYear && month === date.dateMonth && 'text-gray-400'}`}
+              className={`my-auto ${year === dateYear && month === dateMonth && 'text-gray-400'}`}
               onClick={() => onClickArrow(1)}
             />
           </div>

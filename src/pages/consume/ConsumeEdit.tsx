@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { BudgetInfo } from '../../components/organisms/BudgetInfo';
 import { dateMonth } from '../../utils/getDate';
@@ -22,70 +22,68 @@ type Request = {
 export const ConsumeEdit = () => {
   const navigate = useNavigate();
 
-  const initData = useMemo(() => {
-    return [
-      {
-        icon: 'icons/shopping.svg',
-        name: '쇼핑',
-        lastSpend: 10000,
-        balance: 5000,
-      },
-      {
-        icon: 'icons/food.svg',
-        name: '요식',
-        lastSpend: 20000,
-        balance: 4000,
-      },
-      {
-        icon: 'icons/traffic.svg',
-        name: '교통',
-        lastSpend: 30000,
-        balance: 2000,
-      },
-      {
-        icon: 'icons/hospital.svg',
-        name: '의료',
-        lastSpend: 20000,
-        balance: 4000,
-      },
-      {
-        icon: 'icons/fee.svg',
-        name: '납부',
-        lastSpend: 10000,
-        balance: 1000,
-      },
-      {
-        icon: 'icons/education.svg',
-        name: '교육',
-        lastSpend: 20000,
-        balance: 5000,
-      },
-      {
-        icon: 'icons/leisure.svg',
-        name: '여유생활',
-        lastSpend: 30000,
-        balance: 7000,
-      },
-      {
-        icon: 'icons/society.svg',
-        name: '사교활동',
-        lastSpend: 20000,
-        balance: 3000,
-      },
-      {
-        icon: 'icons/daily.svg',
-        name: '일상생활',
-        lastSpend: 10000,
-        balance: 5000,
-      },
-      {
-        icon: 'icons/overseas.svg',
-        name: '해외',
-        lastSpend: 20000,
-        balance: 3000,
-      },
-    ];
-  }, []);
+  const initData = [
+    {
+      icon: 'icons/shopping.svg',
+      name: '쇼핑',
+      lastSpend: 10000,
+      balance: 5000,
+    },
+    {
+      icon: 'icons/food.svg',
+      name: '요식',
+      lastSpend: 20000,
+      balance: 4000,
+    },
+    {
+      icon: 'icons/traffic.svg',
+      name: '교통',
+      lastSpend: 30000,
+      balance: 2000,
+    },
+    {
+      icon: 'icons/hospital.svg',
+      name: '의료',
+      lastSpend: 20000,
+      balance: 4000,
+    },
+    {
+      icon: 'icons/fee.svg',
+      name: '납부',
+      lastSpend: 10000,
+      balance: 1000,
+    },
+    {
+      icon: 'icons/education.svg',
+      name: '교육',
+      lastSpend: 20000,
+      balance: 5000,
+    },
+    {
+      icon: 'icons/leisure.svg',
+      name: '여유생활',
+      lastSpend: 30000,
+      balance: 7000,
+    },
+    {
+      icon: 'icons/society.svg',
+      name: '사교활동',
+      lastSpend: 20000,
+      balance: 3000,
+    },
+    {
+      icon: 'icons/daily.svg',
+      name: '일상생활',
+      lastSpend: 10000,
+      balance: 5000,
+    },
+    {
+      icon: 'icons/overseas.svg',
+      name: '해외',
+      lastSpend: 20000,
+      balance: 3000,
+    },
+  ];
 
   const [data, setData] = useState<Request>({
     shopping: initData[0].balance,
