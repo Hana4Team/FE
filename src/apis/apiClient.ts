@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_BASE_URL } from './url';
 import { getCookie } from '../utils/cookie';
+import { UserType } from '../types/user';
 
 const ACCESSTOKEN = getCookie('token');
 
@@ -20,6 +21,32 @@ export class ApiClient {
   //     });
   //     return response.data;
   //   }
+
+  async getUser() {
+    const response = await this.axiosInstance.request<UserType>({
+      method: 'get',
+      url: '/users',
+    });
+    return response.data;
+  }
+
+  async postAlarm(content: string) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/alarm',
+      data: { contents: content },
+    });
+    return response.data;
+  }
+
+  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/users/msgCheck',
+      data: { code: code, input: inputCode },
+    });
+    return response.data;
+  }
 
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
