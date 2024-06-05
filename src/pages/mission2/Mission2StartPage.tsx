@@ -92,9 +92,9 @@ export const Mission2StartPage = () => {
             content={moneyBoxInfo[0].summary}
             className={`${animation <= 4 ? 'opacity-0' : 'opacity-1'} animate-fadein4`}
             onClick={() =>
-              navigate('/mission2/product', {
-                state: { productId: moneyBoxInfo[0].productsId },
-              })
+              navigate(
+                `/product?productId=${moneyBoxInfo[0].productsId}&mission=2`
+              )
             }
           />
         )}

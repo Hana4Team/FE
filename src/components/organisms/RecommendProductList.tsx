@@ -22,9 +22,7 @@ export const RecommendProductList: FC<IProps> = ({ list }) => {
             size={24}
             className='mb-24 cursor-pointer'
             onClick={() =>
-              navigate(`${location.pathname}/product`, {
-                state: { productId: list[0].productsId },
-              })
+              navigate(`/product?productId=${list[0].productsId}&mission=4`)
             }
           />
         </div>

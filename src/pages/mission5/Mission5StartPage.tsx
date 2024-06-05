@@ -32,9 +32,9 @@ export const Mission5StartPage = () => {
           minInterest={depositInfo[0].interest2}
           content={depositInfo[0].summary}
           onClick={() =>
-            navigate('/mission5/product', {
-              state: { productId: depositInfo[0].productsId },
-            })
+            navigate(
+              `/product?productId=${depositInfo[0].productsId}&mission=5`
+            )
           }
         />
       )}

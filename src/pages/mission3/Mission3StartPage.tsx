@@ -53,9 +53,9 @@ export const Mission3StartPage = () => {
             minInterest={saving100Info[0].interest2}
             content={saving100Info[0].summary}
             onClick={() =>
-              navigate('/mission3/product', {
-                state: { productId: saving100Info[0].productsId },
-              })
+              navigate(
+                `/product?productId=${saving100Info[0].productsId}&mission=3`
+              )
             }
           />
         )}

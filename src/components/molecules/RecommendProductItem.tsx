@@ -11,9 +11,7 @@ export const RecommendProductItem: FC<IProps> = ({ item }) => {
   const location = useLocation();
 
   const moveProductDetail = (productId: number) => {
-    navigate(`${location.pathname}/product`, {
-      state: { productId: productId },
-    });
+    navigate(`/product?productId=${productId}&mission=4`);
   };
 
   return (
