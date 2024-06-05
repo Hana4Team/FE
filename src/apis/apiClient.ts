@@ -3,17 +3,23 @@ import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
 import { UserType, SavePointType, StepType } from '../types/users';
-import {
-  AccountReqType,
-  AccountType,
-  AccountDetailType,
-} from '../types/account';
+import { AccountReqType, AccountType } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { moneyBoxApi } from './interfaces/moneyBoxApi';
+import { moneyBoxType } from '../types/moneyBox';
+import { transactionApi } from './interfaces/transactionApi';
+import {
+  RemmitanceMoneyBoxType,
+  RemmitanceType,
+  TransactionHistoryType,
+} from '../types/transaction';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient
+  implements usersApi, accountApi, moneyBoxApi, transactionApi, alarmApi
+{
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -83,11 +89,62 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
-  async getAccountDetail(accountId: number, year: number, month: number) {
-    const response = await this.axiosInstance.request<AccountDetailType>({
+  //---------transaction---------
+  async getTransactionHistory(accountId: number, year: number, month: number) {
+    const response = await this.axiosInstance.request<TransactionHistoryType>({
       method: 'get',
-      url: `/account/${accountId}
+      url: `/transaction/${accountId}
       ?year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
+  async postRemittance({
+    amount,
+    senderTitle,
+    recipientTitle,
+    senderAccount,
+    recipientAccount,
+  }: RemmitanceType) {
+    const response = await this.axiosInstance.request<void>({
+      method: 'post',
+      url: '/api/v1/transaction',
+      data: {
+        amount: amount,
+        senderTitle: senderTitle,
+        recipientTitle: recipientTitle,
+        senderAccount: senderAccount,
+        recipientAccount: recipientAccount,
+      },
+    });
+    return response.data;
+  }
+
+  async postRemittanceMoneyBox({
+    amount,
+    senderTitle,
+    recipientTitle,
+    senderMoneyBox,
+    recipientMoneyBox,
+  }: RemmitanceMoneyBoxType) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/api/v1/transaction',
+      data: {
+        amount: amount,
+        senderTitle: senderTitle,
+        recipientTitle: recipientTitle,
+        senderMoneyBox: senderMoneyBox,
+        recipientMoneyBox: recipientMoneyBox,
+      },
+    });
+    return response.data;
+  }
+  //---------moneyBox---------
+  async getMoneyBox(): Promise<moneyBoxType> {
+    const response = await this.axiosInstance.request<moneyBoxType>({
+      method: 'get',
+      url: '/moneyBox',
     });
     return response.data;
   }
@@ -128,7 +185,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     newInstance.interceptors.request.use(
       (config) => {
         if (TOKEN) {
-          config.headers['Authorization'] = `${TOKEN}`;
+          config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';

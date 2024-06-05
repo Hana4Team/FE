@@ -303,7 +303,6 @@ export const Sending = () => {
           {/* 4페이지 */}
           {page === 4 && (
             <div className='flex flex-col justify-center items-center mt-16'>
-              {/* <div className='w-full bg-gray-200 h-[0.1rem] mb-10'></div> */}
               <PasswordForm
                 title='계좌 비밀번호를 입력해주세요'
                 inputRef={pwdRef}
