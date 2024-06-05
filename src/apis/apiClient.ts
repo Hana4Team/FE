@@ -128,7 +128,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     newInstance.interceptors.request.use(
       (config) => {
         if (TOKEN) {
-          config.headers['Authorization'] = `${TOKEN}`;
+          config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';
