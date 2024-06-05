@@ -3,11 +3,20 @@ import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
-
-const productId = 1;
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 export const Mission3StartPage = () => {
   const navigate = useNavigate();
+
+  const { data: saving100Info } = useQuery({
+    queryKey: ['saving100Info'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getProdustsList('SAVING100');
+      return res;
+    },
+  });
+
   return (
     <>
       <Topbar title='이사미션' />
@@ -35,16 +44,21 @@ export const Mission3StartPage = () => {
           </div>
           <IoIosArrowForward size={30} className='cursor-pointer' />
         </div>
-        <BankBookIntro
-          subTitle='100일 간 납입하면 우대금리를 받을 수 있는 적금'
-          title='100일 적금'
-          content1='최고 연 5.00%'
-          content2='기본 2.00%'
-          content3='1개월 기준 세전'
-          onClick={() =>
-            navigate('/mission3/product', { state: { productId: productId } })
-          }
-        />
+        {saving100Info && (
+          <BankBookIntro
+            type='100일 적금'
+            name={saving100Info[0].name}
+            title={saving100Info[0].title}
+            maxInterest={saving100Info[0].interest1}
+            minInterest={saving100Info[0].interest2}
+            content={saving100Info[0].summary}
+            onClick={() =>
+              navigate('/mission3/product', {
+                state: { productId: saving100Info[0].productsId },
+              })
+            }
+          />
+        )}
       </div>
     </>
   );

@@ -22,3 +22,13 @@ export type AccountReqType = {
   savingsAccount: boolean;
   moneyboxAccount: boolean;
 };
+export type OpenedDepositSavingReqType = {
+  payment: number;
+  endDate: string;
+  productsId: number;
+  withdrawalAccountId: number;
+};
+export type OpendDepositSavingResType = {
+  depositSavingId: number;
+  accountId: number;
+};
