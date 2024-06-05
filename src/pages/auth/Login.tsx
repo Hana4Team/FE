@@ -3,6 +3,9 @@ import { PasswordForm } from '../../components/molecules/PasswordForm';
 import { Button } from '../../components/ui/Button';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { getCookie, setCookie } from '../../utils/cookie';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -10,6 +13,25 @@ export const Login = () => {
   const [isPwdCorrect, setIsPwdCorrect] = useState<boolean>(true);
   const [re, setRe] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
+
+  const { isSuccess, data } = useMutation({
+    mutationFn: () => {
+      const res = ApiClient.getInstance().postLogin({
+        phoneNumber: getCookie('phoneNumber'),
+        password: pwdRef.current.map((p) => p?.value).join(''),
+      });
+      return res;
+    },
+  });
+
+  const onClickButton = () => {
+    if (data?.success) {
+      data.token && setCookie('token', data.token);
+      navigate('/home');
+    } else {
+      setRe((prev) => !prev);
+    }
+  };
 
   return (
     <div className='bg-white h-screen flex flex-col items-center'>
@@ -22,12 +44,9 @@ export const Login = () => {
           re={re}
           checkPwdCondition={() => setIsActive(true)}
         />
-
         <Button
           text='다음'
-          onClick={() => {
-            navigate('/home');
-          }}
+          onClick={() => onClickButton()}
           isActive={isActive}
         />
       </div>

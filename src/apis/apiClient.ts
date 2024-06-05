@@ -2,7 +2,16 @@ import axios, { AxiosInstance } from 'axios';
 import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
-import { UserType, SavePointType, StepType } from '../types/users';
+import {
+  UserType,
+  SavePointType,
+  StepType,
+  JoinType,
+  JoinReqType,
+  LoginReqType,
+  LoginType,
+  MsgCheckType,
+} from '../types/users';
 import {
   AccountReqType,
   AccountType,
@@ -22,6 +31,42 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
   }
 
   //---------users---------
+  async postLogin(user: LoginReqType) {
+    const response = await this.axiosInstance.request<LoginType>({
+      method: 'post',
+      url: '/users/login',
+      data: user,
+    });
+    return response.data;
+  }
+
+  async postJoin(user: JoinReqType) {
+    const response = await this.axiosInstance.request<JoinType>({
+      method: 'post',
+      url: '/users/join',
+      data: user,
+    });
+    return response.data;
+  }
+
+  async postMessage(phoneNumber: string) {
+    const response = await this.axiosInstance.request<number>({
+      method: 'post',
+      url: '/users/message',
+      data: phoneNumber,
+    });
+    return response.data;
+  }
+
+  async postMsgCheck(codeReq: MsgCheckType) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/users/msgCheck',
+      data: codeReq,
+    });
+    return response.data;
+  }
+
   async updateMissionStart() {
     const response = await this.axiosInstance.request<StepType>({
       method: 'put',
@@ -43,24 +88,6 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
       method: 'put',
       url: `/users/point`,
       data: isMission,
-    });
-    return response.data;
-  }
-
-  async postMessage(phoneNumber: string) {
-    const response = await this.axiosInstance.request<number>({
-      method: 'post',
-      url: '/users/message',
-      data: phoneNumber,
-    });
-    return response.data;
-  }
-
-  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
-    const response = await this.axiosInstance.request<string>({
-      method: 'post',
-      url: '/users/msgCheck',
-      data: { code: code, input: inputCode },
     });
     return response.data;
   }

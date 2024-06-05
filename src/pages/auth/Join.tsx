@@ -10,14 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { phoneNumberPattern } from '../../utils/checkValidation';
 import { ChoiceItem } from '../../components/molecules/ChoiceItem';
 import { phoneNumberAutoHyphen } from '../../utils/phoneNumberAutoHyphen';
-
-interface inputsProps {
-  name: string;
-  birth: string;
-  telecom: string;
-  phoneNumber: string;
-  pwd: string;
-}
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { JoinReqType } from '../../types/users';
+import { setCookie } from '../../utils/cookie';
 
 export const Join = () => {
   const navigate = useNavigate();
@@ -31,17 +27,19 @@ export const Join = () => {
     Array(6).fill(null)
   );
 
-  const [inputs, setInputs] = useState<inputsProps>({
+  const [inputs, setInputs] = useState<JoinReqType>({
     name: '',
-    birth: '',
-    telecom: '',
+    birthDate: '',
     phoneNumber: '',
-    pwd: '',
+    password: '',
+    confirmPassword: '',
   });
 
+  const code = useRef<number>(0);
   const [isName, setIsName] = useState<boolean>(true);
   const [isBirth, setIsBirth] = useState<boolean>(true);
   const [isPhone, setIsPhone] = useState<boolean>(true);
+  const [isMsgCheck, setIsMsgCheck] = useState<boolean>(false);
   const [isPwdCorrect, setIsPwdCorrect] = useState<boolean>(true);
   const [re, setRe] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -49,17 +47,22 @@ export const Join = () => {
 
   const showModalHandler = () => setShowModal(!showModal);
 
+  const { mutate: postJoin, data: joinResult } = useMutation({
+    mutationFn: (input: JoinReqType) => {
+      const res = ApiClient.getInstance().postJoin(input);
+      return res;
+    },
+  });
+  const { mutate: postMessage, data: msgResult } = useMutation({
+    mutationFn: (phone: string) => {
+      const res = ApiClient.getInstance().postMessage(phone);
+      return res;
+    },
+  });
+
   const onClicktelecom = (item: string) => {
     setTelecom(item);
     showModalHandler();
-  };
-
-  const prevStep = () => {
-    if (step > 1 && step !== 5) setStep((prev) => prev - 1);
-    if (step === 5) {
-      setStep((prev) => prev - 1);
-      setIsActive(true);
-    }
   };
 
   const checkCondition = (title: string) => {
@@ -108,7 +111,9 @@ export const Join = () => {
   };
 
   const pwdCheck = () => {
-    if (confirmPwdRef.current.map((p) => p?.value).join('') === inputs.pwd) {
+    if (
+      confirmPwdRef.current.map((p) => p?.value).join('') === inputs.password
+    ) {
       setIsPwdCorrect(true);
       return true;
     } else {
@@ -119,6 +124,14 @@ export const Join = () => {
     }
   };
 
+  const prevStep = () => {
+    if (step > 1 && step !== 5) setStep((prev) => prev - 1);
+    if (step === 5) {
+      setStep((prev) => prev - 1);
+      setIsActive(true);
+    }
+  };
+
   const nextStep = () => {
     if (step === 1 && isName) {
       setInputs({ ...inputs, name: nameRef.current!.value });
@@ -126,7 +139,7 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 2 && isBirth) {
-      setInputs({ ...inputs, birth: birthRef.current!.value });
+      setInputs({ ...inputs, birthDate: birthRef.current!.value });
       setStep((prev) => prev + 1);
       setIsActive(false);
     }
@@ -134,10 +147,14 @@ export const Join = () => {
       setInputs({
         ...inputs,
         phoneNumber: phoneRef.current!.value.split('-').join(''),
-        telecom: telecom,
       });
+
+      postMessage(inputs.phoneNumber);
+      if (msgResult) {
+        code.current = msgResult;
+      }
       setStep((prev) => prev + 1);
-      // setIsActive(false);
+      setIsActive(false);
     }
     if (step === 4) {
       setStep((prev) => prev + 1);
@@ -146,15 +163,24 @@ export const Join = () => {
     if (step === 5) {
       setInputs({
         ...inputs,
-        pwd: pwdRef.current.map((p) => p?.value).join(''),
+        password: pwdRef.current.map((p) => p?.value).join(''),
       });
       setStep((prev) => prev + 1);
       setIsActive(false);
     }
     if (step === 6) {
       if (pwdCheck()) {
-        setIsActive(true);
-        setStep((prev) => prev + 1);
+        setInputs({
+          ...inputs,
+          confirmPassword: confirmPwdRef.current.map((p) => p?.value).join(''),
+        });
+
+        postJoin(inputs);
+        if (joinResult?.success) {
+          setCookie('phoneNumber', joinResult.phoneNumber);
+          setIsActive(true);
+          setStep((prev) => prev + 1);
+        }
       }
     }
     if (step === 7) {
@@ -244,10 +270,19 @@ export const Join = () => {
               <div className='font-hanaMedium text-lg mt-10'>이름</div>
               <div className='font-hanaMedium text-2xl mb-4'>{inputs.name}</div>
               <div className='font-hanaMedium text-lg'>생년월일</div>
-              <div className='font-hanaMedium text-2xl'>{inputs.birth}</div>
+              <div className='font-hanaMedium text-2xl'>{inputs.birthDate}</div>
             </div>
           ) : step === 4 ? (
-            <CertiNumber telecom={telecom} phoneNumber={inputs.phoneNumber} />
+            <>
+              <CertiNumber
+                telecom={telecom}
+                phoneNumber={inputs.phoneNumber}
+                isMsgCheck={isMsgCheck}
+                setIsMsgCheck={setIsMsgCheck}
+                setIsActive={setIsActive}
+                code={code.current}
+              />
+            </>
           ) : step === 5 ? (
             <PasswordForm
               title='간편비밀번호를 입력해주세요'
