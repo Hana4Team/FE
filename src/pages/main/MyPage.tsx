@@ -1,31 +1,40 @@
 import { FaChevronRight } from 'react-icons/fa';
 import { AccountSummaryItem } from '../../components/molecules/AccountSummaryItem';
 import { removeCookie } from '../../utils/cookie';
-
-type itemType = {
-  title: string;
-  money: number;
-};
-const items = [
-  {
-    title: '하나머니',
-    money: 100000000,
-  },
-  {
-    title: '머니박스',
-    money: 100000000,
-  },
-  {
-    title: '100일 적금',
-    money: 100000000,
-  },
-  {
-    title: '청년 도약 계좌',
-    money: 100000000,
-  },
-];
+import { AccountType } from '../../types/account';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 export const MyPage = () => {
+  const { data: accounts } = useQuery({
+    queryKey: ['account'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccount({
+        depositWithdrawalAccount: true,
+        depositAccount: true,
+        savingsAccount: true,
+        moneyboxAccount: true,
+      });
+      return res;
+    },
+  });
+
+  const { data: hanaMoney } = useQuery({
+    queryKey: ['hanaMoney'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getHanaMoney();
+      return res;
+    },
+  });
+
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getUser();
+      return res;
+    },
+  });
+
   return (
     <>
       <div className='pt-20 w-11/12 flex items-center m-auto mb-12'>
@@ -35,7 +44,7 @@ export const MyPage = () => {
           className='w-32 drop-shadow-under'
         />
         <div className='flex flex-col gap-2 ml-5'>
-          <h1 className='font-hanaBold text-[2.7rem]'>별길돌</h1>
+          <h1 className='font-hanaBold text-[2.7rem]'>{userInfo?.name}</h1>
           <p
             className='flex items-center text-xl font-hanaMedium cursor-pointer'
             onClick={() => removeCookie('token')}
@@ -46,19 +55,25 @@ export const MyPage = () => {
         </div>
       </div>
       <div className='flex flex-col items-center gap-7'>
-        {items.map((item) => (
+        {hanaMoney && (
           <AccountSummaryItem
-            title={item.title}
-            totalMoney={item.money}
-            icons={
-              item.title == '하나머니'
-                ? 'icons/piggybank.svg'
-                : item.title == '머니박스'
+            title='하나머니'
+            totalMoney={hanaMoney}
+            icons='icons/piggybank.svg'
+          />
+        )}
+        {accounts &&
+          accounts.map((item: AccountType) => (
+            <AccountSummaryItem
+              title={item.name}
+              totalMoney={item.balance}
+              icons={
+                item.name == '머니박스'
                   ? 'icons/moneybox_icon.svg'
                   : 'icons/bankbook.svg'
-            }
-          />
-        ))}
+              }
+            />
+          ))}
       </div>
     </>
   );

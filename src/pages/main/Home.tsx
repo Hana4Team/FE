@@ -3,14 +3,24 @@ import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/AlertModal';
 import { getCookie } from '../../utils/cookie';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 export const Home = () => {
   const navigate = useNavigate();
   const [isExistMoneyBox, setIsExistMoneyBox] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const isExistToken = getCookie('token');
+
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getUser();
+      return res;
+    },
+  });
 
   const showModalHandler = () => setShowModal(!showModal);
-  const isExistToken = getCookie('token');
 
   const navigatePageHandler = (url: string) => {
     if (isExistToken) navigate(`${url}`);

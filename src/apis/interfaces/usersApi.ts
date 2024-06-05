@@ -13,4 +13,5 @@ export interface usersApi {
     code: number;
     inputCode: number;
   }): Promise<string>;
+  getHanaMoney(): Promise<number>;
 }

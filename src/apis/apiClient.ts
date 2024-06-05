@@ -7,13 +7,18 @@ import {
   AccountReqType,
   AccountType,
   AccountDetailType,
+  OpendDepositSavingResType,
+  OpenedDepositSavingReqType,
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { AlarmType } from '../types/alarm';
+import { productsApi } from './interfaces/productsApi';
+import { ProductsType } from '../types/products';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -73,6 +78,14 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
+  async getHanaMoney() {
+    const response = await this.axiosInstance.request<number>({
+      method: 'get',
+      url: '/users/point',
+    });
+    return response.data;
+  }
+
   //---------account---------
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
@@ -92,12 +105,77 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
+  async postOpendMoneyBox(password: string, productsId: number) {
+    const response = await this.axiosInstance.request<{
+      accountId: number;
+      moneyboxId: number;
+    }>({
+      method: 'post',
+      url: '/account/moneybox',
+      data: {
+        password,
+        productsId,
+      },
+    });
+    return response.data;
+  }
+
+  async postOpenedSaving100(data: OpenedDepositSavingReqType) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingResType>({
+        method: 'post',
+        url: '/account/saving100',
+        data: data,
+      });
+    return response.data;
+  }
+
+  async postOpenedDepositSaving(
+    data: OpenedDepositSavingReqType,
+    initialAmount: number
+  ) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingResType>({
+        method: 'post',
+        url: '/account/depositsaving',
+        data: {
+          data,
+          initialAmount,
+        },
+      });
+    return response.data;
+  }
+  //---------products---------
+  async getProdustsList(type: string) {
+    const response = await this.axiosInstance.request<ProductsType[]>({
+      method: 'get',
+      url: `/products?type=${type}`,
+    });
+    return response.data;
+  }
+
+  async getProduct(productId: number) {
+    const response = await this.axiosInstance.request<ProductsType>({
+      method: 'get',
+      url: `/products/${productId}`,
+    });
+    return response.data;
+  }
+
   //---------alarm---------
   async postAlarm(contents: string) {
     const response = await this.axiosInstance.request<string>({
       method: 'post',
       url: '/alarm',
       data: contents,
+    });
+    return response.data;
+  }
+
+  async getAlarm() {
+    const response = await this.axiosInstance.request<AlarmType[]>({
+      method: 'get',
+      url: '/alarm',
     });
     return response.data;
   }
