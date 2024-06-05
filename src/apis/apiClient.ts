@@ -10,10 +10,15 @@ import {
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { depositsavingType } from '../types/depositsaving';
+import { HomeType } from '../types/home';
+import { depositsavingApi } from './interfaces/depositsavingApi';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient
+  implements usersApi, accountApi, alarmApi, depositsavingApi
+{
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -102,6 +107,24 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
+  //---------depositsaving---------
+  async getDepositSaving(type: string) {
+    const response = await this.axiosInstance.request<depositsavingType>({
+      method: 'get',
+      url: `/depositsaving?type=${type}`,
+    });
+    return response.data;
+  }
+
+  //---------home---------
+  async getHome() {
+    const response = await this.axiosInstance.request<HomeType>({
+      method: 'get',
+      url: '/home',
+    });
+    return response.data;
+  }
+
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
   }
@@ -128,7 +151,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     newInstance.interceptors.request.use(
       (config) => {
         if (TOKEN) {
-          config.headers['Authorization'] = `${TOKEN}`;
+          config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';
