@@ -25,9 +25,8 @@ export const MissionMain = () => {
         title={`더 큰 집으로\n이사가볼까요?`}
       />
       {step.map((s, index) => (
-        <div className='px-8 py-3'>
+        <div key={index} className='px-8 py-3'>
           <MissionStep
-            key={index}
             step={index + 1}
             title={s.title}
             text={s.text}
