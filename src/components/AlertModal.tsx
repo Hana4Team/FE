@@ -17,7 +17,9 @@ export const AlertModal: FC<Iprops> = ({ children, onClose }) => {
         <div className='w-full flex justify-end p-4' onClick={() => onClose()}>
           <IoMdClose size={15} />
         </div>
-        <div className='px-8 pb-6'>{children}</div>
+        <div className='px-8 pb-6 max-h-[40rem] overflow-y-auto'>
+          {children}
+        </div>
 
         <button
           className='p-2 w-full rounded-b-xl text-white bg-hanaGreen font-hanaMedium text-xl'
