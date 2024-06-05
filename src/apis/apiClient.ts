@@ -14,10 +14,13 @@ import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
 import { productsApi } from './interfaces/productsApi';
 import { ProductsType } from '../types/products';
+import { moneyboxApi } from './interfaces/moneyboxApi';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
+export class ApiClient
+  implements usersApi, accountApi, alarmApi, productsApi, moneyboxApi
+{
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -157,6 +160,15 @@ export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
     const response = await this.axiosInstance.request<ProductsType>({
       method: 'get',
       url: `/products/${productId}`,
+    });
+    return response.data;
+  }
+
+  //---------moneybox---------
+  async getMoneyboxSaving() {
+    const response = await this.axiosInstance.request<number>({
+      method: 'get',
+      url: '/moneybox/saving',
     });
     return response.data;
   }

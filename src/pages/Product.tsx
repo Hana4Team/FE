@@ -51,25 +51,34 @@ export const Product = () => {
                   {product.interest2.toFixed(2)}%
                 </span>
               </p>
-              <div className='flex items-center gap-7'>
-                <p className='font-hanaRegular text-lg leading-[3rem]'>
-                  가입기간
-                  <br />
-                  <span className='font-hanaMedium text-xl'>
-                    {product.period}
-                  </span>
-                </p>
-                <div className='border-[0.01px] h-16 border-[#68C5BC]'></div>
-                <p className='font-hanaRegular text-lg leading-[3rem]'>
-                  가입금액
-                  <br />
-                  <span className='font-hanaMedium text-xl'>
-                    {product.payment2
-                      ? `분기별 ${product.payment1}${checkAmountUnitMoney(product.payment1)}~${product.payment2}${checkAmountUnitMoney(product.payment2)}`
-                      : `${product.payment1}${checkAmountUnitMoney(product.payment1)} 이상`}
-                  </span>
-                </p>
-              </div>
+              {mission === '2' ? (
+                <div className='flex flex-col gap-3 mt-5'>
+                  <p className='font-hanaRegular text-xl'>대상</p>
+                  <p className='font-hanaMedium text-2xl'>
+                    만 14세 이상 ~ 만 40세 이하
+                  </p>
+                </div>
+              ) : (
+                <div className='flex items-center gap-7'>
+                  <p className='font-hanaRegular text-lg leading-[3rem]'>
+                    가입기간
+                    <br />
+                    <span className='font-hanaMedium text-xl'>
+                      {product.period}
+                    </span>
+                  </p>
+                  <div className='border-[0.01px] h-16 border-[#68C5BC]'></div>
+                  <p className='font-hanaRegular text-lg leading-[3rem]'>
+                    가입금액
+                    <br />
+                    <span className='font-hanaMedium text-xl'>
+                      {product.payment2
+                        ? `분기별 ${product.payment1}${checkAmountUnitMoney(product.payment1)}~${product.payment2}${checkAmountUnitMoney(product.payment2)}`
+                        : `${product.payment1}${checkAmountUnitMoney(product.payment1)} 이상`}
+                    </span>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className='w-11/12 flex flex-col bg-white py-10 px-10 rounded-3xl m-auto mt-10'>

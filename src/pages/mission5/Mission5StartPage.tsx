@@ -4,6 +4,7 @@ import Topbar from '../../components/Topbar';
 import { ApiClient } from '../../apis/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { BankBookIntro } from '../../components/molecules/BankBookIntro';
+import { CheckAccountMoney } from '../../components/organisms/accounts/CheckAccountMoney';
 
 export const Mission5StartPage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const Mission5StartPage = () => {
         icon='icons/blub.svg'
         title={`모은 목돈으로 새롭게\n 예금에 가입해보아요`}
       />
+      <CheckAccountMoney title='내가 적금으로 모은 금액' money={120300} />
       {depositInfo && (
         <BankBookIntro
           type='머니박스'
