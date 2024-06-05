@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import Topbar from '../../components/Topbar';
 import { Button } from '../../components/ui/Button';
 import { ProductJoinIntro } from '../../components/organisms/ProductJoinIntro';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 export const Mission2Product = () => {
   const navigate = useNavigate();
