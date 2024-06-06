@@ -12,7 +12,7 @@ export const Product = () => {
   const mission = searchParams.get('mission');
 
   const { data: product } = useQuery({
-    queryKey: ['product'],
+    queryKey: ['product', productId],
     queryFn: () => {
       const res = ApiClient.getInstance().getProduct(+productId);
       return res;
@@ -36,23 +36,25 @@ export const Product = () => {
       />
       {product && (
         <>
-          <div className='bg-hanaGreen text-white py-14 px-7 flex flex-col justify-between'>
-            <div className='flex flex-col justify-center gap-4 mb-28'>
+          <div className='bg-hanaGreen text-white py-16 px-7 flex flex-col justify-between'>
+            <div className='flex flex-col justify-center gap-4 mb-32'>
               <p className='font-hanaRegular text-3xl'>{product.name}</p>
-              <h1 className='font-hanaBold text-5xl'>{product.title}</h1>
+              <h1 className='font-hanaBold text-5xl whitespace-pre-line leading-snug'>
+                {product.summary}
+              </h1>
             </div>
-            <div className='flex flex-col justify-center gap-3'>
-              <p className='font-hanaRegular text-2xl'>{product.summary}</p>
-              <p className='font-hanaBold text-[2rem]'>
+            <div className='flex flex-col justify-center gap-4'>
+              <p className='font-hanaRegular text-2xl'>{product.title}</p>
+              <p className='flex items-center font-hanaBold text-[2rem]'>
                 {mission === '2' ? '파킹 ' : '기본 '}
-                {product.interest1.toFixed(2)}%~
-                <span className='text-5xl'>
+                {product.interest1.toFixed(2)}% ~
+                <span className='text-5xl ml-2'>
                   {mission === '2' ? '저축 ' : '최고 '}
                   {product.interest2.toFixed(2)}%
                 </span>
               </p>
               {mission === '2' ? (
-                <div className='flex flex-col gap-3 mt-5'>
+                <div className='flex flex-col gap-3 mt-3'>
                   <p className='font-hanaRegular text-xl'>대상</p>
                   <p className='font-hanaMedium text-2xl'>
                     만 14세 이상 ~ 만 40세 이하
@@ -60,7 +62,7 @@ export const Product = () => {
                 </div>
               ) : (
                 <div className='flex items-center gap-7'>
-                  <p className='font-hanaRegular text-lg leading-[3rem]'>
+                  <p className='font-hanaRegular text-lg leading-[2.5rem]'>
                     가입기간
                     <br />
                     <span className='font-hanaMedium text-xl'>
@@ -68,7 +70,7 @@ export const Product = () => {
                     </span>
                   </p>
                   <div className='border-[0.01px] h-16 border-[#68C5BC]'></div>
-                  <p className='font-hanaRegular text-lg leading-[3rem]'>
+                  <p className='font-hanaRegular text-lg leading-[2.5rem]'>
                     가입금액
                     <br />
                     <span className='font-hanaMedium text-xl'>
@@ -81,49 +83,28 @@ export const Product = () => {
               )}
             </div>
           </div>
-          <div className='w-11/12 flex flex-col bg-white py-10 px-10 rounded-3xl m-auto mt-10'>
-            <h1 className='font-hanaBold text-5xl mb-5'>{product.desc1}</h1>
-            {product.descDetail1.split('+').map((content, index) => (
-              <p
-                key={index}
-                className='font-hanaRegular text-2xl leading-normal'
-              >
-                {index > 0 ? (
-                  <>
-                    <span className='text-hanaRed font-hanaBold'>+</span>
-                    {content}
-                  </>
-                ) : (
-                  content.split(' ').map((word, index) =>
-                    index == 0 ? (
-                      <span
-                        key={index}
-                        className='text-hanaRed font-hanaMedium'
-                      >
-                        {word}
-                      </span>
-                    ) : (
-                      <span key={index}>{word}</span>
-                    )
-                  )
-                )}
-              </p>
-            ))}
+          <div className='w-11/12 flex flex-col bg-white py-14 px-10 rounded-3xl m-auto mt-10'>
+            <h1 className='font-hanaBold text-5xl mb-5 whitespace-pre-line leading-tight'>
+              {product.desc1}
+            </h1>
+            <p className='font-hanaRegular whitespace-pre-line text-2xl leading-relaxed'>
+              {product.descDetail1}
+            </p>
             <img
               src={`${product.descImage1}`}
               alt='productImg'
-              className='w-56 m-auto'
+              className='w-56 mx-auto my-5'
             />
-            <h1 className='font-hanaBold text-5xl my-5 text-right'>
+            <h1 className='font-hanaBold text-5xl mt-24 mb-5 text-right whitespace-pre-line leading-tight'>
               {product.desc2}
             </h1>
-            <p className='font-hanaRegular whitespace-pre-line text-xl leading-normal float-right text-right'>
+            <p className='font-hanaRegular whitespace-pre-line text-2xl leading-relaxed float-right text-right'>
               {product.descDetail2}
             </p>
             <img
               src={`${product.descImage2}`}
               alt='productImg'
-              className='w-56 m-auto'
+              className='w-56 m-auto mt-5'
             />
           </div>
         </>

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ProductsType } from '../../types/products';
 
 interface IProps {
@@ -8,7 +8,6 @@ interface IProps {
 
 export const RecommendProductItem: FC<IProps> = ({ item }) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const moveProductDetail = (productId: number) => {
     navigate(`/product?productId=${productId}&mission=4`);
@@ -21,15 +20,15 @@ export const RecommendProductItem: FC<IProps> = ({ item }) => {
     >
       <div className='flex flex-col gap-3'>
         <h3 className='font-hanaBold text-2xl'>{item.name}</h3>
-        <p className='font-hanaRegular text-xl text-[#838383]'>{item.title}</p>
+        <p className='font-hanaRegular text-lg text-[#838383]'>{item.title}</p>
       </div>
       <div className='flex flex-col items-end justify-center gap-1'>
         <p className='font-hanaRegular text-[#838383] text-base'>
-          {item.summary}
+          연(세전, 1년)
         </p>
         <p className='font-hanaBold text-hanaGreen text-xl'>
-          {item.interest1}%~
-          <span className='font-hanaHeavy'>{item.interest2}%</span>
+          {item.interest1.toFixed(2)}%~
+          <span className='font-hanaHeavy'>{item.interest2.toFixed(2)}%</span>
         </p>
       </div>
     </div>

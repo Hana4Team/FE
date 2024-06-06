@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { BsArrowRightCircleFill } from 'react-icons/bs';
 
 interface IProps {
-  type: '머니박스' | '100일 적금' | '예적금';
+  type: '머니박스' | '100일 적금' | '예금';
   name: string;
   title: string;
   minInterest: number;
@@ -36,14 +36,15 @@ export const BankBookIntro: FC<IProps> = ({
             size={24}
             className='mb-16 mt-1 cursor-pointer'
           />
-          <div className='font-hanaRegular text-2xl  whitespace-pre-line'>
-            <p className='font-hanaBold text-[#008485]'>
+          <div className='flex flex-col justify-center gap-1 font-hanaRegular text-xl whitespace-pre-line'>
+            <p className='font-hanaBold text-[#008485] text-2xl'>
               {type === '머니박스' ? '저축 ' : '최고 '}
               {type !== '100일 적금' && '연 '}
-              {maxInterest}%
+              {maxInterest.toFixed(2)}%
             </p>
             {type === '머니박스' ? '파킹 ' : '기본 '}
-            {minInterest}%<p className='text-[#666666] text-xl'>{content}</p>
+            {minInterest.toFixed(2)}%
+            <p className='text-[#666666] text-lg'>{content}</p>
           </div>
         </div>
         <img src='/public/images/별돌이2.svg' alt='별돌이' className='h-64' />

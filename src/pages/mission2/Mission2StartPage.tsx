@@ -87,8 +87,8 @@ export const Mission2StartPage = () => {
             type='머니박스'
             name={moneyBoxInfo[0].name}
             title={moneyBoxInfo[0].title}
-            maxInterest={moneyBoxInfo[0].interest1}
-            minInterest={moneyBoxInfo[0].interest2}
+            maxInterest={moneyBoxInfo[0].interest2}
+            minInterest={moneyBoxInfo[0].interest1}
             content={moneyBoxInfo[0].summary}
             className={`${animation <= 4 ? 'opacity-0' : 'opacity-1'} animate-fadein4`}
             onClick={() =>
