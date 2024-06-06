@@ -19,6 +19,7 @@ export type AccountType = {
 export type AccountReqType = {
   depositWithdrawalAccount: boolean;
   depositAccount: boolean;
+  saving100Account: boolean;
   savingsAccount: boolean;
   moneyboxAccount: boolean;
 };

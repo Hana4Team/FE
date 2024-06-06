@@ -4,14 +4,23 @@ import { removeCookie } from '../../utils/cookie';
 import { AccountType } from '../../types/account';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
+import { useNavigate } from 'react-router-dom';
 
 export const MyPage = () => {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    removeCookie('token');
+    navigate('/home');
+  };
+
   const { data: accounts } = useQuery({
-    queryKey: ['account'],
+    queryKey: ['accounts'],
     queryFn: () => {
       const res = ApiClient.getInstance().getAccount({
         depositWithdrawalAccount: true,
         depositAccount: true,
+        saving100Account: true,
         savingsAccount: true,
         moneyboxAccount: true,
       });
@@ -47,7 +56,7 @@ export const MyPage = () => {
           <h1 className='font-hanaBold text-[2.7rem]'>{userInfo?.name}</h1>
           <p
             className='flex items-center text-xl font-hanaMedium cursor-pointer'
-            onClick={() => removeCookie('token')}
+            onClick={() => logout()}
           >
             로그아웃
             <FaChevronRight size={10} className='ml-1.5' />
@@ -58,13 +67,14 @@ export const MyPage = () => {
         {hanaMoney && (
           <AccountSummaryItem
             title='하나머니'
-            totalMoney={hanaMoney}
+            totalMoney={hanaMoney.points}
             icons='icons/piggybank.svg'
           />
         )}
         {accounts &&
           accounts.map((item: AccountType) => (
             <AccountSummaryItem
+              key={item.accountId}
               title={item.name}
               totalMoney={item.balance}
               icons={

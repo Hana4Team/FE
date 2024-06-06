@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const AlarmPage = () => {
   const { data: alarms } = useQuery({
-    queryKey: ['alarm'],
+    queryKey: ['alarms'],
     queryFn: () => {
       const res = ApiClient.getInstance().getAlarm();
       return res;

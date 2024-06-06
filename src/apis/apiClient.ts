@@ -7,18 +7,14 @@ import {
   AccountReqType,
   AccountType,
   AccountDetailType,
-  OpendDepositSavingResType,
-  OpenedDepositSavingReqType,
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
 import { AlarmType } from '../types/alarm';
-import { productsApi } from './interfaces/productsApi';
-import { ProductsType } from '../types/products';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
+export class ApiClient implements usersApi, accountApi, alarmApi {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -79,7 +75,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
   }
 
   async getHanaMoney() {
-    const response = await this.axiosInstance.request<number>({
+    const response = await this.axiosInstance.request<{ points: number }>({
       method: 'get',
       url: '/users/point',
     });
@@ -91,7 +87,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
     const response = await this.axiosInstance.request<AccountType[]>({
       method: 'get',
       url: '/account',
-      data: type,
+      params: type,
     });
     return response.data;
   }
@@ -116,48 +112,6 @@ export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
         password,
         productsId,
       },
-    });
-    return response.data;
-  }
-
-  async postOpenedSaving100(data: OpenedDepositSavingReqType) {
-    const response =
-      await this.axiosInstance.request<OpendDepositSavingResType>({
-        method: 'post',
-        url: '/account/saving100',
-        data: data,
-      });
-    return response.data;
-  }
-
-  async postOpenedDepositSaving(
-    data: OpenedDepositSavingReqType,
-    initialAmount: number
-  ) {
-    const response =
-      await this.axiosInstance.request<OpendDepositSavingResType>({
-        method: 'post',
-        url: '/account/depositsaving',
-        data: {
-          data,
-          initialAmount,
-        },
-      });
-    return response.data;
-  }
-  //---------products---------
-  async getProdustsList(type: string) {
-    const response = await this.axiosInstance.request<ProductsType[]>({
-      method: 'get',
-      url: `/products?type=${type}`,
-    });
-    return response.data;
-  }
-
-  async getProduct(productId: number) {
-    const response = await this.axiosInstance.request<ProductsType>({
-      method: 'get',
-      url: `/products/${productId}`,
     });
     return response.data;
   }
@@ -206,11 +160,10 @@ export class ApiClient implements usersApi, accountApi, alarmApi, productsApi {
     newInstance.interceptors.request.use(
       (config) => {
         if (TOKEN) {
-          config.headers['Authorization'] = `${TOKEN}`;
+          config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';
-
         return config;
       },
       (error) => {

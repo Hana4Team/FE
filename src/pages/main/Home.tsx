@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/AlertModal';
-import { getCookie } from '../../utils/cookie';
+import { getCookie, setCookie } from '../../utils/cookie';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 
 export const Home = () => {
   const navigate = useNavigate();
-  const [isExistMoneyBox, setIsExistMoneyBox] = useState<boolean>(true);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isExistMoneyBox, setIsExistMoneyBox] = useState<boolean>(false);
+  const [showModalContent, setShowModalContent] = useState<string>('');
   const isExistToken = getCookie('token');
 
-  const { data: userInfo } = useQuery({
+  const { isLoading, data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: () => {
       const res = ApiClient.getInstance().getUser();
@@ -20,25 +20,41 @@ export const Home = () => {
     },
   });
 
-  const showModalHandler = () => setShowModal(!showModal);
+  const showModalHandler = () => setShowModalContent('');
 
   const navigatePageHandler = (url: string) => {
-    if (isExistToken) navigate(`${url}`);
-    else navigate('/login');
+    if (isExistToken) {
+      if (url === '/consume') {
+        if (userInfo && userInfo.step <= 1 && !userInfo?.stepStatus)
+          setShowModalContent('이사미션 1단계\n가 시작되지 않았습니다.');
+        return;
+      }
+      navigate(`${url}`);
+    } else navigate('/login');
   };
 
   const navigateMoneyBoxHandler = () => {
-    if (!isExistMoneyBox) navigate('/moneyBox');
-    else setShowModal(true);
+    if (isExistMoneyBox) navigate('/moneyBox');
+    else setShowModalContent('머니박스\n가 아직 개설되지 않았어요');
   };
+
+  useEffect(() => {
+    if (userInfo) {
+      if (userInfo.step < 2 || (userInfo?.step === 2 && !userInfo.stepStatus))
+        setIsExistMoneyBox(false);
+      else setIsExistMoneyBox(true);
+    }
+  }, [isLoading]);
 
   return (
     <>
-      {showModal && (
+      {showModalContent !== '' && (
         <AlertModal onClose={showModalHandler}>
           <p className='font-hanaMedium text-2xl'>
-            <span className='text-hanaGreen'>머니박스</span>가 아직 개설되지
-            않았어요
+            <span className='text-hanaGreen'>
+              {showModalContent.split('\n')[0]}
+            </span>
+            {showModalContent.split('\n')[1]}
           </p>
         </AlertModal>
       )}
