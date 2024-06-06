@@ -52,5 +52,5 @@ jobs:
           docker stop frontend
           docekr rm frontend
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ddokddokhana-frontend:latest
-          docker run -d --name frontend -p 3000:80 ${{ secrets.DOCKER_HUB_USERNAME }}/ddokddokhana-frontend:latest
+          docker run -d --name frontend -p 80:80 ${{ secrets.DOCKER_HUB_USERNAME }}/ddokddokhana-frontend:latest
         EOF

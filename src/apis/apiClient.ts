@@ -9,8 +9,7 @@ import {
   AccountDetailType,
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
-// import { API_BASE_URL } from './url';
-const API_BASE_URL = "ec2-43-201-217-228.ap-northeast-2.compute.amazonaws.com:8080/api/v1"
+import { API_BASE_URL } from './url';
 const TOKEN = getCookie('token');
 
 export class ApiClient implements usersApi, accountApi, alarmApi {
