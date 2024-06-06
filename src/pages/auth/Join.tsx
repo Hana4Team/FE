@@ -54,8 +54,8 @@ export const Join = () => {
     },
   });
   const { mutate: postMessage, data: msgResult } = useMutation({
-    mutationFn: (phone: string) => {
-      const res = ApiClient.getInstance().postMessage(phone);
+    mutationFn: (phoneNumber: string) => {
+      const res = ApiClient.getInstance().postMessage(phoneNumber);
       return res;
     },
   });
@@ -144,12 +144,13 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 3 && isPhone) {
-      setInputs({
-        ...inputs,
-        phoneNumber: phoneRef.current!.value.split('-').join(''),
+      const updatedPhoneNumber = phoneRef.current!.value.split('-').join('');
+      setInputs((prevInputs) => {
+        const newInputs = { ...prevInputs, phoneNumber: updatedPhoneNumber };
+        postMessage(inputs.phoneNumber);
+        return newInputs;
       });
 
-      postMessage(inputs.phoneNumber);
       if (msgResult) {
         code.current = msgResult;
       }
@@ -170,12 +171,18 @@ export const Join = () => {
     }
     if (step === 6) {
       if (pwdCheck()) {
-        setInputs({
-          ...inputs,
-          confirmPassword: confirmPwdRef.current.map((p) => p?.value).join(''),
+        const updatedConfirmPassword = confirmPwdRef.current
+          .map((p) => p?.value)
+          .join('');
+        setInputs((prevInputs) => {
+          const newInputs = {
+            ...prevInputs,
+            confirmPwd: updatedConfirmPassword,
+          };
+          postJoin(inputs);
+          return newInputs;
         });
 
-        postJoin(inputs);
         if (joinResult?.success) {
           setCookie('phoneNumber', joinResult.phoneNumber);
           setIsActive(true);

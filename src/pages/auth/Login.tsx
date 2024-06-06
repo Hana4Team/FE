@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { getCookie, setCookie } from '../../utils/cookie';
+import { LoginReqType } from '../../types/users';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -14,17 +15,19 @@ export const Login = () => {
   const [re, setRe] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
 
-  const { isSuccess, data } = useMutation({
-    mutationFn: () => {
-      const res = ApiClient.getInstance().postLogin({
-        phoneNumber: getCookie('phoneNumber'),
-        password: pwdRef.current.map((p) => p?.value).join(''),
-      });
+  const { mutate: login, data } = useMutation({
+    mutationFn: (user: LoginReqType) => {
+      const res = ApiClient.getInstance().postLogin(user);
       return res;
     },
   });
 
   const onClickButton = () => {
+    login({
+      phoneNumber: getCookie('phoneNumber'),
+      password: pwdRef.current.map((p) => p?.value).join(''),
+    });
+
     if (data?.success) {
       data.token && setCookie('token', data.token);
       navigate('/home');
