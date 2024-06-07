@@ -36,7 +36,7 @@ export const Mission3StartPage = () => {
         {moneyboxMoney && (
           <CheckAccountMoney
             title='지난 달 내가 저축한 금액'
-            money={moneyboxMoney}
+            money={moneyboxMoney.savingBalance}
             onClick={() => navigate('/moneybox')}
           />
         )}

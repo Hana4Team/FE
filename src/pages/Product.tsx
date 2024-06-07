@@ -115,7 +115,7 @@ export const Product = () => {
           onClick={() =>
             navigate(`/mission${mission}/account-opening`, {
               state: {
-                productId: productId,
+                product: product,
               },
             })
           }

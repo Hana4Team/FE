@@ -94,8 +94,11 @@ export class ApiClient
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
       method: 'get',
-      url: '/account',
-      data: type,
+      url: `/account?depositWithdrawalAccount=${type.depositWithdrawalAccount}
+      &depositAccount=${type.depositAccount}&
+      &saving100Account=${type.saving100Account}&
+      &savingAccount=${type.savingsAccount}&
+      &moneyboxAccount=${type.moneyboxAccount}`,
     });
     return response.data;
   }
@@ -168,7 +171,9 @@ export class ApiClient
 
   //---------moneybox---------
   async getMoneyboxSaving() {
-    const response = await this.axiosInstance.request<number>({
+    const response = await this.axiosInstance.request<{
+      savingBalance: number;
+    }>({
       method: 'get',
       url: '/moneybox/saving',
     });

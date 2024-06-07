@@ -1,3 +1,5 @@
 export interface moneyboxApi {
-  getMoneyboxSaving(): Promise<number>;
+  getMoneyboxSaving(): Promise<{
+    savingBalance: number;
+  }>;
 }

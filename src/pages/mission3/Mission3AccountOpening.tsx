@@ -10,89 +10,116 @@ import {
   checkAmountUnitMoney,
   checkAmountUnitNumber,
 } from '../../utils/checkAmountUnit';
-
-export const dummyData = {
-  initMoney: 500000,
-  accounts: [
-    {
-      name: '영하나플러스통장1',
-      accountNumber: '000-00000-000000',
-      money: 200000,
-    },
-    {
-      name: '영하나플러스통장2',
-      accountNumber: '111-00000-000000',
-      money: 300000,
-    },
-    {
-      name: '영하나플러스통장3',
-      accountNumber: '000-00000-000000',
-      money: 400000,
-    },
-  ],
-};
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { add, format } from 'date-fns';
 
 type userInfo = {
-  initMoney: number;
   savingMoney: number;
+  outdrawAccountId: number;
   outdrawAccountNumber: string;
-  savingDate: string;
-  interest: number;
 };
 
 export const Mission3AccountOpening = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { data } = location.state.product;
+  const product = location.state.product;
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [btnActive, setBtnActive] = useState<boolean>(true);
   const [info, setInfo] = useState<userInfo>({
-    initMoney: dummyData.initMoney,
     savingMoney: -1,
+    outdrawAccountId: -1,
     outdrawAccountNumber: '',
-    savingDate: '100일',
-    interest: data.interest1,
   });
 
   const savingMoneyInput = useRef<HTMLInputElement | null>(null);
 
+  const {
+    data: moneyboxMoney,
+    isSuccess: moneyboxMoneyIsSuccess,
+    isError: moneyboxMoneyIsError,
+  } = useQuery({
+    queryKey: ['moneyboxMoney'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getMoneyboxSaving();
+      return res;
+    },
+  });
+
+  const postOpendMoneyBox = useMutation({
+    mutationFn: () =>
+      ApiClient.getInstance().postOpenedSaving100({
+        payment: info.savingMoney,
+        endDate: format(add(new Date(), { days: 99 }), 'yyyy-MM-dd'),
+        productsId: product.productsId,
+        withdrawalAccountId: info.outdrawAccountId,
+      }),
+    onSuccess: (data) => {
+      if (data.accountId) setCurrentNumber((prev) => prev + 1);
+      else {
+        alert('상품 가입에 실패하였습니다.');
+        navigate('/mission');
+      }
+    },
+    onError: () => {
+      alert('상품 가입에 실패하였습니다.');
+      navigate('/mission');
+    },
+  });
+
   const nextHandler = () => {
+    if (currentNumber === 0) {
+      if (
+        (moneyboxMoneyIsSuccess && !moneyboxMoney.savingBalance) ||
+        moneyboxMoneyIsError
+      ) {
+        alert('머니박스 계좌 조회를 실패하였습니다.');
+        navigate('/mission');
+        return;
+      }
+    }
+    if (currentNumber === 4) {
+      postOpendMoneyBox.mutate();
+      return;
+    }
     if (currentNumber === 5) {
       navigate('/savings100Days');
       return;
     }
     setCurrentNumber((prev) => prev + 1);
-    currentNumber === 2 || currentNumber === 3 || currentNumber === 4
-      ? setBtnActive(true)
-      : setBtnActive(false);
+    currentNumber === 1 || currentNumber === 0
+      ? setBtnActive(false)
+      : setBtnActive(true);
   };
 
-  const checkEffectSavingMoney = (prev: userInfo) => {
+  const checkEffectSavingMoney = () => {
     if (savingMoneyInput.current) {
       if (
         savingMoneyInput.current?.value === '' ||
         +savingMoneyInput.current.value <
-          checkAmountUnitNumber(data.payment1) ||
-        +savingMoneyInput.current.value > checkAmountUnitNumber(data.payment2)
+          checkAmountUnitNumber(product.payment1) ||
+        +savingMoneyInput.current.value >
+          checkAmountUnitNumber(product.payment2)
       ) {
         setInfo({
-          ...prev,
+          ...info,
           savingMoney: 0,
         });
         return;
       }
       setInfo({
-        ...prev,
+        ...info,
         savingMoney: +savingMoneyInput.current?.value,
       });
       setBtnActive(true);
     }
   };
 
-  const checkOutdrawAccountModal = (account: string) => {
+  const checkOutdrawAccountModal = (account: string, accountId: number) => {
     setInfo({
       ...info,
       outdrawAccountNumber: account,
+      outdrawAccountId: accountId,
     });
     setBtnActive(true);
   };
@@ -113,7 +140,7 @@ export const Mission3AccountOpening = () => {
           {currentNumber === 0 && (
             <div className='w-full flex items-center font-hanaMedium text-[1.7rem]'>
               <span className='mr-2 text-hanaDeepGreen font-hanaBold'>
-                {dummyData.initMoney.toLocaleString('ko-KR')}
+                {moneyboxMoney?.savingBalance.toLocaleString('ko-KR')}
               </span>
               원 가입하기
             </div>
@@ -126,8 +153,8 @@ export const Mission3AccountOpening = () => {
                   pattern='\d*'
                   maxLength={9}
                   ref={savingMoneyInput}
-                  placeholder={`${data?.payment1}${checkAmountUnitMoney(data?.payment1)} ~ ${data?.payment2}${checkAmountUnitMoney(data?.payment2)} `}
-                  onBlur={() => checkEffectSavingMoney(info)}
+                  placeholder={`${product.payment1}${checkAmountUnitMoney(product.payment1)} ~ ${product?.payment2}${checkAmountUnitMoney(product?.payment2)} `}
+                  onBlur={checkEffectSavingMoney}
                   className='w-48 placeholder:text-[#979797] text-end pr-2'
                 />
                 {savingMoneyInput.current?.value && '원'}
@@ -145,9 +172,10 @@ export const Mission3AccountOpening = () => {
           {currentNumber === 3 && <AccountMaturitChoice />}
           {currentNumber === 4 && (
             <AccountCheck
-              money={info.initMoney}
-              period={info.savingDate}
-              interest={info.interest}
+              money={moneyboxMoney?.savingBalance || 0}
+              period='100일'
+              interest={product.interest1}
+              automatic_payment_money={info.savingMoney}
               outdrawAccountNumber={info.outdrawAccountNumber}
             />
           )}

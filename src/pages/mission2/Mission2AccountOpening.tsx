@@ -31,7 +31,7 @@ type userInfo = {
 export const Mission2AccountOpening = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const productId = location.state.productId;
+  const productId = location.state.product.productsId;
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [btnActive, setBtnActive] = useState<boolean>(true);
@@ -130,21 +130,21 @@ export const Mission2AccountOpening = () => {
           phone_number: '',
         });
         return;
-      } else {
-        setInfo({
-          ...info,
-          phone_number: phoneInput.current?.value,
-        });
-        if (
-          info.name !== '' &&
-          info.name !== null &&
-          info.mobile_carrier !== ''
-        ) {
-          setBtnActive(true);
-        }
+      }
+      setInfo({
+        ...info,
+        phone_number: phoneInput.current?.value,
+      });
+      if (
+        info.name !== '' &&
+        info.name !== null &&
+        info.mobile_carrier !== ''
+      ) {
+        setBtnActive(true);
       }
     }
   };
+
   const checkEffectName = () => {
     if (nameInput.current) {
       if (nameInput.current?.value === '') {
@@ -153,18 +153,17 @@ export const Mission2AccountOpening = () => {
           name: '',
         });
         return;
-      } else {
-        setInfo({
-          ...info,
-          name: nameInput.current?.value,
-        });
-        if (
-          info.phone_number !== '' &&
-          info.phone_number !== null &&
-          info.mobile_carrier !== ''
-        ) {
-          setBtnActive(true);
-        }
+      }
+      setInfo({
+        ...info,
+        name: nameInput.current?.value,
+      });
+      if (
+        info.phone_number !== '' &&
+        info.phone_number !== null &&
+        info.mobile_carrier !== ''
+      ) {
+        setBtnActive(true);
       }
     }
   };
