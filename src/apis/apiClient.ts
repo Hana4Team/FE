@@ -15,11 +15,19 @@ import { API_BASE_URL } from './url';
 import { productsApi } from './interfaces/productsApi';
 import { ProductsType } from '../types/products';
 import { moneyboxApi } from './interfaces/moneyboxApi';
+import { depositsavingType } from '../types/depositsaving';
+import { depositsavingApi } from './interfaces/depositsavingApi';
 
 const TOKEN = getCookie('token');
 
 export class ApiClient
-  implements usersApi, accountApi, alarmApi, productsApi, moneyboxApi
+  implements
+    usersApi,
+    accountApi,
+    alarmApi,
+    productsApi,
+    moneyboxApi,
+    depositsavingApi
 {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
@@ -152,6 +160,7 @@ export class ApiClient
       });
     return response.data;
   }
+
   //---------products---------
   async getProdustsList(type: string) {
     const response = await this.axiosInstance.request<ProductsType[]>({
@@ -176,6 +185,15 @@ export class ApiClient
     }>({
       method: 'get',
       url: '/moneybox/saving',
+    });
+    return response.data;
+  }
+
+  //---------depositsaving---------
+  async getDepositSaving(type: string) {
+    const response = await this.axiosInstance.request<depositsavingType>({
+      method: 'get',
+      url: `/depositsaving?type=${type}`,
     });
     return response.data;
   }

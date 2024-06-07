@@ -22,8 +22,8 @@ type userInfo = {
   initMoney: number;
   regularDay: number;
   regularMoney: number;
-  outdrawAccountId: number;
-  outdrawAccountNumber: string;
+  withdrawAccountId: number;
+  withdrawAccountNumber: string;
 };
 
 export const Mission4AccountOpening = () => {
@@ -39,8 +39,8 @@ export const Mission4AccountOpening = () => {
     initMoney: -1,
     regularDay: new Date().getDate(),
     regularMoney: -1,
-    outdrawAccountId: -1,
-    outdrawAccountNumber: '',
+    withdrawAccountId: -1,
+    withdrawAccountNumber: '',
   });
 
   const regularDayInput = useRef<HTMLInputElement | null>(null);
@@ -62,7 +62,7 @@ export const Mission4AccountOpening = () => {
                   'yyyy-MM-dd'
                 ),
           productsId: product.productsId,
-          withdrawalAccountId: info.outdrawAccountId,
+          withdrawalAccountId: info.withdrawAccountId,
         },
         info.initMoney
       ),
@@ -144,8 +144,8 @@ export const Mission4AccountOpening = () => {
   const checkOutdrawAccountModal = (account: string, accountId: number) => {
     setInfo({
       ...info,
-      outdrawAccountNumber: account,
-      outdrawAccountId: accountId,
+      withdrawAccountNumber: account,
+      withdrawAccountId: accountId,
     });
     setBtnActive(true);
   };
@@ -240,7 +240,7 @@ export const Mission4AccountOpening = () => {
                 interest={product.interest1}
                 automatic_payment_date={info.regularDay}
                 automatic_payment_money={info.regularMoney}
-                outdrawAccountNumber={info.outdrawAccountNumber}
+                outdrawAccountNumber={info.withdrawAccountNumber}
               />
             )}
             {currentNumber === 5 && (

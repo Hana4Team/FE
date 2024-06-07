@@ -48,10 +48,10 @@ export const Product = () => {
             </div>
             <div className='flex flex-col justify-center gap-4'>
               <p className='font-hanaRegular text-2xl'>{product.title}</p>
-              <p className='flex items-center font-hanaBold text-[2rem]'>
+              <p className='flex items-center font-hanaRegular text-[2rem] mb-3'>
                 {mission === '2' ? '파킹 ' : '기본 '}
                 {product.interest1.toFixed(2)}% ~
-                <span className='text-5xl ml-2'>
+                <span className='text-5xl ml-2 font-hanaBold'>
                   {mission === '2' ? '저축 ' : '최고 '}
                   {product.interest2.toFixed(2)}%
                 </span>

@@ -4,33 +4,82 @@ import { useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { AccountSaveMoneyAmount } from '../../components/organisms/accounts/AccountSaveMoneyAmount';
 import { AccountMaturitChoice } from '../../components/organisms/accounts/AccountMaturitChoice';
-import { AccountPw } from '../../components/organisms/accounts/AccountPw';
 import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
-import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { add, format } from 'date-fns';
 type userInfo = {
-  maturitDate: string;
+  maturitDate: number;
+  maturitDateUnit: string;
   initMoney: number;
-  outdrawAccountNumber: string;
-  interest: number;
-  password: string;
+  withdrawAccountNumber: string;
 };
 
 export const Mission5AccountOpening = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { data } = location.state.product;
+  const product = location.state.product;
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [btnActive, setBtnActive] = useState<boolean>(false);
   const [info, setInfo] = useState<userInfo>({
-    maturitDate: '',
+    maturitDate: -1,
+    maturitDateUnit: '',
     initMoney: -1,
-    outdrawAccountNumber: '',
-    interest: data.interest1,
-    password: '',
+    withdrawAccountNumber: '',
+  });
+
+  const { data: savingMoney } = useQuery({
+    queryKey: ['savingMoney'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getDepositSaving('SAVING');
+      return res;
+    },
+  });
+
+  const postOpenedDepositSaving = useMutation({
+    mutationFn: () =>
+      ApiClient.getInstance().postOpenedDepositSaving(
+        {
+          payment: info.initMoney,
+          endDate:
+            info.maturitDateUnit === '년'
+              ? format(
+                  add(new Date(), { years: info.maturitDate }),
+                  'yyyy-MM-dd'
+                )
+              : format(
+                  add(new Date(), { months: info.maturitDate }),
+                  'yyyy-MM-dd'
+                ),
+          productsId: product.productsId,
+          withdrawalAccountId: savingMoney?.accountId || 0,
+        },
+        info.initMoney
+      ),
+    onSuccess: (data) => {
+      if (data.accountId) setCurrentNumber((prev) => prev + 1);
+      else {
+        alert('상품 가입에 실패하였습니다.');
+        navigate('/mission');
+      }
+    },
+    onError: () => {
+      alert('상품 가입에 실패하였습니다.');
+      navigate('/mission');
+    },
   });
 
   const nextHandler = () => {
+    if (currentNumber === 1) {
+      setInfo({
+        ...info,
+        withdrawAccountNumber: savingMoney?.accountNumber || '',
+      });
+    }
+    if (currentNumber === 3) {
+      postOpenedDepositSaving.mutate();
+    }
     if (currentNumber === 4) {
       navigate('/home');
       return;
@@ -40,16 +89,20 @@ export const Mission5AccountOpening = () => {
   };
 
   const checkinitMoneyAndMaturitDateModal = (
-    maturitDate: string,
+    maturitDate: number,
+    maturitDateUnit: string,
     initMoney: number
   ) => {
     setInfo({
       ...info,
       maturitDate: maturitDate,
+      maturitDateUnit: maturitDateUnit,
       initMoney: initMoney,
     });
     setBtnActive(true);
   };
+
+  console.log('info>>', info);
 
   return (
     <div className='bg-white flex flex-col items-center h-screen w-full'>
@@ -65,9 +118,9 @@ export const Mission5AccountOpening = () => {
           {currentNumber === 0 && (
             <AccountSaveMoneyAmount
               type={false}
-              period={data.period}
-              payment1={1000000}
-              payment2={1500000}
+              period={product.period}
+              payment1={savingMoney?.balance || 0}
+              payment2={savingMoney?.balance || 0}
               onClick={checkinitMoneyAndMaturitDateModal}
             />
           )}
@@ -76,8 +129,12 @@ export const Mission5AccountOpening = () => {
               <div className='flex gap-3 items-center'>
                 <img src='/images/logo.svg' alt='logo' className='w-12 h-12' />
                 <div className='flex flex-col gap-1 text-hanaGreen'>
-                  <p className='font-hanaRegular text-lg'>영하나적금통장</p>
-                  <p className='font-hanaMedium text-xl'>000-00000-00000</p>
+                  <p className='font-hanaRegular text-lg'>
+                    {savingMoney?.productName}
+                  </p>
+                  <p className='font-hanaMedium text-xl'>
+                    {savingMoney?.accountNumber}
+                  </p>
                 </div>
               </div>
             </div>
@@ -86,13 +143,13 @@ export const Mission5AccountOpening = () => {
           {currentNumber === 3 && (
             <AccountCheck
               money={info.initMoney}
-              period={info.maturitDate}
-              interest={info.interest}
-              outdrawAccountNumber={info.outdrawAccountNumber}
+              period={info.maturitDate + info.maturitDateUnit}
+              interest={product.interest1}
+              outdrawAccountNumber={info.withdrawAccountNumber}
             />
           )}
           {currentNumber === 4 && (
-            <ConfirmCard text={`${data.name}\n가입 완료`} />
+            <ConfirmCard text={`${product.name}\n가입 완료`} />
           )}
         </div>
         <Button
