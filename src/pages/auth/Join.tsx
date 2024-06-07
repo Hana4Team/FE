@@ -35,7 +35,7 @@ export const Join = () => {
     confirmPassword: '',
   });
 
-  const code = useRef<number>(0);
+  const code = useRef<string>('');
   const [isName, setIsName] = useState<boolean>(true);
   const [isBirth, setIsBirth] = useState<boolean>(true);
   const [isPhone, setIsPhone] = useState<boolean>(true);
@@ -52,11 +52,19 @@ export const Join = () => {
       const res = ApiClient.getInstance().postJoin(input);
       return res;
     },
+    onSuccess: (data) => {
+      setCookie('phoneNumber', data.phoneNumber);
+      setIsActive(true);
+      setStep((prev) => prev + 1);
+    },
   });
-  const { mutate: postMessage, data: msgResult } = useMutation({
+  const { mutate: postMessage } = useMutation({
     mutationFn: (phoneNumber: string) => {
       const res = ApiClient.getInstance().postMessage(phoneNumber);
       return res;
+    },
+    onSuccess: (data) => {
+      code.current = data.code;
     },
   });
 
@@ -87,6 +95,8 @@ export const Join = () => {
     if (title === 'phone') {
       if (phoneNumberPattern.test(phoneRef.current!.value)) {
         setIsPhone(true);
+        const updatedPhoneNumber = phoneRef.current!.value.split('-').join('');
+        setInputs({ ...inputs, phoneNumber: updatedPhoneNumber });
         setIsActive(true);
       } else {
         setIsPhone(false);
@@ -115,6 +125,14 @@ export const Join = () => {
       confirmPwdRef.current.map((p) => p?.value).join('') === inputs.password
     ) {
       setIsPwdCorrect(true);
+      const updatedConfirmPassword = confirmPwdRef.current
+        .map((p) => p?.value)
+        .join('');
+      setInputs({
+        ...inputs,
+        confirmPassword: updatedConfirmPassword,
+      });
+      setIsActive(true);
       return true;
     } else {
       setIsPwdCorrect(false);
@@ -144,16 +162,7 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 3 && isPhone) {
-      const updatedPhoneNumber = phoneRef.current!.value.split('-').join('');
-      setInputs((prevInputs) => {
-        const newInputs = { ...prevInputs, phoneNumber: updatedPhoneNumber };
-        postMessage(inputs.phoneNumber);
-        return newInputs;
-      });
-
-      if (msgResult) {
-        code.current = msgResult;
-      }
+      postMessage(inputs.phoneNumber);
       setStep((prev) => prev + 1);
       setIsActive(false);
     }
@@ -170,25 +179,8 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 6) {
-      if (pwdCheck()) {
-        const updatedConfirmPassword = confirmPwdRef.current
-          .map((p) => p?.value)
-          .join('');
-        setInputs((prevInputs) => {
-          const newInputs = {
-            ...prevInputs,
-            confirmPwd: updatedConfirmPassword,
-          };
-          postJoin(inputs);
-          return newInputs;
-        });
-
-        if (joinResult?.success) {
-          setCookie('phoneNumber', joinResult.phoneNumber);
-          setIsActive(true);
-          setStep((prev) => prev + 1);
-        }
-      }
+      pwdCheck();
+      postJoin(inputs);
     }
     if (step === 7) {
       navigate('/home');

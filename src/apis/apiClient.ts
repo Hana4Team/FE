@@ -50,16 +50,16 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
   }
 
   async postMessage(phoneNumber: string) {
-    const response = await this.axiosInstance.request<number>({
+    const response = await this.axiosInstance.request<{ code: string }>({
       method: 'post',
       url: '/users/message',
-      data: phoneNumber,
+      data: { phoneNumber },
     });
     return response.data;
   }
 
   async postMsgCheck(codeReq: MsgCheckType) {
-    const response = await this.axiosInstance.request<string>({
+    const response = await this.axiosInstance.request<{ check: string }>({
       method: 'post',
       url: '/users/msgCheck',
       data: codeReq,
@@ -87,7 +87,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<SavePointType>({
       method: 'put',
       url: `/users/point`,
-      data: isMission,
+      data: { isMission },
     });
     return response.data;
   }
@@ -124,7 +124,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<string>({
       method: 'post',
       url: '/alarm',
-      data: contents,
+      data: { contents },
     });
     return response.data;
   }

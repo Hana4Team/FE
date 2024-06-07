@@ -41,6 +41,6 @@ export type JoinType = {
   phoneNumber: string;
 };
 export type MsgCheckType = {
-  code: number;
-  input: number;
+  code: string;
+  input: string;
 };

@@ -20,6 +20,14 @@ export const Login = () => {
       const res = ApiClient.getInstance().postLogin(user);
       return res;
     },
+    onSuccess: (data) => {
+      if (data?.success) {
+        data.token && setCookie('token', data.token);
+        navigate('/home');
+      } else {
+        setRe((prev) => !prev);
+      }
+    },
   });
 
   const onClickButton = () => {
@@ -27,13 +35,6 @@ export const Login = () => {
       phoneNumber: getCookie('phoneNumber'),
       password: pwdRef.current.map((p) => p?.value).join(''),
     });
-
-    if (data?.success) {
-      data.token && setCookie('token', data.token);
-      navigate('/home');
-    } else {
-      setRe((prev) => !prev);
-    }
   };
 
   return (

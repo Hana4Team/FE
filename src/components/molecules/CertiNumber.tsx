@@ -9,29 +9,35 @@ interface IProps {
   setIsMsgCheck: Dispatch<SetStateAction<boolean>>;
   isMsgCheck: boolean;
   setIsActive: Dispatch<SetStateAction<boolean>>;
-  code: number;
+  code: string;
 }
 
 export const CertiNumber: FC<IProps> = ({
   telecom,
   phoneNumber,
-  setIsMsgCheck,
   isMsgCheck,
+  setIsMsgCheck,
   setIsActive,
   code,
 }) => {
   const [isCheckActive, setIsCheckActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { mutate: postMsgCheck, data: msgCheckResult } = useMutation({
+  const { mutate: postMsgCheck } = useMutation({
     mutationFn: (codeReq: MsgCheckType) => {
       const res = ApiClient.getInstance().postMsgCheck(codeReq);
       return res;
     },
+    onSuccess: (data) => {
+      if (data?.check === 'match') {
+        setIsMsgCheck(true);
+        setIsActive(true);
+      }
+    },
   });
 
   const checkActive = () => {
-    if (inputRef.current?.value.length === 6) setIsCheckActive(true);
+    if (inputRef.current?.value.length === 7) setIsCheckActive(true);
     else setIsCheckActive(false);
   };
 
@@ -39,12 +45,8 @@ export const CertiNumber: FC<IProps> = ({
     inputRef.current &&
       postMsgCheck({
         code: code,
-        input: Number(inputRef.current.value),
+        input: inputRef.current.value,
       });
-    if (msgCheckResult === 'match') {
-      setIsMsgCheck(true);
-      setIsActive(true);
-    }
   };
 
   return (
@@ -61,7 +63,7 @@ export const CertiNumber: FC<IProps> = ({
         <input
           className='font-hanaMedium text-2xl border-b-[1px] border-black w-9/12'
           placeholder='인증번호'
-          maxLength={6}
+          maxLength={7}
           type='text'
           pattern='/d*'
           ref={inputRef}

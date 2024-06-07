@@ -12,8 +12,8 @@ import {
 export interface usersApi {
   postLogin(user: LoginReqType): Promise<LoginType>;
   postJoin(user: JoinReqType): Promise<JoinType>;
-  postMessage(phoneNumber: string): Promise<number>;
-  postMsgCheck(codeReq: MsgCheckType): Promise<string>;
+  postMessage(phoneNumber: string): Promise<{ code: string }>;
+  postMsgCheck(codeReq: MsgCheckType): Promise<{ check: string }>;
   updateMissionStart(): Promise<StepType>;
   updateMissionCheck(): Promise<StepType>;
   updatePoint(isMission: boolean): Promise<SavePointType>;
