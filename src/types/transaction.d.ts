@@ -9,8 +9,8 @@ export type RemmitanceMoneyBoxType = {
   amount: number;
   senderTitle: string;
   recipientTitle: string;
-  senderMoneyBox: string;
-  recipientMoneyBox: string;
+  senderMoneybox: string;
+  recipientMoneybox: string;
 };
 
 export type TransactionHistoryType = {

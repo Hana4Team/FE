@@ -4,7 +4,7 @@ import { IoIosArrowRoundForward } from 'react-icons/io';
 
 interface Iprops {
   title: string;
-  balance: number;
+  balance?: number;
   color1: string;
   color2: string;
   onClick?: () => void;
@@ -41,7 +41,7 @@ export const MoneyBoxItem: FC<Iprops> = ({
             </>
           )}
         </div>
-        <p className='text-3xl font-hanaBold'>{balance.toLocaleString()} 원</p>
+        <p className='text-3xl font-hanaBold'>{balance?.toLocaleString()} 원</p>
       </div>
       <div
         className={`flex flex-col justify-end items-end w-28 bg-[#${color2}] rounded-r-2xl p-5 font-hanaMedium cursor-pointer`}

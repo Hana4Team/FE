@@ -48,7 +48,7 @@ export class ApiClient
     const response = await this.axiosInstance.request<SavePointType>({
       method: 'put',
       url: `/users/point`,
-      data: isMission,
+      data: { isMission },
     });
     return response.data;
   }
@@ -57,7 +57,7 @@ export class ApiClient
     const response = await this.axiosInstance.request<number>({
       method: 'post',
       url: '/users/message',
-      data: phoneNumber,
+      data: { phoneNumber },
     });
     return response.data;
   }
@@ -83,8 +83,11 @@ export class ApiClient
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
       method: 'get',
-      url: '/account',
-      data: type,
+      url: `/account?depositWithdrawalAccount=${type.depositWithdrawalAccount}
+      &depositAccount=${type.depositAccount}&
+      &saving100Account=${type.saving100Account}&
+      &savingAccount=${type.savingsAccount}&
+      &moneyboxAccount=${type.moneyboxAccount}`,
     });
     return response.data;
   }
@@ -99,44 +102,27 @@ export class ApiClient
     return response.data;
   }
 
-  async postRemittance({
-    amount,
-    senderTitle,
-    recipientTitle,
-    senderAccount,
-    recipientAccount,
-  }: RemmitanceType) {
-    const response = await this.axiosInstance.request<void>({
+  async postRemittance(TransactionSaveReq: RemmitanceType) {
+    console.log(TransactionSaveReq);
+    const response = await this.axiosInstance.request<{
+      transactionId: number;
+    }>({
       method: 'post',
-      url: '/api/v1/transaction',
-      data: {
-        amount: amount,
-        senderTitle: senderTitle,
-        recipientTitle: recipientTitle,
-        senderAccount: senderAccount,
-        recipientAccount: recipientAccount,
-      },
+      url: '/transaction',
+      data: TransactionSaveReq,
     });
     return response.data;
   }
 
-  async postRemittanceMoneyBox({
-    amount,
-    senderTitle,
-    recipientTitle,
-    senderMoneyBox,
-    recipientMoneyBox,
-  }: RemmitanceMoneyBoxType) {
-    const response = await this.axiosInstance.request<string>({
+  async postRemittanceMoneyBox(
+    TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
+  ) {
+    const response = await this.axiosInstance.request<{
+      transactionId: number;
+    }>({
       method: 'post',
-      url: '/api/v1/transaction',
-      data: {
-        amount: amount,
-        senderTitle: senderTitle,
-        recipientTitle: recipientTitle,
-        senderMoneyBox: senderMoneyBox,
-        recipientMoneyBox: recipientMoneyBox,
-      },
+      url: '/transaction/moneybox',
+      data: TransactionMoneyboxSaveReq,
     });
     return response.data;
   }
@@ -144,7 +130,7 @@ export class ApiClient
   async getMoneyBox(): Promise<moneyBoxType> {
     const response = await this.axiosInstance.request<moneyBoxType>({
       method: 'get',
-      url: '/moneyBox',
+      url: '/moneybox',
     });
     return response.data;
   }
@@ -154,7 +140,7 @@ export class ApiClient
     const response = await this.axiosInstance.request<string>({
       method: 'post',
       url: '/alarm',
-      data: contents,
+      data: { contents },
     });
     return response.data;
   }

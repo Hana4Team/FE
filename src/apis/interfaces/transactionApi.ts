@@ -10,18 +10,10 @@ export interface transactionApi {
     year: number,
     month: number
   ): Promise<TransactionHistoryType>;
-  postRemittance({
-    amount,
-    senderTitle,
-    recipientTitle,
-    senderAccount,
-    recipientAccount,
-  }: RemmitanceType): Promise<void>;
-  postRemittanceMoneyBox({
-    amount,
-    senderTitle,
-    recipientTitle,
-    senderMoneyBox,
-    recipientMoneyBox,
-  }: RemmitanceMoneyBoxType): Promise<string>;
+  postRemittance(TransactionSaveReq: RemmitanceType): Promise<{
+    transactionId: number;
+  }>;
+  postRemittanceMoneyBox(
+    TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
+  ): Promise<{ transactionId: number }>;
 }
