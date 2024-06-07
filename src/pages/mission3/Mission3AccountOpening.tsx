@@ -7,8 +7,8 @@ import { AccountOutputChoice } from '../../components/organisms/accounts/Account
 import { AccountMaturitChoice } from '../../components/organisms/accounts/AccountMaturitChoice';
 import { AccountCheck } from '../../components/organisms/accounts/AccountCheck';
 import {
+  checkAmountMoney,
   checkAmountUnitMoney,
-  checkAmountUnitNumber,
 } from '../../utils/checkAmountUnit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
@@ -46,7 +46,7 @@ export const Mission3AccountOpening = () => {
     },
   });
 
-  const postOpendMoneyBox = useMutation({
+  const postOpenedSaving100 = useMutation({
     mutationFn: () =>
       ApiClient.getInstance().postOpenedSaving100({
         payment: info.savingMoney,
@@ -69,17 +69,14 @@ export const Mission3AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 0) {
-      if (
-        (moneyboxMoneyIsSuccess && !moneyboxMoney.savingBalance) ||
-        moneyboxMoneyIsError
-      ) {
+      if (!moneyboxMoneyIsSuccess || moneyboxMoneyIsError) {
         alert('머니박스 계좌 조회를 실패하였습니다.');
         navigate('/mission');
         return;
       }
     }
     if (currentNumber === 4) {
-      postOpendMoneyBox.mutate();
+      postOpenedSaving100.mutate();
       return;
     }
     if (currentNumber === 5) {
@@ -96,10 +93,8 @@ export const Mission3AccountOpening = () => {
     if (savingMoneyInput.current) {
       if (
         savingMoneyInput.current?.value === '' ||
-        +savingMoneyInput.current.value <
-          checkAmountUnitNumber(product.payment1) ||
-        +savingMoneyInput.current.value >
-          checkAmountUnitNumber(product.payment2)
+        +savingMoneyInput.current.value < product.payment1 * 1000 ||
+        +savingMoneyInput.current.value > product.payment2 * 1000
       ) {
         setInfo({
           ...info,
@@ -153,7 +148,7 @@ export const Mission3AccountOpening = () => {
                   pattern='\d*'
                   maxLength={9}
                   ref={savingMoneyInput}
-                  placeholder={`${product.payment1}${checkAmountUnitMoney(product.payment1)} ~ ${product?.payment2}${checkAmountUnitMoney(product?.payment2)} `}
+                  placeholder={`${checkAmountMoney(product.payment1)}${checkAmountUnitMoney(product.payment1)} ~ ${checkAmountMoney(product?.payment2)}${checkAmountUnitMoney(product?.payment2)} `}
                   onBlur={checkEffectSavingMoney}
                   className='w-48 placeholder:text-[#979797] text-end pr-2'
                 />

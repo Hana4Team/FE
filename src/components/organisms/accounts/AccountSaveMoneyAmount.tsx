@@ -1,8 +1,8 @@
 import { FC, FormEvent, useRef, useState } from 'react';
 import { calMaturitDate } from '../../../utils/calMaturitDate';
 import {
+  checkAmountMoney,
   checkAmountUnitMoney,
-  checkAmountUnitNumber,
 } from '../../../utils/checkAmountUnit';
 
 interface IProps {
@@ -10,7 +10,11 @@ interface IProps {
   period: string;
   payment1: number;
   payment2: number;
-  onClick: (maturitDate: string, initMoney: number) => void;
+  onClick: (
+    maturitDate: number,
+    maturitDateUnit: string,
+    initMoney: number
+  ) => void;
 }
 
 export const AccountSaveMoneyAmount: FC<IProps> = ({
@@ -65,10 +69,8 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
     e.preventDefault();
     if (initMoney.current?.value) {
       if (
-        +initMoney.current?.value <
-          (type ? checkAmountUnitNumber(payment1) : payment1) ||
-        +initMoney.current?.value >
-          (type ? checkAmountUnitNumber(payment2) : payment2)
+        +initMoney.current?.value < (type ? payment1 * 1000 : payment1) ||
+        +initMoney.current?.value > (type ? payment2 * 1000 : payment2)
       ) {
         setAlertMoneyMessage(true);
         initMoney.current?.focus();
@@ -81,12 +83,13 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
   };
 
   const saveData = (money: number) => {
-    onClick(
-      `${maturitDate.current?.value}${
-        maturitDatePeriods.scope === '개월' ? '개월' : '년'
-      }`,
-      money
-    );
+    if (maturitDate.current) {
+      onClick(
+        +maturitDate.current?.value,
+        maturitDatePeriods.scope === '개월' ? '개월' : '년',
+        money
+      );
+    }
   };
 
   return (
@@ -121,9 +124,9 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
             ref={initMoney}
             placeholder={
               type
-                ? `${payment1}${checkAmountUnitMoney(
+                ? `${checkAmountMoney(payment1)}${checkAmountUnitMoney(
                     payment1
-                  )}~${payment2}${checkAmountUnitMoney(payment2)}`
+                  )}~${checkAmountMoney(payment2)}${checkAmountUnitMoney(payment2)}`
                 : `${payment2.toLocaleString('ko-KR')}원`
             }
             onBlur={inputMoneyHandler}
@@ -134,7 +137,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
         </p>
         {payment2 && alertMoneyMessage && (
           <p className='text-red-600 font-hanaRegular text-lg'>
-            {`${type ? payment1 : payment1.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment1) : '원'}부터 ${type ? payment2 : payment2.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment2) : '원'}사이의 금액을 입력해주세요!`}
+            {`${type ? checkAmountMoney(payment1) : payment1.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment1) : '원'}부터 ${type ? checkAmountMoney(payment2) : payment2.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment2) : '원'}사이의 금액을 입력해주세요!`}
           </p>
         )}
       </div>

@@ -146,7 +146,7 @@ export class ApiClient
         method: 'post',
         url: '/account/depositsaving',
         data: {
-          data,
+          ...data,
           initialAmount,
         },
       });

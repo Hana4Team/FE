@@ -3,7 +3,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import { Button } from '../components/ui/Button';
 import { ApiClient } from '../apis/apiClient';
-import { checkAmountUnitMoney } from '../utils/checkAmountUnit';
+import {
+  checkAmountMoney,
+  checkAmountUnitMoney,
+} from '../utils/checkAmountUnit';
 
 export const Product = () => {
   const navigate = useNavigate();
@@ -75,8 +78,8 @@ export const Product = () => {
                     <br />
                     <span className='font-hanaMedium text-xl'>
                       {product.payment2
-                        ? `분기별 ${product.payment1}${checkAmountUnitMoney(product.payment1)}~${product.payment2}${checkAmountUnitMoney(product.payment2)}`
-                        : `${product.payment1}${checkAmountUnitMoney(product.payment1)} 이상`}
+                        ? `분기별 ${checkAmountMoney(product.payment1)}${checkAmountUnitMoney(product.payment1)}~${checkAmountMoney(product.payment2)}${checkAmountUnitMoney(product.payment2)}`
+                        : `${checkAmountMoney(product.payment1)}${checkAmountUnitMoney(product.payment1)} 이상`}
                     </span>
                   </p>
                 </div>
