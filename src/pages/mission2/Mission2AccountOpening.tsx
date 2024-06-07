@@ -7,9 +7,11 @@ import { SelectMenu } from '../../components/molecules/SelectMenu';
 import { phoneNumberAutoHyphen } from '../../utils/phoneNumberAutoHyphen';
 import { phoneNumberPattern } from '../../utils/checkValidation';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwCheck';
 import { AccountPw } from '../../components/organisms/accounts/AccountPw';
+import { useMutation } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 type userInfo = {
   name: string | null;
@@ -20,6 +22,7 @@ type userInfo = {
   asset_status: string;
   checkCard: boolean | null;
   password: string;
+  productId: number;
 };
 
 /**
@@ -27,6 +30,8 @@ type userInfo = {
  */
 export const Mission2AccountOpening = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const productId = location.state.productId;
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [btnActive, setBtnActive] = useState<boolean>(true);
@@ -39,13 +44,63 @@ export const Mission2AccountOpening = () => {
     asset_status: '',
     checkCard: null,
     password: '',
+    productId: productId,
   });
 
   const phoneInput = useRef<HTMLInputElement | null>(null);
   const nameInput = useRef<HTMLInputElement | null>(null);
+  const realCertificatioNnumber = useRef<string>('');
   const certificationNumberInput = useRef<HTMLInputElement | null>(null);
 
+  const postMessage = useMutation({
+    mutationFn: (phoneNumber: string) =>
+      ApiClient.getInstance().postMessage(phoneNumber),
+    onSuccess: (data) => {
+      realCertificatioNnumber.current = data.code;
+      setCurrentNumber((prev) => prev + 1);
+      setBtnActive(false);
+    },
+  });
+
+  const postMessageCheck = useMutation({
+    mutationFn: ({ code, inputCode }: { code: string; inputCode: string }) =>
+      ApiClient.getInstance().postMsgCheck({ code, inputCode }),
+    onSuccess: (data) => {
+      if (data.check === 'match') setBtnActive(true);
+      else alert('인증번호가 맞지 않습니다.');
+    },
+    onError: () => {
+      alert('인증을 실패하셨습니다.');
+      navigate('/mission');
+    },
+  });
+
+  const postOpendMoneyBox = useMutation({
+    mutationFn: () =>
+      ApiClient.getInstance().postOpendMoneyBox(info.password, productId),
+    onSuccess: (data) => {
+      if (data.accountId) setCurrentNumber((prev) => prev + 1);
+      else {
+        alert('상품 가입에 실패하였습니다.');
+        navigate('/mission');
+      }
+    },
+    onError: () => {
+      alert('상품 가입에 실패하였습니다.');
+      navigate('/mission');
+    },
+  });
+
   const nextHandler = () => {
+    if (currentNumber === 1) {
+      if (info.phone_number)
+        postMessage.mutate(info.phone_number.split('-').join(''));
+      return;
+    }
+    if (currentNumber === 8) {
+      postOpendMoneyBox.mutate();
+      return;
+    }
     if (currentNumber === 9) {
       navigate('/moneyBox', {
         state: {
@@ -55,9 +110,7 @@ export const Mission2AccountOpening = () => {
       return;
     }
     setCurrentNumber((prev) => prev + 1);
-    currentNumber === 7 || currentNumber === 8
-      ? setBtnActive(true)
-      : setBtnActive(false);
+    currentNumber === 7 ? setBtnActive(true) : setBtnActive(false);
   };
 
   const phoneInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,14 +214,20 @@ export const Mission2AccountOpening = () => {
           certification_number: '',
         });
         return;
-      } else {
-        setInfo({
-          ...info,
-          certification_number: certificationNumberInput.current?.value,
-        });
-        setBtnActive(true);
       }
+      setInfo({
+        ...info,
+        certification_number: certificationNumberInput.current?.value,
+      });
     }
+  };
+
+  const checkCertificationHandler = () => {
+    if (info.certification_number)
+      postMessageCheck.mutate({
+        code: realCertificatioNnumber.current,
+        inputCode: info.certification_number,
+      });
   };
 
   const checkPwModal = (password: string) => {
@@ -345,18 +404,22 @@ export const Mission2AccountOpening = () => {
                 <div className='flex justify-between gap-3 text-2xl items-center'>
                   <input
                     type='text'
+                    maxLength={7}
                     placeholder='인증번호'
                     ref={certificationNumberInput}
                     onBlur={checkEffectCertification}
                     className='w-full border-b-[0.05rem] border-black py-3 placeholder-[#979797] font-hanaMedium text-2xl'
                   />
-                  <button className='bg-[#D9D9D9] font-hanaMedium text-lg px-3 w-24 h-12 rounded-lg cursor-pointer'>
-                    재요청
+                  <button
+                    onClick={checkCertificationHandler}
+                    className='bg-[#D9D9D9] font-hanaMedium text-lg px-3 w-24 h-12 rounded-lg cursor-pointer'
+                  >
+                    확인
                   </button>
                 </div>
                 {info.certification_number === '' && (
                   <span className='font-hanaLight text-lg text-red-600 mt-2'>
-                    인증번호를 다시 입력해주세요!
+                    인증번호를 확인해주세요!
                   </span>
                 )}
               </div>

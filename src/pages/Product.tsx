@@ -112,7 +112,13 @@ export const Product = () => {
       <div className='flex justify-center items-center mt-10'>
         <Button
           text='가입 신청하기'
-          onClick={() => navigate(`/mission${mission}/account-opening`)}
+          onClick={() =>
+            navigate(`/mission${mission}/account-opening`, {
+              state: {
+                productId: productId,
+              },
+            })
+          }
         />
       </div>
     </>

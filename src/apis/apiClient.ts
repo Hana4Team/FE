@@ -55,16 +55,18 @@ export class ApiClient
   }
 
   async postMessage(phoneNumber: string) {
-    const response = await this.axiosInstance.request<number>({
+    const response = await this.axiosInstance.request<{
+      code: string;
+    }>({
       method: 'post',
       url: '/users/message',
-      data: phoneNumber,
+      data: { phoneNumber },
     });
     return response.data;
   }
 
-  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
-    const response = await this.axiosInstance.request<string>({
+  async postMsgCheck({ code, inputCode }: { code: string; inputCode: string }) {
+    const response = await this.axiosInstance.request<{ check: string }>({
       method: 'post',
       url: '/users/msgCheck',
       data: { code: code, input: inputCode },
