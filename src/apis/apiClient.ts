@@ -10,10 +10,12 @@ import {
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { newsApi } from './interfaces/newsApi';
+import { NewsItemsType } from '../types/news';
 
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient implements usersApi, accountApi, alarmApi, newsApi {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -42,7 +44,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<SavePointType>({
       method: 'put',
       url: `/users/point`,
-      data: isMission,
+      data: { isMission },
     });
     return response.data;
   }
@@ -73,6 +75,18 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
+  async putCheckNews() {
+    const response = await this.axiosInstance.request<{
+      success: boolean;
+      type?: string;
+      message?: string;
+    }>({
+      method: 'put',
+      url: '/users/news',
+    });
+    return response.data;
+  }
+
   //---------account---------
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
@@ -97,13 +111,28 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<string>({
       method: 'post',
       url: '/alarm',
-      data: contents,
+      data: { contents },
     });
     return response.data;
   }
 
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
+  }
+
+  //---------news---------
+  async getNews(query: string) {
+    const response = await this.axiosInstance.request<{
+      lastBuildDate: Date;
+      total: number;
+      start: number;
+      display: number;
+      items: NewsItemsType[];
+    }>({
+      method: 'get',
+      url: `/news?query=${query}`,
+    });
+    return response.data;
   }
 
   // registerToken(newToken: string) {
@@ -128,7 +157,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     newInstance.interceptors.request.use(
       (config) => {
         if (TOKEN) {
-          config.headers['Authorization'] = `${TOKEN}`;
+          config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
 
         config.headers['Content-Type'] = 'application/json';

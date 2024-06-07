@@ -13,4 +13,9 @@ export interface usersApi {
     code: number;
     inputCode: number;
   }): Promise<string>;
+  putCheckNews(): Promise<{
+    success: boolean;
+    type?: string;
+    message?: string;
+  }>;
 }
