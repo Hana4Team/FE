@@ -8,7 +8,7 @@ export type TransactionType = {
   isSender: boolean;
   title: string;
   amount: number;
-  createdAt: string;
+  createdAt: Date;
 };
 export type AccountType = {
   accountId: number;

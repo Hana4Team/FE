@@ -91,7 +91,7 @@ export class ApiClient
   async getAccountDetail(accountId: number, year: number, month: number) {
     const response = await this.axiosInstance.request<AccountDetailType>({
       method: 'get',
-      url: `/account/${accountId}
+      url: `/transaction/${accountId}
       ?year=${year}&month=${month}`,
     });
     return response.data;

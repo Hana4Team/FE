@@ -1,17 +1,35 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useCalender } from '../../hooks/calender';
 import { addMonths, subMonths } from 'date-fns';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 const DAY_LIST = ['일', '월', '화', '수', '목', '금', '토'];
 
 interface IProps {
-  success: number;
-  fail: number;
+  accountId: number;
 }
 
-export const Calendar: FC<IProps> = ({ success, fail }) => {
+export const Calendar: FC<IProps> = ({ accountId }) => {
   const calender = useCalender();
+  const today = new Date();
+  const [year, setYear] = useState<number>(today.getFullYear());
+  const [month, setMonth] = useState<number>(today.getMonth());
+
+  const { data: saving100, isSuccess } = useQuery({
+    queryKey: ['saving100', accountId, year, month],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccountDetail(
+        accountId,
+        year,
+        month
+      );
+      return res;
+    },
+  });
+
+  console.log(saving100?.transactionList);
 
   const dateList = calender.weekCalendarList;
   const currentDate = calender.currentDate;
@@ -21,15 +39,11 @@ export const Calendar: FC<IProps> = ({ success, fail }) => {
       <div className='flex justify-center items-center font-hanaCM text-center text-xl border-b-2 w-full pb-2'>
         <div className='w-1/2 border-r-2'>
           저축성공!{' '}
-          <span className='text-hanaDeepGreen font-hanaBold text-2xl'>
-            {success}일
-          </span>
+          <span className='text-hanaDeepGreen font-hanaBold text-2xl'>일</span>
         </div>
         <div className='w-1/2'>
           다음엔 꼭!ㅠ{' '}
-          <span className='text-hanaDeepGreen font-hanaBold text-2xl'>
-            {fail}일
-          </span>
+          <span className='text-hanaDeepGreen font-hanaBold text-2xl'>일</span>
         </div>
       </div>
       <div className='flex justify-center items-center font-hanaBold text-2xl py-7'>
