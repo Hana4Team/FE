@@ -86,8 +86,11 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
       method: 'get',
-      url: '/account',
-      params: type,
+      url: `/account?depositWithdrawalAccount=${type.depositWithdrawalAccount}
+      &depositAccount=${type.depositAccount}&
+      &saving100Account=${type.saving100Account}&
+      &savingAccount=${type.savingsAccount}&
+      &moneyboxAccount=${type.moneyboxAccount}`,
     });
     return response.data;
   }

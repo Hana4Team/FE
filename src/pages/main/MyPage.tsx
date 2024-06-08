@@ -78,7 +78,7 @@ export const MyPage = () => {
               title={item.name}
               totalMoney={item.balance}
               icons={
-                item.name == '머니박스'
+                item.name == '머니박스 통장'
                   ? 'icons/moneybox_icon.svg'
                   : 'icons/bankbook.svg'
               }

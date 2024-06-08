@@ -25,9 +25,10 @@ export const Home = () => {
   const navigatePageHandler = (url: string) => {
     if (isExistToken) {
       if (url === '/consume') {
-        if (userInfo && userInfo.step <= 1 && !userInfo?.stepStatus)
+        if (userInfo && userInfo.step <= 1 && !userInfo?.stepStatus) {
           setShowModalContent('이사미션 1단계\n가 시작되지 않았습니다.');
-        return;
+          return;
+        }
       }
       navigate(`${url}`);
     } else navigate('/login');
