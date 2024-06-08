@@ -30,7 +30,7 @@ export const Sending = () => {
     receiveAccount: string;
   };
 
-  const { data: accountData, isSuccess: querySuccess } = useQuery({
+  const { data: accountData } = useQuery({
     queryKey: ['accounts'],
     queryFn: () => {
       const res = ApiClient.getInstance().getAccount({
@@ -77,6 +77,17 @@ export const Sending = () => {
             : data.receiveName === '소비'
               ? 'EXPENSE'
               : 'SAVING',
+      });
+      return res;
+    },
+  });
+
+  const { mutate: passwordCheck, data: passwordData } = useMutation({
+    mutationKey: ['passwordCheck'],
+    mutationFn: (password: string) => {
+      const res = ApiClient.getInstance().postAccountPasswordCheck({
+        accountNumber: data.sendAccount,
+        password: password,
       });
       return res;
     },
@@ -146,17 +157,17 @@ export const Sending = () => {
       setIsActive(false);
       setShowModal2(false);
       return;
-    } else if (page === 4 && pwdCheck()) {
+    } else if (page === 4 && passwordData?.message === 'match') {
       if (data.sendAccount === data.receiveAccount) {
         sendingMoneyBox();
       } else {
-        console.log(
-          Number(String(price).replaceAll(',', '')),
-          data.sendAccount,
-          data.receiveAccount
-        );
         sending();
       }
+      return;
+    } else if (page === 4 && passwordData?.message === 'mismatch') {
+      setIsPwdCorrect(false);
+      setIsActive(false);
+      setRe(!re);
       return;
     } else if (page === 5) {
       navigate('/moneyBox'),
@@ -205,22 +216,10 @@ export const Sending = () => {
 
   const checkPwdCondition = () => {
     if (pwdRef.current.map((p) => p?.value).join('').length === 4) {
+      passwordCheck(pwdRef.current.map((p) => p?.value).join(''));
       setIsActive(true);
     } else {
       setIsActive(false);
-    }
-  };
-
-  const pwdCheck = () => {
-    // 실제 비밀번호와 비교하는 작업 필요
-    if (pwdRef.current.map((p) => p?.value).join('') === '1234') {
-      setIsPwdCorrect(true);
-      return true;
-    } else {
-      setIsPwdCorrect(false);
-      setIsActive(false);
-      setRe(!re);
-      return false;
     }
   };
 

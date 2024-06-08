@@ -11,3 +11,7 @@ export type AccountReqType = {
   savingsAccount: boolean;
   moneyboxAccount: boolean;
 };
+export type AccountPwdCheckType = {
+  accountNumber: string;
+  password: string;
+};
