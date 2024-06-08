@@ -102,6 +102,15 @@ export class ApiClient
     return response.data;
   }
 
+  async getMoneyBoxHistory(type: string, year: number, month: number) {
+    const response = await this.axiosInstance.request<TransactionHistoryType>({
+      method: 'get',
+      url: `/transaction/moneybox?type=${type}
+      &year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
   async postRemittance(TransactionSaveReq: RemmitanceType) {
     console.log(TransactionSaveReq);
     const response = await this.axiosInstance.request<{

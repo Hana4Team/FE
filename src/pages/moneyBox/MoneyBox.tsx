@@ -112,6 +112,14 @@ export const MoneyBox = () => {
     setShowChoiceModal(!showChoiceModal);
   };
 
+  const clickMove2 = (type: string) => {
+    navigate('/account', {
+      state: {
+        type: type,
+      },
+    });
+  };
+
   const moveHandler = (receiveName: string, selectSend?: boolean) => {
     navigate('/sending', {
       state: {
@@ -212,22 +220,25 @@ export const MoneyBox = () => {
           balance={moneyBoxData?.parkingBalance}
           color1='9BDEDF'
           color2='5CB6B7'
-          onClick={() => clickMove('파킹')}
+          onClick={clickMove}
+          onClick2={() => clickMove2('PARKING')}
         />
         <MoneyBoxItem
           title='소비'
           balance={moneyBoxData?.expenseBalance}
           color1='FFB2B7'
           color2='F2777E'
-          onClick={() => clickMove('소비')}
+          onClick={clickMove}
+          onClick2={() => clickMove2('EXPENSE')}
         />
         <MoneyBoxItem
           title='저축'
           balance={moneyBoxData?.savingBalance}
           color1='9CDAB8'
           color2='74BE96'
-          onClick={() => clickMove('저축')}
+          onClick={clickMove}
           onClickQuestion={openModalHanlder}
+          onClick2={() => clickMove2('SAVING')}
           isLimit
         />
       </div>
