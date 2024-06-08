@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { NewsCategory } from '../../components/molecules/NewsCategory';
 import { NewsItem } from '../../components/molecules/NewsItem';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
-import { Alarm } from '../../components/molecules/Alarm';
+import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
 
 const categories = [
   '금융',
@@ -23,7 +23,6 @@ const categories = [
 export const NewsList = () => {
   const [choiceCategory, setChoiceCategory] = useState<string>(categories[0]);
   const [showAlarm, setShowAlarm] = useState<boolean>(false);
-  const [activeAnimation, setActiveAnimation] = useState<boolean>(false);
   const alarmMsgRef = useRef<string>('');
 
   const { data: newsList } = useQuery({
@@ -67,32 +66,14 @@ export const NewsList = () => {
     setChoiceCategory(keyword);
   };
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (showAlarm) {
-      setActiveAnimation(true);
-      timer = setTimeout(() => {
-        setShowAlarm(false);
-      }, 5000);
-    } else if (!showAlarm && activeAnimation) {
-      setActiveAnimation(true);
-      timer = setTimeout(() => {
-        setActiveAnimation(false);
-      }, 3000);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [showAlarm]);
-
   return (
     <div className='relative w-full'>
-      {(showAlarm || activeAnimation) && (
-        <div
-          className={`fixed max-w-[500px] w-full z-[60] ${showAlarm ? 'animate-slidedown' : 'animate-slideup'}`}
-        >
-          <Alarm message={alarmMsgRef.current} />
-        </div>
+      {showAlarm && (
+        <AlarmAnimation
+          message={alarmMsgRef.current}
+          showAlarm={showAlarm}
+          onClickShowAlarm={(status: boolean) => setShowAlarm(status)}
+        />
       )}
       <Topbar title='오늘의 금융' />
       <MissionStartHeader

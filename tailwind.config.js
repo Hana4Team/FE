@@ -115,7 +115,7 @@ export default {
         tada: 'tada 1s ease-in-out 0.25s 1',
         flyinup: 'fly-in-up 0.6s ease-in-out 0.25s 1',
         slidedown: 'slide-down 1s forwards',
-        slideup: 'slide-up 1s forwards',
+        slideup: 'slide-up 1.3s forwards',
       },
     },
     minHeight: {
