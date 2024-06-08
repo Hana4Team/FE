@@ -30,7 +30,7 @@ export const Sending = () => {
     receiveAccount: string;
   };
 
-  const { data: accountData } = useQuery({
+  const accountQuery = useQuery({
     queryKey: ['accounts'],
     queryFn: () => {
       const res = ApiClient.getInstance().getAccount({
@@ -42,6 +42,7 @@ export const Sending = () => {
       });
       return res;
     },
+    enabled: false,
   });
 
   const { mutate: sending, isSuccess: mutateSuccess0 } = useMutation({
@@ -224,7 +225,11 @@ export const Sending = () => {
   };
 
   useEffect(() => {
-    data.sendAccount && setPage(2);
+    if (data.sendAccount) {
+      setPage(2);
+    } else {
+      accountQuery.refetch();
+    }
   }, []);
 
   return (
@@ -232,7 +237,7 @@ export const Sending = () => {
       {showModal && (
         <ChoiceMenu title='출금계좌선택' onClose={() => showModalHandler()}>
           <div className='flex flex-col'>
-            {accountData?.map((account, idx) => (
+            {accountQuery.data?.map((account, idx) => (
               <AccountDetailItem
                 key={idx}
                 title={account.name}
