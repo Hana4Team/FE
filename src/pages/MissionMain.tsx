@@ -45,7 +45,9 @@ export const MissionMain = () => {
               text={s.text}
               status={
                 index + 1 === user.step
-                  ? '진행중'
+                  ? user.stepStatus === 0
+                    ? '시작'
+                    : '진행중'
                   : index + 1 < user.step
                     ? '완료'
                     : '시작'
