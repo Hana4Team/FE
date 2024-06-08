@@ -25,7 +25,7 @@ export const Home = () => {
   const navigatePageHandler = (url: string) => {
     if (isExistToken) {
       if (url === '/consume') {
-        if (userInfo && userInfo.step <= 1 && !userInfo?.stepStatus) {
+        if (userInfo && userInfo.step <= 1 && userInfo.stepStatus === 0) {
           setShowModalContent('이사미션 1단계\n가 시작되지 않았습니다.');
           return;
         }
@@ -41,7 +41,10 @@ export const Home = () => {
 
   useEffect(() => {
     if (userInfo) {
-      if (userInfo.step < 2 || (userInfo?.step === 2 && !userInfo.stepStatus))
+      if (
+        userInfo.step < 2 ||
+        (userInfo.step === 2 && userInfo.stepStatus === 0)
+      )
         setIsExistMoneyBox(false);
       else setIsExistMoneyBox(true);
     }
