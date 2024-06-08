@@ -93,9 +93,20 @@ export const Mission2AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 1) {
-      if (info.phone_number)
+      if (
+        btnActive &&
+        info.name &&
+        info.name !== '' &&
+        info.phone_number &&
+        info.phone_number !== '' &&
+        info.mobile_carrier !== ''
+      ) {
         postMessage.mutate(info.phone_number.split('-').join(''));
-      return;
+        return;
+      } else {
+        setBtnActive(false);
+        return;
+      }
     }
     if (currentNumber === 8) {
       postOpendMoneyBox.mutate();
@@ -135,11 +146,7 @@ export const Mission2AccountOpening = () => {
         ...info,
         phone_number: phoneInput.current?.value,
       });
-      if (
-        info.name !== '' &&
-        info.name !== null &&
-        info.mobile_carrier !== ''
-      ) {
+      if (info.name && info.name !== '' && info.mobile_carrier !== '') {
         setBtnActive(true);
       }
     }
@@ -160,7 +167,7 @@ export const Mission2AccountOpening = () => {
       });
       if (
         info.phone_number !== '' &&
-        info.phone_number !== null &&
+        info.phone_number &&
         info.mobile_carrier !== ''
       ) {
         setBtnActive(true);
@@ -177,9 +184,9 @@ export const Mission2AccountOpening = () => {
     setShowModal(false);
     if (
       info.name !== '' &&
-      info.name !== null &&
+      info.name &&
       info.phone_number !== '' &&
-      info.phone_number !== null
+      info.phone_number
     )
       setBtnActive(true);
   };

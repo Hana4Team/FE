@@ -75,6 +75,12 @@ export const Mission3AccountOpening = () => {
         return;
       }
     }
+    if (currentNumber === 1) {
+      if (!checkRegularAmount()) {
+        setBtnActive(false);
+        return;
+      }
+    }
     if (currentNumber === 4) {
       postOpenedSaving100.mutate();
       return;
@@ -90,18 +96,14 @@ export const Mission3AccountOpening = () => {
   };
 
   const checkEffectSavingMoney = () => {
+    if (!checkRegularAmount()) {
+      setInfo({
+        ...info,
+        savingMoney: 0,
+      });
+      return;
+    }
     if (savingMoneyInput.current) {
-      if (
-        savingMoneyInput.current?.value === '' ||
-        +savingMoneyInput.current.value < product.payment1 * 1000 ||
-        +savingMoneyInput.current.value > product.payment2 * 1000
-      ) {
-        setInfo({
-          ...info,
-          savingMoney: 0,
-        });
-        return;
-      }
       setInfo({
         ...info,
         savingMoney: +savingMoneyInput.current?.value,
@@ -117,6 +119,18 @@ export const Mission3AccountOpening = () => {
       outdrawAccountId: accountId,
     });
     setBtnActive(true);
+  };
+
+  const checkRegularAmount = () => {
+    if (savingMoneyInput.current) {
+      if (
+        savingMoneyInput.current?.value === '' ||
+        +savingMoneyInput.current.value < product.payment1 * 1000 ||
+        +savingMoneyInput.current.value > product.payment2 * 1000
+      )
+        return false;
+    }
+    return true;
   };
 
   return (

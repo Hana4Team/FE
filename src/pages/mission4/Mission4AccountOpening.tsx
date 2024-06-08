@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Topbar from '../../components/Topbar';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { AccountSaveMoneyAmount } from '../../components/organisms/accounts/AccountSaveMoneyAmount';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -16,6 +16,7 @@ import {
 import { add, format } from 'date-fns';
 import { useMutation } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
+import { calMaturitDate } from '../../utils/calMaturitDate';
 type userInfo = {
   maturitDate: number;
   maturitDateUnit: string;
@@ -33,6 +34,8 @@ export const Mission4AccountOpening = () => {
   const [currentNumber, setCurrentNumber] = useState<number>(0);
   const [btnActive, setBtnActive] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [checkInitMoneyAndMaturitDate, setcheckInitMoneyAndMaturitDate] =
+    useState<boolean>(false);
   const [info, setInfo] = useState<userInfo>({
     maturitDate: -1,
     maturitDateUnit: '',
@@ -80,6 +83,26 @@ export const Mission4AccountOpening = () => {
   });
 
   const nextHandler = () => {
+    if (currentNumber === 0) {
+      if (
+        !checkInitMoneyAndMaturitDate ||
+        !checkInitRegularMoney(info.initMoney)
+      ) {
+        setBtnActive(false);
+        return;
+      }
+    }
+    if (currentNumber === 1) {
+      if (
+        moneyInput.current &&
+        (moneyInput.current.value === '' ||
+          !checkInitRegularMoney(+moneyInput.current.value) ||
+          !checkMaturitDate())
+      ) {
+        setBtnActive(false);
+        return;
+      }
+    }
     if (currentNumber === 4) {
       postOpenedDepositSaving.mutate();
       return;
@@ -105,7 +128,6 @@ export const Mission4AccountOpening = () => {
       maturitDateUnit: maturitDateUnit,
       initMoney: initMoney,
     });
-    setBtnActive(true);
   };
 
   const regularDayEffect = () => {
@@ -130,8 +152,7 @@ export const Mission4AccountOpening = () => {
     if (moneyInput.current) {
       if (
         moneyInput.current.value === '' ||
-        +moneyInput.current.value < product.payment1 * 1000 ||
-        +moneyInput.current.value > product.payment2 * 1000
+        !checkInitRegularMoney(+moneyInput.current.value)
       ) {
         setInfo({ ...info, regularMoney: 0 });
         return;
@@ -149,6 +170,39 @@ export const Mission4AccountOpening = () => {
     });
     setBtnActive(true);
   };
+
+  const checkInitRegularMoney = (money: number) => {
+    if (money < product.payment1 * 1000 || money > product.payment2 * 1000) {
+      return false;
+    }
+    return true;
+  };
+
+  const checkMaturitDate = () => {
+    const maturitDatePeriods = calMaturitDate(product.period);
+    if (info.maturitDateUnit === '개월') {
+      if (
+        info.maturitDate < +maturitDatePeriods.periodList[0] ||
+        info.maturitDate > +maturitDatePeriods.periodList[1]
+      ) {
+        return false;
+      }
+    } else {
+      if (!maturitDatePeriods.periodList.includes(info.maturitDate + ''))
+        return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (
+      checkInitMoneyAndMaturitDate &&
+      checkInitRegularMoney(info.initMoney) &&
+      checkMaturitDate()
+    )
+      setBtnActive(true);
+    else setBtnActive(false);
+  }, [checkInitMoneyAndMaturitDate]);
 
   return (
     <>
@@ -199,6 +253,9 @@ export const Mission4AccountOpening = () => {
                 payment1={product.payment1}
                 payment2={product.payment2}
                 onClick={checkinitMoneyAndMaturitDateModal}
+                onClickCheck={(status: boolean) =>
+                  setcheckInitMoneyAndMaturitDate(status)
+                }
               />
             )}
             {currentNumber === 1 && (

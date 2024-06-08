@@ -15,6 +15,7 @@ interface IProps {
     maturitDateUnit: string,
     initMoney: number
   ) => void;
+  onClickCheck: (status: boolean) => void;
 }
 
 export const AccountSaveMoneyAmount: FC<IProps> = ({
@@ -23,6 +24,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
   payment1,
   payment2,
   onClick,
+  onClickCheck,
 }) => {
   const maturitDatePeriods = calMaturitDate(period);
   const maturitDate = useRef<HTMLInputElement | null>(null);
@@ -34,6 +36,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
 
   const inputMaturitDateHandler = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
+    onClickCheck(false);
     if (maturitDate.current?.value === '') {
       setAlertMaturitMessage(true);
       setShowMaturitScope(false);
@@ -47,7 +50,6 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
           +maturitDate.current?.value > +maturitDatePeriods.periodList[1]
         ) {
           setAlertMaturitMessage(true);
-          maturitDate.current?.focus();
           return;
         }
       } else {
@@ -55,7 +57,6 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
           !maturitDatePeriods.periodList.includes(maturitDate.current?.value)
         ) {
           setAlertMaturitMessage(true);
-          maturitDate.current?.focus();
           return;
         }
       }
@@ -67,13 +68,13 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
 
   const inputMoneyHandler = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
+    onClickCheck(false);
     if (initMoney.current?.value && type) {
       if (
         +initMoney.current?.value < (type ? payment1 * 1000 : payment1) ||
         +initMoney.current?.value > (type ? payment2 * 1000 : payment2)
       ) {
         setAlertMoneyMessage(true);
-        initMoney.current?.focus();
         return;
       }
     }
@@ -89,6 +90,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
         maturitDatePeriods.scope === '개월' ? '개월' : '년',
         money
       );
+      onClickCheck(true);
     }
   };
 
