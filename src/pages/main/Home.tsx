@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/AlertModal';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 
