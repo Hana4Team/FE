@@ -86,7 +86,8 @@ export const Mission4AccountOpening = () => {
     if (currentNumber === 0) {
       if (
         !checkInitMoneyAndMaturitDate ||
-        !checkInitRegularMoney(info.initMoney)
+        !checkInitRegularMoney(info.initMoney) ||
+        !checkMaturitDate()
       ) {
         setBtnActive(false);
         return;
@@ -96,8 +97,7 @@ export const Mission4AccountOpening = () => {
       if (
         moneyInput.current &&
         (moneyInput.current.value === '' ||
-          !checkInitRegularMoney(+moneyInput.current.value) ||
-          !checkMaturitDate())
+          !checkInitRegularMoney(+moneyInput.current.value))
       ) {
         setBtnActive(false);
         return;

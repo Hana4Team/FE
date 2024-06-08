@@ -69,11 +69,15 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
   const inputMoneyHandler = (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     onClickCheck(false);
-    if (initMoney.current?.value && type) {
+    if (initMoney.current?.value) {
       if (
-        +initMoney.current?.value < (type ? payment1 * 1000 : payment1) ||
-        +initMoney.current?.value > (type ? payment2 * 1000 : payment2)
+        type &&
+        (+initMoney.current?.value < payment1 * 1000 ||
+          +initMoney.current?.value > payment2 * 1000)
       ) {
+        setAlertMoneyMessage(true);
+        return;
+      } else if (!type && +initMoney.current?.value < payment1 * 1000) {
         setAlertMoneyMessage(true);
         return;
       }
@@ -124,24 +128,26 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
             pattern='\d*'
             maxLength={8}
             ref={initMoney}
-            value={!type ? payment1 : undefined}
             placeholder={
               type
                 ? `${checkAmountMoney(payment1)}${checkAmountUnitMoney(
                     payment1
                   )}~${checkAmountMoney(payment2)}${checkAmountUnitMoney(payment2)}`
-                : `${payment1.toLocaleString('ko-KR')}원`
+                : `${checkAmountMoney(payment1)}${checkAmountUnitMoney(
+                    payment1
+                  )}`
             }
             onBlur={inputMoneyHandler}
-            disabled={!type}
             className={`border-b-[0.6px] border-black py-2 w-44 text-center placeholder-[#979797] bg-transparent mr-2 focus:outline-none`}
           />
           {initMoney.current?.value && '원 '}
           가입하기
         </p>
-        {type && payment2 && alertMoneyMessage && (
+        {alertMoneyMessage && (
           <p className='text-red-600 font-hanaRegular text-lg'>
-            {`${type ? checkAmountMoney(payment1) : payment1.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment1) : '원'}부터 ${type ? checkAmountMoney(payment2) : payment2.toLocaleString('ko-KR')}${type ? checkAmountUnitMoney(payment2) : '원'}사이의 금액을 입력해주세요!`}
+            {type
+              ? `${checkAmountMoney(payment1)}${checkAmountUnitMoney(payment1)}부터${checkAmountMoney(payment2)}${checkAmountUnitMoney(payment2)}사이의 금액을 입력해주세요!`
+              : `${checkAmountMoney(payment1)}${checkAmountUnitMoney(payment1)}이상의 금액을 입력해주세요!`}
           </p>
         )}
       </div>

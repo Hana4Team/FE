@@ -27,7 +27,7 @@ export const BankBookIntro: FC<IProps> = ({
       className={`w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center ${className}`}
       onClick={() => onClick()}
     >
-      <p className='font-hanaRegular text-2xl'>{title}</p>
+      <p className='font-hanaRegular text-2xl ml-1'>{title}</p>
       <h1 className='font-hanaBold text-[2.7rem]'>{name}</h1>
       <div className='flex justify-between'>
         <div className='flex flex-col justify-between items-start'>

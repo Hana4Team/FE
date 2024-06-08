@@ -9,14 +9,6 @@ import { CheckAccountMoney } from '../../components/organisms/accounts/CheckAcco
 export const Mission5StartPage = () => {
   const navigate = useNavigate();
 
-  const { data: savingMoney } = useQuery({
-    queryKey: ['savingMoney'],
-    queryFn: () => {
-      const res = ApiClient.getInstance().getDepositSaving('SAVING');
-      return res;
-    },
-  });
-
   const { data: depositInfo } = useQuery({
     queryKey: ['depositInfo'],
     queryFn: () => {
@@ -33,10 +25,6 @@ export const Mission5StartPage = () => {
         title={`모은 목돈으로 새롭게\n 예금에 가입해보아요`}
       />
       <div className='flex flex-col gap-7'>
-        <CheckAccountMoney
-          title='내가 적금으로 모은 금액'
-          money={savingMoney?.balance || 0}
-        />
         {depositInfo && (
           <BankBookIntro
             type='예금'
