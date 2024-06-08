@@ -7,8 +7,8 @@ import {
   AccountReqType,
   AccountType,
   AccountDetailType,
-  OpendDepositSavingResType,
   OpenedDepositSavingReqType,
+  OpendDepositSavingSuccessResType,
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
@@ -137,7 +137,7 @@ export class ApiClient
 
   async postOpenedSaving100(data: OpenedDepositSavingReqType) {
     const response =
-      await this.axiosInstance.request<OpendDepositSavingResType>({
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
         method: 'post',
         url: '/account/saving100',
         data: data,
@@ -145,14 +145,34 @@ export class ApiClient
     return response.data;
   }
 
-  async postOpenedDepositSaving(
+  async postOpenedSaving(
+    data: OpenedDepositSavingReqType,
+    payment: number,
+    payDate: number,
+    initialAmount: number
+  ) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
+        method: 'post',
+        url: '/account/saving',
+        data: {
+          ...data,
+          payment,
+          payDate,
+          initialAmount,
+        },
+      });
+    return response.data;
+  }
+
+  async postOpenedDeposit(
     data: OpenedDepositSavingReqType,
     initialAmount: number
   ) {
     const response =
-      await this.axiosInstance.request<OpendDepositSavingResType>({
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
         method: 'post',
-        url: '/account/depositsaving',
+        url: '/account/deposit',
         data: {
           ...data,
           initialAmount,

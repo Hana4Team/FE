@@ -51,7 +51,7 @@ export const Mission4AccountOpening = () => {
 
   const postOpenedDepositSaving = useMutation({
     mutationFn: () =>
-      ApiClient.getInstance().postOpenedDepositSaving(
+      ApiClient.getInstance().postOpenedSaving(
         {
           payment: info.regularMoney,
           endDate:
@@ -67,6 +67,8 @@ export const Mission4AccountOpening = () => {
           productsId: product.productsId,
           withdrawalAccountId: info.withdrawAccountId,
         },
+        info.regularMoney,
+        info.regularDay,
         info.initMoney
       ),
     onSuccess: (data) => {
@@ -287,7 +289,10 @@ export const Mission4AccountOpening = () => {
               </div>
             )}
             {currentNumber === 2 && (
-              <AccountOutputChoice onClick={checkOutdrawAccountModal} />
+              <AccountOutputChoice
+                productId={product.productId}
+                onClick={checkOutdrawAccountModal}
+              />
             )}
             {currentNumber === 3 && <AccountMaturitChoice />}
             {currentNumber === 4 && (

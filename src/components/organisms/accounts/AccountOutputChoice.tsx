@@ -6,10 +6,11 @@ import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../../apis/apiClient';
 
 interface IProps {
+  productId: number;
   onClick: (account: string, accountId: number) => void;
 }
 
-export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
+export const AccountOutputChoice: FC<IProps> = ({ productId, onClick }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [choiceAccount, setChoiceAccount] = useState({
     name: '',
@@ -18,7 +19,7 @@ export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
   });
 
   const { data: accounts } = useQuery({
-    queryKey: ['accounts'],
+    queryKey: ['accounts', productId],
     queryFn: () => {
       const res = ApiClient.getInstance().getAccount({
         depositWithdrawalAccount: true,

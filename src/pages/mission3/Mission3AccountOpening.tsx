@@ -176,7 +176,10 @@ export const Mission3AccountOpening = () => {
             </div>
           )}
           {currentNumber === 2 && (
-            <AccountOutputChoice onClick={checkOutdrawAccountModal} />
+            <AccountOutputChoice
+              productId={product.productId}
+              onClick={checkOutdrawAccountModal}
+            />
           )}
           {currentNumber === 3 && <AccountMaturitChoice />}
           {currentNumber === 4 && (

@@ -29,7 +29,7 @@ export type OpenedDepositSavingReqType = {
   productsId: number;
   withdrawalAccountId: number;
 };
-export type OpendDepositSavingResType = {
+export type OpendDepositSavingSuccessResType = {
   depositSavingId: number;
   accountId: number;
 };

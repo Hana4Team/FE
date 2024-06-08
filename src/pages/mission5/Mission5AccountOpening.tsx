@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { ErrorResponse, useLocation, useNavigate } from 'react-router-dom';
 import Topbar from '../../components/Topbar';
 import { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/Button';
@@ -11,6 +11,7 @@ import { ApiClient } from '../../apis/apiClient';
 import { add, format } from 'date-fns';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
 import { calMaturitDate } from '../../utils/calMaturitDate';
+import { error } from 'console';
 type userInfo = {
   maturitDate: number;
   maturitDateUnit: string;
@@ -37,7 +38,7 @@ export const Mission5AccountOpening = () => {
 
   const postOpenedDepositSaving = useMutation({
     mutationFn: () =>
-      ApiClient.getInstance().postOpenedDepositSaving(
+      ApiClient.getInstance().postOpenedDeposit(
         {
           payment: info.initMoney,
           endDate:
@@ -81,6 +82,7 @@ export const Mission5AccountOpening = () => {
     }
     if (currentNumber === 3) {
       postOpenedDepositSaving.mutate();
+      return;
     }
     if (currentNumber === 4) {
       navigate('/home');
@@ -165,7 +167,10 @@ export const Mission5AccountOpening = () => {
             />
           )}
           {currentNumber === 1 && (
-            <AccountOutputChoice onClick={checkOutdrawAccountModal} />
+            <AccountOutputChoice
+              productId={product.productId}
+              onClick={checkOutdrawAccountModal}
+            />
           )}
           {currentNumber === 2 && <AccountMaturitChoice />}
           {currentNumber === 3 && (

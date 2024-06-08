@@ -2,8 +2,8 @@ import {
   AccountReqType,
   AccountType,
   AccountDetailType,
-  OpendDepositSavingResType,
   OpenedDepositSavingReqType,
+  OpendDepositSavingSuccessResType,
 } from '../../types/account';
 
 export interface accountApi {
@@ -22,9 +22,15 @@ export interface accountApi {
   }>;
   postOpenedSaving100(
     data: OpenedDepositSavingReqType
-  ): Promise<OpendDepositSavingResType>;
-  postOpenedDepositSaving(
+  ): Promise<OpendDepositSavingSuccessResType>;
+  postOpenedSaving(
+    data: OpenedDepositSavingReqType,
+    payment: number,
+    payDate: number,
+    initialAmount: number
+  ): Promise<OpendDepositSavingSuccessResType>;
+  postOpenedDeposit(
     data: OpenedDepositSavingReqType,
     initialAmount: number
-  ): Promise<OpendDepositSavingResType>;
+  ): Promise<OpendDepositSavingSuccessResType>;
 }

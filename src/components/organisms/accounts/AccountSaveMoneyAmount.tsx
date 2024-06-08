@@ -126,7 +126,7 @@ export const AccountSaveMoneyAmount: FC<IProps> = ({
           <input
             type='text'
             pattern='\d*'
-            maxLength={8}
+            maxLength={10}
             ref={initMoney}
             placeholder={
               type
