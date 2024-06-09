@@ -10,9 +10,15 @@ import {
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { SpendListType } from '../types/spend';
+import { spendApi } from './interfaces/spendApi';
+import { BudgetReqType, BudgetResType } from '../types/budget';
+import { budgetApi } from './interfaces/budgetApi';
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient
+  implements usersApi, accountApi, spendApi, budgetApi, alarmApi
+{
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -41,7 +47,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<SavePointType>({
       method: 'put',
       url: `/users/point`,
-      data: isMission,
+      data: { isMission },
     });
     return response.data;
   }
@@ -82,11 +88,52 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
-  async getAccountDetail(accountId: number, year: number, month: number) {
-    const response = await this.axiosInstance.request<AccountDetailType>({
+  //---------spend---------
+  async getSpendList(year: number, month: number) {
+    const response = await this.axiosInstance.request<SpendListType>({
       method: 'get',
-      url: `/account/${accountId}
-      ?year=${year}&month=${month}`,
+      url: `/spend?year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
+  //---------budget---------
+  async getTotalBudget() {
+    const response = await this.axiosInstance.request<{ sum: number }>({
+      method: 'get',
+      url: '/budget',
+    });
+    return response.data;
+  }
+
+  async updateTotalBudget(sum: number) {
+    const response = await this.axiosInstance.request<{
+      isInitialUpdate: boolean;
+    }>({
+      method: 'put',
+      url: '/budget',
+      data: { sum },
+    });
+    return response.data;
+  }
+
+  async getCategoryBudget() {
+    const response = await this.axiosInstance.request<BudgetResType>({
+      method: 'get',
+      url: '/budget/category',
+    });
+    return response.data;
+  }
+
+  async updateCategoryBudget(budget: BudgetReqType) {
+    const response = await this.axiosInstance.request<{
+      success: boolean;
+      type: string;
+      message: string;
+    }>({
+      method: 'put',
+      url: '/budget/category',
+      data: budget,
     });
     return response.data;
   }
@@ -96,7 +143,7 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     const response = await this.axiosInstance.request<string>({
       method: 'post',
       url: '/alarm',
-      data: contents,
+      data: { contents },
     });
     return response.data;
   }

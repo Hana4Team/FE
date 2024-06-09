@@ -1,17 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { ArcElement, Chart } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { CategoryItem } from '../molecules/CategoryItem';
 import { dateMonth, dateYear } from '../../utils/getDate';
-
-type DataType = {
-  name: string;
-  balance: number;
-};
+import { SpendType } from '../../types/spend';
 
 interface Iprops {
-  datas: DataType[];
+  datas: SpendType[];
   year: number;
   month: number;
   balance: number;
@@ -31,19 +27,20 @@ export const CategorySpendCard: FC<Iprops> = ({
 }) => {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [text, setText] = useState<string>('전체보기');
+  const [re, setRe] = useState<boolean>(false);
 
   Chart.register(ArcElement);
 
   const extra =
     datas.length <= 4
       ? null
-      : datas.slice(5).reduce((acc, val) => acc + val.balance, 0);
+      : datas.slice(5).reduce((acc, val) => acc + val.amount, 0);
 
   const colors = ['#28B2A5', '#E90061', '#FFC700', '#AD9A5F', '#B5B5B5'];
 
   const data = {
     labels: [
-      ...datas.slice(0, Math.min(datas.length, 4)).map((item) => item.name),
+      ...datas.slice(0, Math.min(datas.length, 4)).map((item) => item.type),
       '기타',
     ],
     datasets: [
@@ -51,7 +48,7 @@ export const CategorySpendCard: FC<Iprops> = ({
         data: [
           ...datas
             .slice(0, Math.min(datas.length, 4))
-            .map((item) => item.balance),
+            .map((item) => item.amount),
           extra,
         ],
         borderWidth: 2,
@@ -138,9 +135,10 @@ export const CategorySpendCard: FC<Iprops> = ({
         </div>
         {datas.slice(0, Math.min(datas.length, 4)).map((item, idx) => (
           <CategoryItem
+            key={idx}
             color={colors[idx]}
-            name={item.name}
-            balance={item.balance}
+            name={item.type}
+            balance={item.amount}
           />
         ))}
         {extra && (
@@ -151,11 +149,12 @@ export const CategorySpendCard: FC<Iprops> = ({
             {showAll &&
               datas
                 .slice(5)
-                .map((item) => (
+                .map((item, idx) => (
                   <CategoryItem
+                    key={idx}
                     color={colors[4]}
-                    name={item.name}
-                    balance={item.balance}
+                    name={item.type}
+                    balance={item.amount}
                   />
                 ))}
             <div
