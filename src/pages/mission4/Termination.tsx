@@ -7,10 +7,17 @@ import { AccountDetailItem } from '../../components/molecules/AccountDetailItem'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { pwPattern } from '../../utils/checkValidation';
+import { differenceInDays } from 'date-fns';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { AccountDelType, AccountPwdCheckType } from '../../types/account';
 
 interface RequestType {
-  accountType: string;
+  accountId: number;
+  accountName: string;
   sendAccount: string;
+  sendAccountId: number;
+  endDate: string;
   terminationDate: string;
   terminationType: string;
   principal: number;
@@ -25,59 +32,122 @@ export const Termination = () => {
   const pwdRef = useRef<HTMLInputElement | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [isPwdCheck, setIsPwdCheck] = useState<boolean>(true);
+
+  const { mutate: postAccountPasswordCheck } = useMutation({
+    mutationFn: (reqData: AccountPwdCheckType) => {
+      const res = ApiClient.getInstance().postAccountPasswordCheck(reqData);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (data.message === 'match') setStep((prev) => prev + 1);
+      else setIsPwdCheck(false);
+    },
+  });
+
+  const { data: accounts, isSuccess } = useQuery({
+    queryKey: ['account'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccount({
+        depositWithdrawalAccount: true,
+        depositAccount: false,
+        saving100Account: false,
+        savingsAccount: false,
+        moneyboxAccount: false,
+      });
+      return res;
+    },
+  });
+
+  const { mutate: deleteAccount } = useMutation({
+    mutationFn: (reqData: AccountDelType) => {
+      const res = ApiClient.getInstance().deleteAccount(reqData);
+      return res;
+    },
+    onSuccess: (data) => {
+      data.message === 'success' && setStep((prev) => prev + 1);
+    },
+  });
 
   const locationState = location.state as {
-    accountType: string;
+    accountId: number;
+    accountName: string;
     sendAccount: string;
     terminationDate: string;
-    terminationType: string;
+    endDate: string;
     principal: number;
     totalAmount: number;
   };
 
-  // const [receiveAccount, setReceiveAccount] = useState<string>('');
   const [data, setDate] = useState<RequestType>({
-    accountType: locationState.accountType,
+    accountId: locationState.accountId,
+    accountName: locationState.accountName,
     sendAccount: locationState.sendAccount,
+    sendAccountId: 0,
+    endDate: locationState.endDate,
     terminationDate: locationState.terminationDate,
-    terminationType: locationState.terminationType,
+    terminationType:
+      differenceInDays(locationState.endDate, locationState.terminationDate) > 0
+        ? '중도해지'
+        : '만기해지',
     principal: locationState.principal,
-    totalAmount: locationState.totalAmount,
+    totalAmount:
+      differenceInDays(locationState.endDate, locationState.terminationDate) > 0
+        ? locationState.principal
+        : locationState.totalAmount,
     receiveAccount: '',
   });
 
   const showModalHandler = () => setShowModal(!showModal);
   const nextStep = () => {
-    if (step === 3) navigate('/mission');
-    else setStep((prev) => prev + 1);
+    if (step === 1) {
+      postAccountPasswordCheck({
+        accountNumber: data.sendAccount,
+        password: pwdRef.current!.value,
+      });
+    } else if (step === 2) {
+      deleteAccount({
+        deleteAccountId: data.accountId,
+        depositAccountId: data.sendAccountId,
+      });
+    } else if (step === 3) {
+      navigate('/mission');
+    }
   };
-  const clickAccount = (clikedAccount: string) => {
+  const clickAccount = (
+    clickedAccountId: number,
+    clikedAccountNumber: string,
+    clickedBalance: number,
+    clickedName: string
+  ) => {
     setShowModal(false);
-    setDate({ ...data, receiveAccount: clikedAccount });
+    setDate({
+      ...data,
+      receiveAccount: clikedAccountNumber,
+      sendAccountId: clickedAccountId,
+    });
     if (pwPattern.test(pwdRef.current!.value)) setIsActive(true);
   };
   const checkIsActive = () => {
     if (pwPattern.test(pwdRef.current!.value) && data.receiveAccount !== '')
       setIsActive(true);
+    else setIsActive(false);
   };
 
   return (
     <div className='bg-white h-screen flex flex-col items-center'>
-      {showModal && (
+      {showModal && isSuccess && (
         <ChoiceMenu title='입금계좌선택' onClose={() => showModalHandler()}>
           <div className='flex flex-col'>
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='111-111-111111'
-              balance={50000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
+            {accounts.map((account) => (
+              <AccountDetailItem
+                accountId={account.accountId}
+                title={account.name}
+                accountNumber={account.accountNumber}
+                balance={account.balance}
+                onClick={clickAccount}
+              />
+            ))}
           </div>
         </ChoiceMenu>
       )}
@@ -95,6 +165,11 @@ export const Termination = () => {
                 className='p-2 border-b-2 w-full text-2xl'
                 onBlur={checkIsActive}
               />
+              {!isPwdCheck && (
+                <div className='text-lg mt-2 text-red-500'>
+                  비밀번호를 다시 입력해주세요
+                </div>
+              )}
             </div>
             <div className='my-10'>
               <div className='font-hanaMedium text-2xl mb-6'>입금계좌 선택</div>
@@ -111,6 +186,10 @@ export const Termination = () => {
               </div>
               <div className='flex justify-between mb-2'>
                 <p>만기일</p>
+                <p>{data.endDate}</p>
+              </div>
+              <div className='flex justify-between mb-2'>
+                <p>해지일</p>
                 <p>{data.terminationDate}</p>
               </div>
               <div className='flex justify-between'>
@@ -129,8 +208,8 @@ export const Termination = () => {
             </div>
             <div className='flex flex-col font-hanaLight text-xl border px-7 py-5 gap-2'>
               <div className='flex justify-between'>
-                <p>해지계좌종류</p>
-                <p>{data.accountType}</p>
+                <p>해지계좌이름</p>
+                <p>{data.accountName}</p>
               </div>
               <div className='flex justify-between'>
                 <p>해지계좌번호</p>
@@ -138,7 +217,7 @@ export const Termination = () => {
               </div>
               <div className='flex justify-between'>
                 <p>만기일</p>
-                <p>{data.terminationDate}</p>
+                <p>{data.endDate}</p>
               </div>
               <div className='flex justify-between'>
                 <p>해지구분</p>
@@ -146,11 +225,11 @@ export const Termination = () => {
               </div>
               <div className='flex justify-between'>
                 <p>원금</p>
-                <p>{data.principal}</p>
+                <p>{data.principal.toLocaleString()}</p>
               </div>
               <div className='flex justify-between'>
                 <p>받으실금액</p>
-                <p>{data.totalAmount}</p>
+                <p>{data.totalAmount.toLocaleString()}</p>
               </div>
               <div className='flex justify-between'>
                 <p>입금계좌번호</p>

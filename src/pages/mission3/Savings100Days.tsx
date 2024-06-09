@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Calendar } from '../../components/organisms/Calendar';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, formatDate } from 'date-fns';
 
 export const Savings100Days = () => {
   const navigate = useNavigate();
+  const startDate = useRef<string>('');
+  const endDate = useRef<string>('');
 
   const { data: saving100, isSuccess } = useQuery({
     queryKey: ['saving100'],
@@ -17,24 +19,34 @@ export const Savings100Days = () => {
     },
   });
 
-  console.log(saving100);
+  const { data: saving100Check, isSuccess: isCheckSuccess } = useQuery({
+    queryKey: ['saving100Check'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getSaving100Check();
+      return res;
+    },
+  });
 
   const moveToTermination = () => {
-    navigate('/termination', {
-      state: {
-        accountType: '정기적금',
-        sendAccount: '0000-000-000000',
-        terminationDate: '2024.05.20',
-        terminationType: '만기해지',
-        principal: 1000000,
-        totalAmount: 1023366,
-      },
-    });
+    isSuccess &&
+      navigate('/termination', {
+        state: {
+          accountId: saving100.accountId,
+          accountName: saving100.productName,
+          sendAccount: saving100.accountNumber,
+          terminationDate: formatDate(Date.now(), 'yyyy-MM-dd'),
+          endDate: saving100.endDate,
+          principal: saving100.balance,
+          totalAmount: Math.floor(
+            saving100.balance * (1 + saving100.interest * 0.01)
+          ),
+        },
+      });
   };
 
   return (
     <>
-      {isSuccess && (
+      {isSuccess && isCheckSuccess && (
         <>
           <Topbar
             title={saving100.productName}
@@ -46,7 +58,7 @@ export const Savings100Days = () => {
               <div className='text-4xl font-hanaBold'>
                 총{' '}
                 <span className='text-hanaDeepGreen'>
-                  {saving100.balance}원
+                  {saving100.balance.toLocaleString()}원
                 </span>
                 모았어요
               </div>
@@ -56,17 +68,23 @@ export const Savings100Days = () => {
                   <div className='h-28 py-5'>
                     <div className='absolute w-1/2'>
                       <div className='font-hanaMedium text-lg mb-2 mr-4 text-end'>
-                        D-
-                        {differenceInDays(
-                          saving100.endDate,
-                          saving100.startDate
-                        )}
+                        {differenceInDays(saving100.endDate, new Date()) > 0
+                          ? `D-${differenceInDays(saving100.endDate, new Date()) + 1}`
+                          : differenceInDays(saving100.endDate, new Date()) < 0
+                            ? `D+${Math.abs(differenceInDays(saving100.endDate, new Date()))}`
+                            : 'D-Day'}
                       </div>
                       <div className='absolute bg-gray-100 w-[100%] h-5 rounded-lg border-2'></div>
-                      <div className='absolute bg-hanaGreen w-[60%] h-5 rounded-lg'></div>
+                      <div
+                        className={`absolute bg-hanaGreen w-[${Math.floor(
+                          (differenceInDays(new Date(), saving100.startDate) /
+                            100) *
+                            100
+                        )}%] h-5 rounded-lg`}
+                      ></div>
                     </div>
                   </div>
-                  <div className='font-hanaMedium text-2xl pt-2'>
+                  <div className='font-hanaMedium text-xl pt-2'>
                     <div className='flex gap-2'>
                       <div>신규일</div>
                       <div>{saving100.startDate}</div>
@@ -92,15 +110,21 @@ export const Savings100Days = () => {
               <div className='font-hanaMedium text-2xl w-full py-20 pb-3 pl-20'>
                 나의 저축 현황
               </div>
-              <Calendar accountId={saving100.accountId} />
+              <Calendar
+                accountId={saving100.accountId}
+                startDate={saving100.startDate}
+                endDate={saving100.endDate}
+                success={saving100Check.successCount}
+                fail={saving100Check.failCount}
+              />
               <div className='w-[300px] bg-white rounded-2xl mt-10 mb-4 p-5 border border-black font-hanaMedium text-xl'>
                 <div className='flex justify-between pb-4'>
                   <div className='text-gray-400'>납입일 수</div>
-                  <div>76일/100일</div>
+                  <div>{saving100Check.successCount}일/100일</div>
                 </div>
                 <div className='flex justify-between pb-4 border-b-2'>
                   <div className='text-gray-400'>첫 납입 금액</div>
-                  <div>{saving100.initialAmount}원</div>
+                  <div>{saving100.initialAmount.toLocaleString()}원</div>
                 </div>
                 <div className='flex justify-between pt-4'>
                   <div>나의 예상금리</div>

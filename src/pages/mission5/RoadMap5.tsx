@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, formatDate } from 'date-fns';
 
 export const RoadMap5 = () => {
   const navigate = useNavigate();
@@ -17,16 +17,20 @@ export const RoadMap5 = () => {
   });
 
   const moveToTermination = () => {
-    navigate('/termination', {
-      state: {
-        accountType: '정기예금',
-        sendAccount: '0000-000-000000',
-        terminationDate: '2024.05.20',
-        terminationType: '만기해지',
-        principal: 1000000,
-        totalAmount: 1023366,
-      },
-    });
+    isSuccess &&
+      navigate('/termination', {
+        state: {
+          accountId: roadmap.accountId,
+          accountName: roadmap.productName,
+          sendAccount: roadmap.accountNumber,
+          terminationDate: formatDate(Date.now(), 'yyyy-MM-dd'),
+          endDate: roadmap.endDate,
+          principal: roadmap.balance,
+          totalAmount: Math.floor(
+            roadmap.balance * (1 + roadmap.interest * 0.01)
+          ),
+        },
+      });
   };
 
   return (
@@ -44,21 +48,26 @@ export const RoadMap5 = () => {
             />
             <div className='flex flex-col items-center font-hanaMedium py-20 relative z-10'>
               <div className='text-2xl'>
-                예금 만기까지{' '}
-                {differenceInDays(roadmap.endDate, roadmap.startDate)}일
+                예금 만기까지 {differenceInDays(roadmap.endDate, Date.now())}일
                 남았습니다!
               </div>
               <div className='font-hanaBold text-[32px]'>
-                {roadmap.balance}원
+                {roadmap.balance.toLocaleString()}원
               </div>
               <div className='text-xl'>해지일 | {roadmap.endDate}</div>
             </div>
 
-            <div className='relative top-[153px] flex flex-col items-center justify-center z-10'>
+            <div className='relative ml-16 w-8/12 h-1 flex justify-center items-center text-center'>
               <img
                 src='/images/별돌이까꿍.svg'
-                className='absolute left-[20%] -top-[60px] w-20 z-10 rotate-90 '
+                className={`absolute left-[${Math.floor(
+                  (differenceInDays(new Date(), roadmap.startDate) /
+                    differenceInDays(roadmap.endDate, roadmap.startDate)) *
+                    100
+                )}%] top-[92px] w-20 z-10 rotate-90 `}
               />
+            </div>
+            <div className='relative top-[153px] flex flex-col items-center justify-center z-10'>
               <div className='h-3 w-11/12 rounded-xl bg-blue-950'></div>
               <div className='flex w-11/12 font-hanaMedium text-lg justify-between m-1'>
                 <div className='text-white'>{roadmap.startDate} 개설</div>
@@ -71,16 +80,16 @@ export const RoadMap5 = () => {
               <div className='font-hanaMedium text-2xl'>예금 가입</div>
               <div className='flex flex-col items-end'>
                 <div className='font-hanaBold text-2xl text-hanaGreen'>
-                  {roadmap.initialAmount}
+                  {roadmap.initialAmount.toLocaleString()}
                 </div>
                 <div className='font-hanaMedium text-xl text-gray-500'>
-                  {roadmap.balance}
+                  {roadmap.balance.toLocaleString()}
                 </div>
               </div>
             </div>
 
             <button
-              className='absolute bottom-28 right-10 z-20 cursor-pointer font-hanaMedium text-lg'
+              className='absolute bottom-28 right-10 z-[60] cursor-pointer font-hanaMedium text-lg'
               onClick={moveToTermination}
             >
               해지하기
