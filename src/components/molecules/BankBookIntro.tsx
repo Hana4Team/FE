@@ -47,7 +47,7 @@ export const BankBookIntro: FC<IProps> = ({
             <p className='text-[#666666] text-lg'>{content}</p>
           </div>
         </div>
-        <img src='/public/images/별돌이2.svg' alt='별돌이' className='h-64' />
+        <img src='/images/별돌이2.svg' alt='별돌이' className='h-64' />
       </div>
     </div>
   );

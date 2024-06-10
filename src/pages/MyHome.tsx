@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ApiClient } from '../apis/apiClient';
@@ -6,6 +6,7 @@ import { Shopping } from '../components/organisms/Shopping';
 
 export const MyHome = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { pathname } = useLocation();
   const [isOpenModal, setIsModalOpen] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
@@ -26,6 +27,12 @@ export const MyHome = () => {
     return () => {
       clearTimeout(animate);
     };
+  }, []);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['home'],
+    });
   }, []);
 
   return (

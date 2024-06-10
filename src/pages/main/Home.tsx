@@ -3,11 +3,12 @@ import { FaChevronRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/AlertModal';
 import { getCookie } from '../../utils/cookie';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 
 export const Home = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isExistMoneyBox, setIsExistMoneyBox] = useState<boolean>(false);
   const [showModalContent, setShowModalContent] = useState<string>('');
   const isExistToken = getCookie('token');
@@ -49,6 +50,12 @@ export const Home = () => {
       else setIsExistMoneyBox(true);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['userInfo'],
+    });
+  }, []);
 
   return (
     <>
