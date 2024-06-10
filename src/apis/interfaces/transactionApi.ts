@@ -29,4 +29,8 @@ export interface transactionApi {
   postRemittanceMoneyBox(
     TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
   ): Promise<{ transactionId: number }>;
+  getWaste(): Promise<{
+    wasteIndex: number;
+    wasteType: string;
+  }>;
 }

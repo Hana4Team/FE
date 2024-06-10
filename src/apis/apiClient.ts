@@ -358,6 +358,17 @@ export class ApiClient
     return response.data;
   }
 
+  async getWaste() {
+    const response = await this.axiosInstance.request<{
+      wasteIndex: number;
+      wasteType: string;
+    }>({
+      method: 'get',
+      url: '/transaction/waste',
+      });
+    return response.data;
+  }
+
   //---------spend---------
   async getSpendList(year: number, month: number) {
     const response = await this.axiosInstance.request<SpendListType>({
