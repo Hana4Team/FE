@@ -1,12 +1,97 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { AccountHistoryItem } from '../../components/molecules/AccountHistoryItem';
 import { dateMonth, dateYear } from '../../utils/getDate';
+import { useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { formatter2, toLocale } from '../../utils/dateTimeformat';
+import { TransactionType } from '../../types/transaction';
 
 export const AccountHistory = () => {
+  const location = useLocation();
+
+  const locationState = location.state as {
+    accountId: number;
+    type: string;
+  };
+
   const [year, setYear] = useState<number>(dateYear);
   const [month, setMonth] = useState<number>(dateMonth);
+
+  const {
+    data: transactionData,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: ['transactions', year, month],
+    queryFn: () => {
+      if (locationState.accountId != null) {
+        const res = ApiClient.getInstance().getTransactionHistory(
+          locationState.accountId,
+          year,
+          month
+        );
+        return res;
+      } else if (locationState.type != null) {
+        const res = ApiClient.getInstance().getMoneyBoxHistory(
+          locationState.type,
+          year,
+          month
+        );
+        return res;
+      }
+    },
+    staleTime: 10,
+  });
+
+  const [initData, setInitData] = useState({
+    name: transactionData?.name,
+    accountNumber: transactionData?.accountNumber,
+    balance: transactionData?.balance.toLocaleString(),
+  });
+
+  useEffect(() => {
+    if (locationState.accountId != null) {
+      try {
+        ApiClient.getInstance()
+          .getTransactionHistory(locationState.accountId, year, month)
+          .then((res) => {
+            setInitData({
+              name: res.name,
+              accountNumber: res.accountNumber,
+              balance: res.balance.toLocaleString(),
+            });
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (locationState.type != null) {
+      try {
+        ApiClient.getInstance()
+          .getMoneyBoxHistory(locationState.type, year, month)
+          .then((res) => {
+            setInitData({
+              name: res.name,
+              accountNumber: res.accountNumber,
+              balance: res.balance.toLocaleString(),
+            });
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   isSuccess &&
+  //     setInitData({
+  //       name: transactionData?.name,
+  //       accountNumber: transactionData?.accountNumber,
+  //       balance: transactionData?.balance.toLocaleString(),
+  //     });
+  // }, [isSuccess]);
 
   const onClickArrow = (value: number) => {
     if (year === dateYear && month === dateMonth && value === 1) return;
@@ -29,12 +114,12 @@ export const AccountHistory = () => {
       <div className='flex flex-col p-10 justify-center items-center gap-10'>
         {/* 카드 영역 */}
         <div className='w-full h-72 flex flex-col p-8 bg-hanaGreen rounded-2xl text-white'>
-          <p className='font-hanaMedium text-3xl mb-4'>하나 주거래 H20</p>
+          <p className='font-hanaMedium text-3xl mb-4'>{initData.name}</p>
           <p className='font-hanaRegular text-2xl mb-6'>
-            하나은행 111-111-111111
+            하나은행 {initData.accountNumber}
           </p>
           <p className='h-full flex flex-col justify-center font-hanaCM text-4xl'>
-            600,000원
+            {initData.balance}원
           </p>
         </div>
         {/* 히스토리 영역 */}
@@ -54,34 +139,18 @@ export const AccountHistory = () => {
               onClick={() => onClickArrow(1)}
             />
           </div>
-          <AccountHistoryItem
-            name='파킹'
-            date='06. 02'
-            time='09:20'
-            balance={10000}
-            type={2}
-          />
-          <AccountHistoryItem
-            name='소비'
-            date='06. 02'
-            time='09:20'
-            balance={10000}
-            type={3}
-          />
-          <AccountHistoryItem
-            name='파킹'
-            date='06. 02'
-            time='09:20'
-            balance={10000}
-            type={2}
-          />
-          <AccountHistoryItem
-            name='소비'
-            date='06. 02'
-            time='09:20'
-            balance={10000}
-            type={3}
-          />
+          {transactionData?.transactionList?.map(
+            (trans: TransactionType, idx: number) => (
+              <AccountHistoryItem
+                key={idx}
+                name={trans.title}
+                date={formatter2(new Date(trans.dateTime!)).monthDate}
+                time={formatter2(new Date(trans.dateTime!)).time}
+                balance={trans.amount}
+                type={trans.isSender}
+              />
+            )
+          )}
         </div>
       </div>
     </>

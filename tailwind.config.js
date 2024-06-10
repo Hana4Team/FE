@@ -159,6 +159,22 @@ export default {
           '100%': {
             opacity: '1',
             transform: 'scale3d(1, 1, 1)',
+            },
+        },
+        'slide-down': {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(0, 60%, 0)',
+          },
+        },
+        'slide-up': {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(0, -200%, 0)',
           },
         },
       },
@@ -174,6 +190,8 @@ export default {
         jiggle: 'jiggle 0.6s ease-in-out 0.25s 1',
         fadeinright: 'fade-in-right 1s ease-in-out 0.25s 1',
         flyin: 'fly-in 0.6s ease-in-out 0.25s 1',
+        slidedown: 'slide-down 1s forwards',
+        slideup: 'slide-up 1.3s forwards',
       },
     },
     minHeight: {

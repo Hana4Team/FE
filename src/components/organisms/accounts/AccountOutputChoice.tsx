@@ -2,13 +2,15 @@ import { FC, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { ChoiceMenu } from '../../ChoiceMenu';
 import { AccountDetailItem } from '../../molecules/AccountDetailItem';
-import { dummyData } from '../../../pages/mission3/Mission3AccountOpening';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../../apis/apiClient';
 
 interface IProps {
-  onClick: (account: string) => void;
+  productId: number;
+  onClick: (account: string, accountId: number) => void;
 }
 
-export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
+export const AccountOutputChoice: FC<IProps> = ({ productId, onClick }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [choiceAccount, setChoiceAccount] = useState({
     name: '',
@@ -16,14 +18,33 @@ export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
     money: 0,
   });
 
-  const clickedAccount = (account: string, name?: string, balance?: number) => {
+  const { data: accounts } = useQuery({
+    queryKey: ['accounts', productId],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccount({
+        depositWithdrawalAccount: true,
+        depositAccount: false,
+        saving100Account: false,
+        savingsAccount: false,
+        moneyboxAccount: false,
+      });
+      return res;
+    },
+  });
+
+  const clickedAccount = (
+    accountId: number,
+    account: string,
+    balance: number,
+    name?: string
+  ) => {
     setChoiceAccount({
       name: name || '',
       accountNumber: account,
       money: balance || 0,
     });
     setShowModal(!showModal);
-    onClick(account);
+    onClick(account, accountId);
   };
 
   return (
@@ -33,16 +54,17 @@ export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
           title='출금계좌 선택'
           onClose={() => setShowModal(!showModal)}
         >
-          {dummyData.accounts.map((account, index) => (
-            <AccountDetailItem
-              key={index}
-              title={account.name}
-              account={account.accountNumber}
-              balance={account.money}
-              isThreeData={true}
-              onClick={clickedAccount}
-            />
-          ))}
+          {accounts &&
+            accounts.map((account, index) => (
+              <AccountDetailItem
+                key={index}
+                accountId={account.accountId}
+                title={account.name}
+                accountNumber={account.accountNumber}
+                balance={account.balance}
+                onClick={clickedAccount}
+              />
+            ))}
         </ChoiceMenu>
       )}
       <div
