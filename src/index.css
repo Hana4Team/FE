@@ -6,8 +6,8 @@
   font-family: 'Hana-Heavy';
   src:
     local('Hana2.0 H'),
-    url('./assets/fonts/Hana2-Heavy.otf') format('opentype'),
-    url('./assets/fonts/Hana2-Heavy.ttf') format('truetype');
+    url('./assets/fonts/Hana2-Heavy.otf') format('otf'),
+    url('./assets/fonts/Hana2-Heavy.ttf') format('ttf');
 }
 
 @font-face {
@@ -15,41 +15,41 @@
   src:
     local('Hana2.0 B'),
     url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.otf')
-      format('opentype'),
+      format('otf'),
     url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.ttf')
-      format('truetype');
+      format('ttf');
 }
 
 @font-face {
   font-family: 'Hana-CM';
   src:
     local('Hana2.0 CM'),
-    url('./assets/fonts/Hana2-CM.otf') format('opentype'),
-    url('./assets/fonts/Hana2-CM.ttf') format('truetype');
+    url('./assets/fonts/Hana2-CM.otf') format('otf'),
+    url('./assets/fonts/Hana2-CM.ttf') format('ttf');
 }
 
 @font-face {
   font-family: 'Hana-Medium';
   src:
     local('Hana2.0 M'),
-    url('/assets/fonts/Hana2-Medium.otf') format('opentype'),
-    url('/assets/fonts/Hana2-Medium.ttf') format('truetype');
+    url('/assets/fonts/Hana2-Medium.otf') format('otf'),
+    url('/assets/fonts/Hana2-Medium.ttf') format('ttf');
 }
 
 @font-face {
   font-family: 'Hana-Regular';
   src:
     local('Hana2.0 R'),
-    url('./assets/fonts/Hana2-Regular.otf') format('opentype'),
-    url('./assets/fonts/Hana2-Regular.ttf') format('truetype');
+    url('./assets/fonts/Hana2-Regular.otf') format('otf'),
+    url('./assets/fonts/Hana2-Regular.ttf') format('ttf');
 }
 
 @font-face {
   font-family: 'Hana-Light';
   src:
     local('Hana2.0 L'),
-    url('./assets/fonts/Hana2-Light.otf') format('opentype'),
-    url('./assets/fonts/Hana2-Light.ttf') format('truetype');
+    url('./assets/fonts/Hana2-Light.otf') format('otf'),
+    url('./assets/fonts/Hana2-Light.ttf') format('ttf');
 }
 
 html,
