@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,ts,tsx}'],
+  content: ['./src/**/*.{js, jsx, html, ts, tsx}'],
   safelist: [
     'bg-[#28B2A5]',
     'bg-[#E90061]',
@@ -15,15 +15,15 @@ export default {
     'bg-[#74BE96]',
   ],
   theme: {
+    fontFamily: {
+      hanaHeavy: ['Hana-Heavy'],
+      hanaBold: ['Hana-Bold'],
+      hanaCM: ['Hana-CM'],
+      hanaMedium: ['Hana-Medium'],
+      hanaRegular: ['Hana-Regular'],
+      hanaLight: ['Hana-Light'],
+    },
     extend: {
-      fontFamily: {
-        hanaHeavy: ['Hana-Heavy'],
-        hanaBold: ['Hana-Bold'],
-        hanaCM: ['Hana-CM'],
-        hanaMedium: ['Hana-Medium'],
-        hanaRegular: ['Hana-Regular'],
-        hanaLight: ['Hana-Light'],
-      },
       colors: {
         hanaGreen: '#28B2A5',
         hanaRed: '#E90061',
