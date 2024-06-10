@@ -3,6 +3,19 @@ import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
 import {
+  AccountReqType,
+  AccountType,
+  OpenedDepositSavingReqType,
+  OpendDepositSavingSuccessResType,
+} from '../types/account';
+import { alarmApi } from './interfaces/alarmApi';
+import { API_BASE_URL } from './url';
+import { productsApi } from './interfaces/productsApi';
+import { ProductsType } from '../types/products';
+import { moneyboxApi } from './interfaces/moneyboxApi';
+import { depositsavingType } from '../types/depositsaving';
+import { depositsavingApi } from './interfaces/depositsavingApi';
+import {
   UserType,
   SavePointType,
   StepType,
@@ -12,11 +25,7 @@ import {
   LoginType,
   MsgCheckType,
 } from '../types/users';
-import { AccountReqType, AccountType } from '../types/account';
-import { alarmApi } from './interfaces/alarmApi';
-import { API_BASE_URL } from './url';
 import { AlarmType } from '../types/alarm';
-import { moneyBoxApi } from './interfaces/moneyBoxApi';
 import { moneyBoxType } from '../types/moneyBox';
 import { transactionApi } from './interfaces/transactionApi';
 import {
@@ -28,7 +37,14 @@ import {
 const TOKEN = getCookie('token');
 
 export class ApiClient
-  implements usersApi, accountApi, moneyBoxApi, transactionApi, alarmApi
+  implements
+    usersApi,
+    accountApi,
+    alarmApi,
+    productsApi,
+    moneyboxApi,
+    transactionApi,
+    depositsavingApi
 {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
@@ -100,7 +116,9 @@ export class ApiClient
   }
 
   async postMessage(phoneNumber: string) {
-    const response = await this.axiosInstance.request<number>({
+    const response = await this.axiosInstance.request<{
+      code: string;
+    }>({
       method: 'post',
       url: '/users/message',
       data: { phoneNumber },
@@ -108,8 +126,8 @@ export class ApiClient
     return response.data;
   }
 
-  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
-    const response = await this.axiosInstance.request<string>({
+  async postMsgCheck({ code, inputCode }: { code: string; inputCode: string }) {
+    const response = await this.axiosInstance.request<{ check: string }>({
       method: 'post',
       url: '/users/msgCheck',
       data: { code: code, input: inputCode },
@@ -166,7 +184,63 @@ export class ApiClient
       data: {
         password,
         productsId,
-      }});
+      },
+    });
+    return response.data;
+  }
+
+  async postOpenedSaving100(data: OpenedDepositSavingReqType) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
+        method: 'post',
+        url: '/account/saving100',
+        data: data,
+      });
+    return response.data;
+  }
+
+  async postOpenedSaving(
+    data: OpenedDepositSavingReqType,
+    payment: number,
+    payDate: number,
+    initialAmount: number
+  ) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
+        method: 'post',
+        url: '/account/saving',
+        data: {
+          ...data,
+          payment,
+          payDate,
+          initialAmount,
+        },
+      });
+    return response.data;
+  }
+
+  async postOpenedDeposit(
+    data: OpenedDepositSavingReqType,
+    initialAmount: number
+  ) {
+    const response =
+      await this.axiosInstance.request<OpendDepositSavingSuccessResType>({
+        method: 'post',
+        url: '/account/deposit',
+        data: {
+          ...data,
+          initialAmount,
+        },
+      });
+    return response.data;
+  }
+
+  //---------products---------
+  async getProdustsList(type: string) {
+    const response = await this.axiosInstance.request<ProductsType[]>({
+      method: 'get',
+      url: `/products?type=${type}`,
+      });
     return response.data;
   }
 
@@ -176,6 +250,14 @@ export class ApiClient
       url: `/transaction/moneybox?type=${type}
       &year=${year}&month=${month}`,
     });
+    return response.data;
+  }
+
+  async getProduct(productId: number) {
+    const response = await this.axiosInstance.request<ProductsType>({
+      method: 'get',
+      url: `/products/${productId}`,
+      });
     return response.data;
   }
 
@@ -191,6 +273,26 @@ export class ApiClient
     return response.data;
   }
 
+  //---------moneybox---------
+  async getMoneyboxSaving() {
+    const response = await this.axiosInstance.request<{
+      savingBalance: number;
+    }>({
+      method: 'get',
+      url: '/moneybox/saving',
+    });
+    return response.data;
+  }
+
+  //---------depositsaving---------
+  async getDepositSaving(type: string) {
+    const response = await this.axiosInstance.request<depositsavingType>({
+      method: 'get',
+      url: `/depositsaving?type=${type}`,
+      });
+    return response.data;
+  }
+
   async postRemittanceMoneyBox(
     TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
   ) {
@@ -203,6 +305,7 @@ export class ApiClient
     });
     return response.data;
   }
+  
   //---------moneyBox---------
   async getMoneyBox(): Promise<moneyBoxType> {
     const response = await this.axiosInstance.request<moneyBoxType>({
