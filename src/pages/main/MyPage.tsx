@@ -2,12 +2,14 @@ import { FaChevronRight } from 'react-icons/fa';
 import { AccountSummaryItem } from '../../components/molecules/AccountSummaryItem';
 import { getCookie, removeCookie } from '../../utils/cookie';
 import { AccountType } from '../../types/account';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const MyPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const name = getCookie('name');
 
   const logout = () => {
@@ -37,6 +39,10 @@ export const MyPage = () => {
       return res;
     },
   });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['accounts'] });
+  }, []);
 
   return (
     <>

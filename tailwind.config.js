@@ -209,8 +209,8 @@ export default {
     },
     minHeight: {
       'real-screen': 'calc(100vh - 100px)',
-      'real-screen2': 'calc(100vh - 82.5px)',
-      'real-screen3': 'calc(100vh - 182.5px)',
+      'real-screen2': 'calc(100vh - 50px)',
+      'real-screen3': 'calc(100vh - 150px)',
     },
     backgroundImage: {
       roadmap4: "url('/images/roadmap.svg')",

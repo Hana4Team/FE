@@ -6,7 +6,7 @@ import { CategoryEditItem } from '../../components/molecules/CategoryEditItem';
 import { Button } from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { BudgetReqType } from '../../types/budget';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 
 type BudgetEditType = {
@@ -31,6 +31,7 @@ const CategoryConvert = {
 
 export const ConsumeEdit = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data: spendData, isSuccess: successSpend } = useQuery({
     queryKey: ['spend3'],

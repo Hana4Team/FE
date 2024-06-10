@@ -5,7 +5,7 @@ import { RiPencilFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { CategoryItem } from '../../components/molecules/CategoryItem';
 import { CategorySpendCard } from '../../components/organisms/CategorySpendCard';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { SpendType } from '../../types/spend';
 
@@ -24,12 +24,14 @@ const Category = {
 
 export const ConsumePattern = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [year, setYear] = useState<number>(dateYear);
   const [month, setMonth] = useState<number>(dateMonth);
   const [spend, setSpend] = useState<number>(0);
   const [budget, setBudget] = useState<number>(0);
   const [percent, setPercent] = useState<number>(0);
+  const [patch, setPatch] = useState<boolean>(false);
 
   const spendQuery = useQuery({
     queryKey: ['category', year, month],
@@ -40,8 +42,8 @@ export const ConsumePattern = () => {
     staleTime: 100,
   });
 
-  const { data: budgetData, isSuccess: successBudget } = useQuery({
-    queryKey: ['budget'],
+  const budgetQuery = useQuery({
+    queryKey: ['budget', patch],
     queryFn: () => {
       const res = ApiClient.getInstance().getTotalBudget();
       return res;
@@ -67,25 +69,36 @@ export const ConsumePattern = () => {
   }, [spendQuery.data]);
 
   useEffect(() => {
-    if (spendQuery.isSuccess && successBudget) {
+    if (spendQuery.isSuccess && budgetQuery) {
       try {
         ApiClient.getInstance()
           .getSpendList(dateYear, dateMonth)
           .then((res) => {
             setSpend(res.sum);
             setPercent(Math.round((res.sum / budget) * 100));
+            console.log();
           });
       } catch (e) {
         console.log(e);
       }
     }
-  }, [spendQuery.isSuccess, successBudget]);
+  }, [spendQuery, budgetQuery]);
 
   useEffect(() => {
-    if (successBudget) {
-      setBudget(budgetData.sum);
+    if (budgetQuery.isSuccess) {
+      setBudget(budgetQuery.data.sum);
     }
-  }, [successBudget]);
+  }, [budgetQuery.isSuccess]);
+
+  useEffect(() => {
+    if (budgetQuery.data) {
+      console.log(budgetQuery.data.sum);
+    }
+  }, [budgetQuery.data]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['budget'] });
+  }, []);
 
   const onClickButton = () => {
     navigate('/consumeEdit');
@@ -118,7 +131,7 @@ export const ConsumePattern = () => {
             <p className='flex items-center font-hanaBold text-3xl'>예산</p>
             <div className='flex flex-row gap-3 items-center'>
               <p className='font-hanaMedium text-3xl'>
-                {budget.toLocaleString()}원
+                {budgetQuery.data?.sum.toLocaleString()}원
               </p>
               <RiPencilFill
                 size={20}
@@ -131,10 +144,12 @@ export const ConsumePattern = () => {
           {/* 프로그래스바 */}
           <div className='flex flex-row h-8 w-full my-6'>
             <div
-              className={`bg-hanaGreen w-[${percent}%] h-full rounded-l-lg`}
+              className={`bg-hanaGreen h-full rounded-l-lg`}
+              style={{ width: `${percent}%` }}
             ></div>
             <div
-              className={`bg-gray-200 w-[${100 - percent}%] h-full rounded-r-lg border-2 flex items-center`}
+              className={`bg-gray-200 h-full rounded-r-lg border-2 flex items-center`}
+              style={{ width: `${100 - percent}%` }}
             >
               <p className='ml-1 font-hanaMedium text-xl'>{percent}%</p>
             </div>
