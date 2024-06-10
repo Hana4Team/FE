@@ -1,16 +1,18 @@
 import Topbar from '../../components/Topbar';
 import { MoneyBoxItem } from '../../components/molecules/MoneyBoxItem';
 import { ChoiceMenu } from '../../components/ChoiceMenu';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MoneyBoxMoveItem } from '../../components/molecules/MoneyBoxMoveItem';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AlertModal } from '../../components/AlertModal';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
+import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
 
 export const MoneyBox = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const locationState = location.state as {
     prev: boolean;
@@ -41,23 +43,26 @@ export const MoneyBox = () => {
     },
   });
 
-  const {
-    mutate: updateHanaMoney,
-    isSuccess: isSuccess1,
-    data: hanaMoney,
-  } = useMutation({
+  const { mutate: updateHanaMoney } = useMutation({
     mutationKey: ['updateHanaMoney'],
     mutationFn: (isMission: boolean) => {
       const res = ApiClient.getInstance().updatePoint(isMission);
       return res;
     },
+    onSuccess: (data) => {
+      postAlarm(`하나머니 ${data.points}원 적립!`);
+    },
   });
 
-  const { mutate: postAlarm, isSuccess: isSuccess2 } = useMutation({
+  const { mutate: postAlarm } = useMutation({
     mutationKey: ['updateHanaMoney'],
     mutationFn: (contents: string) => {
       const res = ApiClient.getInstance().postAlarm(contents);
       return res;
+    },
+    onSuccess: (_, variables) => {
+      setShowAlarm(true);
+      alarmMsgRef.current = `하나머니 ${variables}원 적립!`;
     },
   });
 
@@ -69,15 +74,15 @@ export const MoneyBox = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    if (isSuccess1 && !isSuccess2) {
-      postAlarm(`하나머니 ${hanaMoney?.points}원 적립!`);
-    }
-  }, [isSuccess1]);
+    queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+  }, []);
 
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showChoiceModal, setShowChoiceModal] = useState<boolean>(false);
   const [clickedName, setClickedName] = useState<string>('파킹');
+  const [showAlarm, setShowAlarm] = useState<boolean>(false);
+  const alarmMsgRef = useRef<string>('');
 
   const openChoiceModalHandler = () => setShowChoiceModal(true);
   const closeChoiceModalHandler = () => {
@@ -145,11 +150,21 @@ export const MoneyBox = () => {
   };
 
   return (
-    <>
+    <div className='relative w-full'>
+      {showAlarm && (
+        <AlarmAnimation
+          message={alarmMsgRef.current}
+          showAlarm={showAlarm}
+          onClickShowAlarm={(status: boolean) => setShowAlarm(status)}
+        />
+      )}
       {showStepModal && (
         <AlertModal onClose={() => onCloseStepModal()}>
           <div className='flex flex-col font-hanaMedium text-2xl text-center'>
-            <p>미션을 클리어하였습니다!</p>
+            <p>
+              2단계 미션을 <span className='text-hanaDeepGreen'>완료</span>
+              했습니다!
+            </p>
           </div>
         </AlertModal>
       )}
@@ -242,6 +257,6 @@ export const MoneyBox = () => {
           isLimit
         />
       </div>
-    </>
+    </div>
   );
 };

@@ -31,7 +31,6 @@ export const ConsumePattern = () => {
   const [spend, setSpend] = useState<number>(0);
   const [budget, setBudget] = useState<number>(0);
   const [percent, setPercent] = useState<number>(0);
-  const [patch, setPatch] = useState<boolean>(false);
 
   const spendQuery = useQuery({
     queryKey: ['category', year, month],
@@ -43,7 +42,7 @@ export const ConsumePattern = () => {
   });
 
   const budgetQuery = useQuery({
-    queryKey: ['budget', patch],
+    queryKey: ['budget'],
     queryFn: () => {
       const res = ApiClient.getInstance().getTotalBudget();
       return res;
@@ -69,32 +68,32 @@ export const ConsumePattern = () => {
   }, [spendQuery.data]);
 
   useEffect(() => {
-    if (spendQuery.isSuccess && budgetQuery) {
-      try {
-        ApiClient.getInstance()
-          .getSpendList(dateYear, dateMonth)
-          .then((res) => {
-            setSpend(res.sum);
-            setPercent(Math.round((res.sum / budget) * 100));
-            console.log();
-          });
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      ApiClient.getInstance()
+        .getSpendList(dateYear, dateMonth)
+        .then((res) => {
+          setSpend(res.sum);
+        });
+    } catch (e) {
+      console.log(e);
     }
-  }, [spendQuery, budgetQuery]);
-
-  useEffect(() => {
-    if (budgetQuery.isSuccess) {
-      setBudget(budgetQuery.data.sum);
-    }
-  }, [budgetQuery.isSuccess]);
+  }, []);
 
   useEffect(() => {
     if (budgetQuery.data) {
-      console.log(budgetQuery.data.sum);
+      setBudget(budgetQuery.data.sum);
     }
   }, [budgetQuery.data]);
+
+  useEffect(() => {
+    if (spendQuery.data?.sum && budgetQuery.data?.sum)
+      setPercent(
+        Math.min(
+          100,
+          Math.round((spendQuery.data.sum / budgetQuery.data.sum) * 100)
+        )
+      );
+  }, [budgetQuery.data, spendQuery.data]);
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['budget'] });
@@ -142,19 +141,33 @@ export const ConsumePattern = () => {
             </div>
           </div>
           {/* 프로그래스바 */}
-          <div className='flex flex-row h-8 w-full my-6'>
-            <div
-              className={`bg-hanaGreen h-full rounded-l-lg`}
-              style={{ width: `${percent}%` }}
-            ></div>
-            <div
-              className={`bg-gray-200 h-full rounded-r-lg border-2 flex items-center`}
-              style={{ width: `${100 - percent}%` }}
-            >
-              <p className='ml-1 font-hanaMedium text-xl'>{percent}%</p>
+          {!budgetQuery.isLoading && !spendQuery.isLoading && (
+            <div className='flex flex-row h-8 w-full my-6'>
+              <div
+                className={`${percent >= 90 ? 'bg-hanaRed rounded-r-lg' : 'bg-hanaGreen'} rounded-l-lg h-full flex items-center justify-end text-end`}
+                style={{ width: `${percent}%` }}
+              >
+                {percent > 75 && (
+                  <p className='mr-1 font-hanaMedium text-xl text-white'>
+                    {percent}%
+                  </p>
+                )}
+              </div>
+              <div
+                className={`${percent !== 100 && 'rounded-r-lg'} bg-gray-200 h-full border-2 flex items-center`}
+                style={{ width: `${100 - percent}%` }}
+              >
+                {percent <= 75 && (
+                  <p className='ml-1 font-hanaMedium text-xl'>{percent}%</p>
+                )}
+              </div>
             </div>
-          </div>
-          <CategoryItem color='#28B2A5' name='지출' balance={spend} />
+          )}
+          <CategoryItem
+            color={`${percent >= 90 ? '#E90061' : '#28B2A5'}`}
+            name='지출'
+            balance={spend}
+          />
           <CategoryItem
             color='#B5B5B5'
             name='남은 예산'

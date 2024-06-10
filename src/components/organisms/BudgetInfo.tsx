@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FC, useEffect, useState } from 'react';
 import { RiPencilFill } from 'react-icons/ri';
 import { ApiClient } from '../../apis/apiClient';
@@ -16,6 +16,8 @@ export const BudgetInfo: FC<Iprops> = ({
   lastSpend,
   initialFunc,
 }) => {
+  const queryClient = useQueryClient();
+
   const [isEdit, SetIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState(balance?.toLocaleString());
 
@@ -29,6 +31,8 @@ export const BudgetInfo: FC<Iprops> = ({
       const res = ApiClient.getInstance().updateTotalBudget(sum);
       return res;
     },
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['budget', 'userInfo'] }),
   });
 
   const valueChangeHandler = (e: any) => {
@@ -56,7 +60,6 @@ export const BudgetInfo: FC<Iprops> = ({
   }, [isSuccessUpdate]);
 
   useEffect(() => {
-    console.log(balance);
     setValue(balance ? balance?.toLocaleString() : '0');
   }, [balance]);
 
@@ -94,7 +97,7 @@ export const BudgetInfo: FC<Iprops> = ({
           </div>
         </div>
       )}
-      {lastSpend && (
+      {lastSpend != undefined && (
         <div className='flex flex-row justify-between mt-4 font-hanaLight'>
           <p className='text-2xl text-gray-400'>지난 달 지출</p>
           <p className='text-2xl'>{lastSpend.toLocaleString()}원</p>

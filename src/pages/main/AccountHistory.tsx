@@ -4,13 +4,14 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { AccountHistoryItem } from '../../components/molecules/AccountHistoryItem';
 import { dateMonth, dateYear } from '../../utils/getDate';
 import { useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { formatter2, toLocale } from '../../utils/dateTimeformat';
 import { TransactionType } from '../../types/transaction';
 
 export const AccountHistory = () => {
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   const locationState = location.state as {
     accountId: number;
