@@ -72,14 +72,14 @@ export const MoneyBox = () => {
       return res;
     },
     onSuccess: (_, variables) => {
+      checkMission();
       setShowAlarm(true);
-      alarmMsgRef.current = `하나머니 ${variables}원 적립!`;
+      alarmMsgRef.current = variables;
     },
   });
 
   useEffect(() => {
     if (!isSuccess0 && userInfo?.step === 2 && userInfo.stepStatus === 2) {
-      checkMission();
       setShowStepModal(true);
       setCheckExpense(true);
     }
@@ -169,7 +169,7 @@ export const MoneyBox = () => {
   };
 
   return (
-    <div className='relative w-full h-screen'>
+    <div className='w-full min-h-real-screen3'>
       {showAlarm && (
         <AlarmAnimation
           message={alarmMsgRef.current}
