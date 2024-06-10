@@ -28,7 +28,7 @@ export const PasswordForm: FC<IProps> = ({
   }, [step, re]);
 
   useEffect(() => {
-    inputRef.current[0]?.focus();
+    focusFirstInput();
   }, [step, re]);
 
   const handleInput = (
@@ -46,6 +46,7 @@ export const PasswordForm: FC<IProps> = ({
     }
 
     checkPwdCondition?.();
+    focusFirstInput();
   };
 
   const handleKeyDown = (
@@ -55,6 +56,15 @@ export const PasswordForm: FC<IProps> = ({
     if (event.key === 'Backspace') {
       if (!inputRef.current[index]?.value && index >= 0) {
         inputRef.current[index - 1]?.focus();
+      }
+    }
+  };
+
+  const focusFirstInput = () => {
+    for (let i = 0; i < inputRef.current.length; i += 1) {
+      if (!inputRef.current[i]?.value) {
+        inputRef.current[i]?.focus();
+        break;
       }
     }
   };
@@ -78,6 +88,7 @@ export const PasswordForm: FC<IProps> = ({
             ref={(el) => (inputRef.current[index] = el)}
             onChange={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}
+            onFocus={() => focusFirstInput()}
           />
         ))}
       </div>

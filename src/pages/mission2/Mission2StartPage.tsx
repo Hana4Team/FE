@@ -3,13 +3,21 @@ import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
 import Topbar from '../../components/Topbar';
-import { useEffect, useRef, useState } from 'react';
-
-const productId = 1;
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 export const Mission2StartPage = () => {
   const navigate = useNavigate();
   const [animation, setAnimation] = useState<number>(0);
+
+  const { data: moneyBoxInfo } = useQuery({
+    queryKey: ['moneyBoxInfo'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getProdustsList('MONEYBOX');
+      return res;
+    },
+  });
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -74,17 +82,22 @@ export const Mission2StartPage = () => {
             저축 도전하기
           </p>
         </MoneyBoxIntroItem>
-        <BankBookIntro
-          subTitle='파킹, 소비, 저축 3가지로 통장 쪼개기'
-          title='머니박스 통장'
-          content1='최고 연 3.00%'
-          content2={`저축 3.00%\n파킹 2.00%`}
-          content3='1개월 기준 세전'
-          className={`${animation <= 4 ? 'opacity-0' : 'opacity-1'} animate-fadein4`}
-          onClick={() =>
-            navigate('/mission2/product', { state: { productId: productId } })
-          }
-        />
+        {moneyBoxInfo && (
+          <BankBookIntro
+            type='머니박스'
+            name={moneyBoxInfo[0].name}
+            title={moneyBoxInfo[0].title}
+            maxInterest={moneyBoxInfo[0].interest2}
+            minInterest={moneyBoxInfo[0].interest1}
+            content={moneyBoxInfo[0].summary}
+            className={`${animation <= 4 ? 'opacity-0' : 'opacity-1'} animate-fadein4`}
+            onClick={() =>
+              navigate(
+                `/product?productId=${moneyBoxInfo[0].productsId}&mission=2`
+              )
+            }
+          />
+        )}
       </div>
     </>
   );

@@ -8,6 +8,8 @@ import { AccountDetailItem } from '../../components/molecules/AccountDetailItem'
 import { SendingModal } from '../../components/SendingModal';
 import { PasswordForm } from '../../components/molecules/PasswordForm';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 interface RequestType {
   balance: number;
@@ -28,10 +30,79 @@ export const Sending = () => {
     receiveAccount: string;
   };
 
-  const initialBalance = locationState.initialBalance;
+  const accountQuery = useQuery({
+    queryKey: ['accounts'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccount({
+        depositWithdrawalAccount: true,
+        depositAccount: false,
+        saving100Account: false,
+        savingsAccount: false,
+        moneyboxAccount: false,
+      });
+      return res;
+    },
+    enabled: false,
+  });
+
+  const { mutate: sending, isSuccess: mutateSuccess0 } = useMutation({
+    mutationKey: ['sending'],
+    mutationFn: () => {
+      const res = ApiClient.getInstance().postRemittance({
+        amount: Number(String(price).replaceAll(',', '')),
+        senderTitle: '머니박스충전',
+        recipientTitle: '머니박스충전',
+        senderAccount: data.sendAccount,
+        recipientAccount: data.receiveAccount,
+      });
+      return res;
+    },
+  });
+
+  const { mutate: sendingMoneyBox, isSuccess: mutateSuccess1 } = useMutation({
+    mutationKey: ['sendingMoneyBox'],
+    mutationFn: () => {
+      const res = ApiClient.getInstance().postRemittanceMoneyBox({
+        amount: Number(String(price).replaceAll(',', '')),
+        senderTitle: `${data.sendName}->${data.receiveName}`,
+        recipientTitle: `${data.sendName}->${data.receiveName}`,
+        senderMoneybox:
+          data.sendName === '파킹'
+            ? 'PARKING'
+            : data.sendName === '소비'
+              ? 'EXPENSE'
+              : 'SAVING',
+        recipientMoneybox:
+          data.receiveName === '파킹'
+            ? 'PARKING'
+            : data.receiveName === '소비'
+              ? 'EXPENSE'
+              : 'SAVING',
+      });
+      return res;
+    },
+  });
+
+  const { mutate: passwordCheck, data: passwordData } = useMutation({
+    mutationKey: ['passwordCheck'],
+    mutationFn: (password: string) => {
+      const res = ApiClient.getInstance().postAccountPasswordCheck({
+        accountNumber: data.sendAccount,
+        password: password,
+      });
+      return res;
+    },
+  });
+
+  useEffect(() => {
+    if (mutateSuccess0 || mutateSuccess1) {
+      setPage(page + 1);
+      setButtonText('완료');
+    }
+  }, [mutateSuccess0, mutateSuccess1]);
 
   const [data, SetData] = useState<RequestType>({
-    balance: 0,
+    balance: locationState.initialBalance ? locationState.initialBalance : 0,
     sendName: locationState.sendName,
     receiveName: locationState.receiveName,
     sendAccount: locationState.sendAccount,
@@ -58,8 +129,17 @@ export const Sending = () => {
     setPage(page - 1);
   };
 
-  const clickAccount = (clickedAccount: string) => {
-    SetData({ ...data, sendAccount: clickedAccount });
+  const clickAccount = (
+    clickedAccountId: number,
+    clickedAccountNumber: string,
+    clickedBalance: number,
+    clickedName: string
+  ) => {
+    SetData({
+      ...data,
+      sendAccount: clickedAccountNumber,
+      balance: clickedBalance,
+    });
     setIsActive(true);
     showModalHandler();
   };
@@ -78,12 +158,25 @@ export const Sending = () => {
       setIsActive(false);
       setShowModal2(false);
       return;
-    } else if (page === 4 && pwdCheck()) {
-      setPage(page + 1);
-      setButtonText('완료');
+    } else if (page === 4 && passwordData?.message === 'match') {
+      if (data.sendAccount === data.receiveAccount) {
+        sendingMoneyBox();
+      } else {
+        sending();
+      }
+      return;
+    } else if (page === 4 && passwordData?.message === 'mismatch') {
+      setIsPwdCorrect(false);
+      setIsActive(false);
+      setRe(!re);
       return;
     } else if (page === 5) {
-      navigate(-1);
+      navigate('/moneyBox'),
+        {
+          state: {
+            prev: true,
+          },
+        };
     }
   };
 
@@ -109,7 +202,7 @@ export const Sending = () => {
 
     let realPrice = Number(String(price).replaceAll(',', ''));
 
-    if (realPrice > initialBalance) {
+    if (realPrice > data.balance) {
       setIsActive(false);
       setMoneyCap(false);
       content!.innerText = '현재 잔액보다 큰 금액은 송금할 수 없습니다.';
@@ -124,27 +217,19 @@ export const Sending = () => {
 
   const checkPwdCondition = () => {
     if (pwdRef.current.map((p) => p?.value).join('').length === 4) {
+      passwordCheck(pwdRef.current.map((p) => p?.value).join(''));
       setIsActive(true);
     } else {
       setIsActive(false);
     }
   };
 
-  const pwdCheck = () => {
-    // 실제 비밀번호와 비교하는 작업 필요
-    if (pwdRef.current.map((p) => p?.value).join('') === '1234') {
-      setIsPwdCorrect(true);
-      return true;
-    } else {
-      setIsPwdCorrect(false);
-      setIsActive(false);
-      setRe(!re);
-      return false;
-    }
-  };
-
   useEffect(() => {
-    data.sendAccount && setPage(2);
+    if (data.sendAccount) {
+      setPage(2);
+    } else {
+      accountQuery.refetch();
+    }
   }, []);
 
   return (
@@ -152,90 +237,16 @@ export const Sending = () => {
       {showModal && (
         <ChoiceMenu title='출금계좌선택' onClose={() => showModalHandler()}>
           <div className='flex flex-col'>
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='111-111-111111'
-              balance={50000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
-            <AccountDetailItem
-              title='영하나플러스통장'
-              account='222-222-222222'
-              balance={200000}
-              onClick={clickAccount}
-            />
+            {accountQuery.data?.map((account, idx) => (
+              <AccountDetailItem
+                key={idx}
+                title={account.name}
+                accountId={account.accountId}
+                accountNumber={account.accountNumber}
+                balance={account.balance}
+                onClick={clickAccount}
+              />
+            ))}
           </div>
         </ChoiceMenu>
       )}
@@ -303,7 +314,6 @@ export const Sending = () => {
           {/* 4페이지 */}
           {page === 4 && (
             <div className='flex flex-col justify-center items-center mt-16'>
-              {/* <div className='w-full bg-gray-200 h-[0.1rem] mb-10'></div> */}
               <PasswordForm
                 title='계좌 비밀번호를 입력해주세요'
                 inputRef={pwdRef}

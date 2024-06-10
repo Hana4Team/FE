@@ -2,21 +2,23 @@ import { FC } from 'react';
 import { BsArrowRightCircleFill } from 'react-icons/bs';
 
 interface IProps {
-  subTitle: string;
+  type: '머니박스' | '100일 적금' | '예금';
+  name: string;
   title: string;
-  content1: string;
-  content2: string;
-  content3: string;
+  minInterest: number;
+  maxInterest: number;
+  content: string;
   className?: string;
   onClick: () => void;
 }
 
 export const BankBookIntro: FC<IProps> = ({
-  subTitle,
+  type,
+  name,
   title,
-  content1,
-  content2,
-  content3,
+  maxInterest,
+  minInterest,
+  content,
   className,
   onClick,
 }) => {
@@ -25,8 +27,8 @@ export const BankBookIntro: FC<IProps> = ({
       className={`w-11/12 bg-white py-10 px-10 rounded-3xl m-auto flex flex-col justify-center ${className}`}
       onClick={() => onClick()}
     >
-      <p className='font-hanaRegular text-2xl'>{subTitle}</p>
-      <h1 className='font-hanaBold text-[2.7rem]'>{title}</h1>
+      <p className='font-hanaRegular text-2xl ml-1'>{title}</p>
+      <h1 className='font-hanaBold text-[2.7rem]'>{name}</h1>
       <div className='flex justify-between'>
         <div className='flex flex-col justify-between items-start'>
           <BsArrowRightCircleFill
@@ -34,10 +36,15 @@ export const BankBookIntro: FC<IProps> = ({
             size={24}
             className='mb-16 mt-1 cursor-pointer'
           />
-          <div className='font-hanaRegular text-2xl  whitespace-pre-line'>
-            <p className='font-hanaBold text-[#008485]'>{content1}</p>
-            {content2}
-            <p className='text-[#666666] text-xl'>{content3}</p>
+          <div className='flex flex-col justify-center gap-1 font-hanaRegular text-xl whitespace-pre-line'>
+            <p className='font-hanaBold text-[#008485] text-2xl'>
+              {type === '머니박스' ? '저축 ' : '최고 '}
+              {type !== '100일 적금' && '연 '}
+              {maxInterest.toFixed(2)}%
+            </p>
+            {type === '머니박스' ? '파킹 ' : '기본 '}
+            {minInterest.toFixed(2)}%
+            <p className='text-[#666666] text-lg'>{content}</p>
           </div>
         </div>
         <img src='/public/images/별돌이2.svg' alt='별돌이' className='h-64' />

@@ -1,14 +1,8 @@
-export type AccountDetailType = {
-  name: string;
-  accountNumber: string;
-  balance: number;
-  transactionList: TransactionType[];
-};
 export type TransactionType = {
   isSender: boolean;
   title: string;
   amount: number;
-  createdAt: string;
+  createdAt: Date;
 };
 export type AccountType = {
   accountId: number;
@@ -19,6 +13,25 @@ export type AccountType = {
 export type AccountReqType = {
   depositWithdrawalAccount: boolean;
   depositAccount: boolean;
+  saving100Account: boolean;
   savingsAccount: boolean;
   moneyboxAccount: boolean;
+};
+export type AccountPwdCheckType = {
+  accountNumber: string;
+  password: string;
+};
+export type AccountDelType = {
+  deleteAccountId: number;
+  depositAccountId: number;
+};
+export type OpenedDepositSavingReqType = {
+  payment: number;
+  endDate: string;
+  productsId: number;
+  withdrawalAccountId: number;
+};
+export type OpendDepositSavingSuccessResType = {
+  depositSavingId: number;
+  accountId: number;
 };
