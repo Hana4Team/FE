@@ -12,6 +12,7 @@ import { AccountPwCheck } from '../../components/organisms/accounts/AccountPwChe
 import { AccountPw } from '../../components/organisms/accounts/AccountPw';
 import { useMutation } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
+import { MsgCheckType } from '../../types/users';
 
 type userInfo = {
   name: string | null;
@@ -63,8 +64,8 @@ export const Mission2AccountOpening = () => {
   });
 
   const postMessageCheck = useMutation({
-    mutationFn: ({ code, inputCode }: { code: string; inputCode: string }) =>
-      ApiClient.getInstance().postMsgCheck({ code, inputCode }),
+    mutationFn: (codeReq: MsgCheckType) =>
+      ApiClient.getInstance().postMsgCheck(codeReq),
     onSuccess: (data) => {
       if (data.check === 'match') setBtnActive(true);
       else alert('인증번호가 맞지 않습니다.');
@@ -232,7 +233,7 @@ export const Mission2AccountOpening = () => {
     if (info.certification_number)
       postMessageCheck.mutate({
         code: realCertificatioNnumber.current,
-        inputCode: info.certification_number,
+        input: info.certification_number,
       });
   };
 

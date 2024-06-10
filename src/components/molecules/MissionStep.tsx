@@ -10,6 +10,7 @@ interface IProps {
   text: string;
   status: string;
   userStep: number;
+  userStepStatus: number;
 }
 
 export const MissionStep: FC<IProps> = ({
@@ -18,6 +19,7 @@ export const MissionStep: FC<IProps> = ({
   text,
   status,
   userStep,
+  userStepStatus,
 }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -42,7 +44,12 @@ export const MissionStep: FC<IProps> = ({
           </div>
           <div className='mt-2 text-gray-600'>{text}</div>
         </div>
-        <MiniButton step={step} text={status} userStep={userStep} />
+        <MiniButton
+          step={step}
+          text={status}
+          userStep={userStep}
+          userStepStatus={userStepStatus}
+        />
         {status === '완료' && (
           <div className='absolute left-0 top-0 w-full h-full '>
             <div className='absolute top-1/4 left-1/3 -rotate-12 z-10 font-hanaHeavy text-hanaRed text-5xl'>

@@ -1,6 +1,6 @@
 import { FaChevronRight } from 'react-icons/fa';
 import { AccountSummaryItem } from '../../components/molecules/AccountSummaryItem';
-import { removeCookie } from '../../utils/cookie';
+import { getCookie, removeCookie } from '../../utils/cookie';
 import { AccountType } from '../../types/account';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom';
 
 export const MyPage = () => {
   const navigate = useNavigate();
+  const name = getCookie('name');
 
   const logout = () => {
     removeCookie('token');
+    removeCookie('name');
     navigate('/home');
   };
 
@@ -36,14 +38,6 @@ export const MyPage = () => {
     },
   });
 
-  const { data: userInfo } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: () => {
-      const res = ApiClient.getInstance().getUser();
-      return res;
-    },
-  });
-
   return (
     <>
       <div className='pt-20 w-11/12 flex items-center m-auto mb-12'>
@@ -53,7 +47,7 @@ export const MyPage = () => {
           className='w-32 drop-shadow-under'
         />
         <div className='flex flex-col gap-2 ml-5'>
-          <h1 className='font-hanaBold text-[2.7rem]'>{userInfo?.name}</h1>
+          <h1 className='font-hanaBold text-[2.7rem]'>{name}</h1>
           <p
             className='flex items-center text-xl font-hanaMedium cursor-pointer'
             onClick={() => logout()}

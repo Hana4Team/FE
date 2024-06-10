@@ -27,8 +27,6 @@ export const MissionMain = () => {
     },
   });
 
-  console.log(user);
-
   return (
     <>
       <Topbar title='이사미션' />
@@ -45,12 +43,15 @@ export const MissionMain = () => {
               text={s.text}
               status={
                 index + 1 === user.step
-                  ? '진행중'
+                  ? user.stepStatus === 0
+                    ? '시작'
+                    : '진행중'
                   : index + 1 < user.step
                     ? '완료'
                     : '시작'
               }
               userStep={user.step}
+              userStepStatus={user.stepStatus}
             />
           </div>
         ))}

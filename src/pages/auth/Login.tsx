@@ -22,7 +22,10 @@ export const Login = () => {
     },
     onSuccess: (data) => {
       if (data?.success) {
-        data.token && setCookie('token', data.token);
+        if (data.name && data.token) {
+          setCookie('name', data.name);
+          setCookie('token', data.token);
+        }
         navigate('/home');
       } else {
         setRe((prev) => !prev);

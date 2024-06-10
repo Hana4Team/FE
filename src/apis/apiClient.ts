@@ -1,4 +1,3 @@
-import { accountApi } from './interfaces/accountApi';
 import axios, { AxiosInstance } from 'axios';
 import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
@@ -15,11 +14,8 @@ import { SpendListType } from '../types/spend';
 import { spendApi } from './interfaces/spendApi';
 import { BudgetReqType, BudgetResType } from '../types/budget';
 import { budgetApi } from './interfaces/budgetApi';
-import { depositsavingType } from '../types/depositsaving';
 import { HomeType } from '../types/home';
 import { depositsavingApi } from './interfaces/depositsavingApi';
-import { transactionApi } from './interfaces/transactionApi';
-import { SpendType, TransactionHistoryType } from '../types/transaction';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
 import { newsApi } from './interfaces/newsApi';
@@ -28,7 +24,6 @@ import { productsApi } from './interfaces/productsApi';
 import { ProductsType } from '../types/products';
 import { moneyboxApi } from './interfaces/moneyboxApi';
 import { depositsavingType } from '../types/depositsaving';
-import { depositsavingApi } from './interfaces/depositsavingApi';
 import {
   UserType,
   SavePointType,
@@ -43,6 +38,7 @@ import { AlarmType } from '../types/alarm';
 import { moneyBoxType } from '../types/moneyBox';
 import { transactionApi } from './interfaces/transactionApi';
 import {
+  SpendType,
   RemmitanceMoneyBoxType,
   RemmitanceType,
   TransactionHistoryType,
@@ -61,7 +57,7 @@ export class ApiClient
     depositsavingApi,
     newsApi,
     budgetApi,
-    spendApi,
+    spendApi
 {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
@@ -132,26 +128,6 @@ export class ApiClient
     return response.data;
   }
 
-  async postMessage(phoneNumber: string) {
-    const response = await this.axiosInstance.request<{
-      code: string;
-    }>({
-      method: 'post',
-      url: '/users/message',
-      data: { phoneNumber },
-    });
-    return response.data;
-  }
-
-  async postMsgCheck({ code, inputCode }: { code: string; inputCode: string }) {
-    const response = await this.axiosInstance.request<{ check: string }>({
-      method: 'post',
-      url: '/users/msgCheck',
-      data: { code: code, input: inputCode },
-    });
-    return response.data;
-  }
-
   async getUser() {
     const response = await this.axiosInstance.request<UserType>({
       method: 'get',
@@ -168,7 +144,7 @@ export class ApiClient
     }>({
       method: 'put',
       url: '/users/news',
-      });
+    });
     return response.data;
   }
 
@@ -257,7 +233,7 @@ export class ApiClient
       method: 'put',
       url: '/budget/category',
       data: budget,
-      });
+    });
     return response.data;
   }
 
@@ -278,7 +254,7 @@ export class ApiClient
     }>({
       method: 'get',
       url: `/transaction/saving100Check`,
-      });
+    });
     return response.data;
   }
 
@@ -348,7 +324,7 @@ export class ApiClient
     const response = await this.axiosInstance.request<ProductsType[]>({
       method: 'get',
       url: `/products?type=${type}`,
-      });
+    });
     return response.data;
   }
 
@@ -369,7 +345,7 @@ export class ApiClient
       method: 'post',
       url: '/transaction/spend',
       data: spendReq,
-      });
+    });
     return response.data;
   }
 
@@ -377,7 +353,7 @@ export class ApiClient
     const response = await this.axiosInstance.request<ProductsType>({
       method: 'get',
       url: `/products/${productId}`,
-      });
+    });
     return response.data;
   }
 
@@ -404,15 +380,6 @@ export class ApiClient
     return response.data;
   }
 
-  //---------depositsaving---------
-  async getDepositSaving(type: string) {
-    const response = await this.axiosInstance.request<depositsavingType>({
-      method: 'get',
-      url: `/depositsaving?type=${type}`,
-      });
-    return response.data;
-  }
-
   async postRemittanceMoneyBox(
     TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
   ) {
@@ -425,7 +392,7 @@ export class ApiClient
     });
     return response.data;
   }
-  
+
   //---------moneyBox---------
   async getMoneyBox(): Promise<moneyBoxType> {
     const response = await this.axiosInstance.request<moneyBoxType>({

@@ -135,7 +135,10 @@ export const Mission1StartPage = () => {
       {showStepModal && (
         <AlertModal onClose={() => onCloseStepModal()}>
           <div className='flex flex-col font-hanaMedium text-2xl text-center'>
-            <p>미션을 클리어하였습니다!</p>
+            <p>
+              1단계 미션을 <span className='text-hanaDeepGreen'>완료</span>
+              했습니다!
+            </p>
           </div>
         </AlertModal>
       )}
