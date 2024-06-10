@@ -1,8 +1,9 @@
 import { MissionStep } from '../components/molecules/MissionStep';
 import Topbar from '../components/Topbar';
 import { MissionStartHeader } from '../components/molecules/MissionStartHeader';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../apis/apiClient';
+import { useEffect } from 'react';
 
 const step = [
   { title: '내 소비 습관 알기', text: '지난 달 나의 소비 습관을 알아보아요' },
@@ -19,6 +20,7 @@ const step = [
 ];
 
 export const MissionMain = () => {
+  const queryClient = useQueryClient();
   const { data: user, isSuccess } = useQuery({
     queryKey: ['user'],
     queryFn: () => {
@@ -26,6 +28,12 @@ export const MissionMain = () => {
       return res;
     },
   });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['user'],
+    });
+  }, []);
 
   return (
     <>

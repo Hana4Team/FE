@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
 
 interface IProps {
   title: ReactNode;
@@ -18,17 +18,14 @@ export const PasswordForm: FC<IProps> = ({
   checkPwdCondition,
 }) => {
   useEffect(() => {
-    if (step === 6 || step == undefined) {
+    if (step === 6 || step === undefined) {
       inputRef.current.forEach((input) => {
         if (input) {
           input.value = '';
         }
       });
+      focusFirstInput();
     }
-  }, [step, re]);
-
-  useEffect(() => {
-    focusFirstInput();
   }, [step, re]);
 
   const handleInput = (
@@ -46,7 +43,6 @@ export const PasswordForm: FC<IProps> = ({
     }
 
     checkPwdCondition?.();
-    focusFirstInput();
   };
 
   const handleKeyDown = (
@@ -54,7 +50,7 @@ export const PasswordForm: FC<IProps> = ({
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === 'Backspace') {
-      if (!inputRef.current[index]?.value && index >= 0) {
+      if (!inputRef.current[index]?.value && index > 0) {
         inputRef.current[index - 1]?.focus();
       }
     }
@@ -88,7 +84,7 @@ export const PasswordForm: FC<IProps> = ({
             ref={(el) => (inputRef.current[index] = el)}
             onChange={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            onFocus={() => focusFirstInput()}
+            onClick={focusFirstInput}
           />
         ))}
       </div>

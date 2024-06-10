@@ -109,9 +109,21 @@ export const Join = () => {
       else setIsActive(false);
     }
     if (title === 'confirmPwd') {
-      if (confirmPwdRef.current.map((p) => p?.value).join('').length === 6)
+      if (confirmPwdRef.current.map((p) => p?.value).join('').length === 6) {
         setIsActive(true);
-      else setIsActive(false);
+        if (
+          confirmPwdRef.current.map((p) => p?.value).join('') ===
+          inputs.password
+        ) {
+          const updatedConfirmPassword = confirmPwdRef.current
+            .map((p) => p?.value)
+            .join('');
+          setInputs({
+            ...inputs,
+            confirmPassword: updatedConfirmPassword,
+          });
+        }
+      } else setIsActive(false);
     }
   };
 
@@ -121,17 +133,8 @@ export const Join = () => {
   };
 
   const pwdCheck = () => {
-    if (
-      confirmPwdRef.current.map((p) => p?.value).join('') === inputs.password
-    ) {
+    if (inputs.confirmPassword === inputs.password) {
       setIsPwdCorrect(true);
-      const updatedConfirmPassword = confirmPwdRef.current
-        .map((p) => p?.value)
-        .join('');
-      setInputs({
-        ...inputs,
-        confirmPassword: updatedConfirmPassword,
-      });
       setIsActive(true);
       return true;
     } else {
@@ -162,8 +165,8 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 3 && isPhone) {
-      postMessage(inputs.phoneNumber);
       setStep((prev) => prev + 1);
+      postMessage(inputs.phoneNumber);
       setIsActive(false);
     }
     if (step === 4) {
@@ -179,8 +182,7 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 6) {
-      pwdCheck();
-      postJoin(inputs);
+      pwdCheck() && postJoin(inputs);
     }
     if (step === 7) {
       navigate('/home');

@@ -1,12 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { differenceInDays, formatDate } from 'date-fns';
+import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
+import { AlertModal } from '../../components/AlertModal';
 
 export const RoadMap5 = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [showStepModal, setShowStepModal] = useState<boolean>(false);
+  const [showAlarm, setShowAlarm] = useState<boolean>(false);
+  const alarmMsgRef = useRef<string>('');
 
   const { data: roadmap, isSuccess } = useQuery({
     queryKey: ['roadMap5'],
@@ -15,6 +21,67 @@ export const RoadMap5 = () => {
       return res;
     },
   });
+
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getUser();
+      return res;
+    },
+  });
+
+  const { mutate: checkMission, isSuccess: isSuccess0 } = useMutation({
+    mutationKey: ['checkMission'],
+    mutationFn: () => {
+      const res = ApiClient.getInstance().updateMissionCheck();
+      return res;
+    },
+  });
+
+  const { mutate: updateHanaMoney } = useMutation({
+    mutationKey: ['updateHanaMoney'],
+    mutationFn: (isMission: boolean) => {
+      const res = ApiClient.getInstance().updatePoint(isMission);
+      return res;
+    },
+    onSuccess: (data) => {
+      postAlarm(`하나머니 ${data.points}원 적립!`);
+    },
+  });
+
+  const { mutate: postAlarm } = useMutation({
+    mutationKey: ['updateHanaMoney'],
+    mutationFn: (contents: string) => {
+      const res = ApiClient.getInstance().postAlarm(contents);
+      return res;
+    },
+    onSuccess: (_, variables) => {
+      checkMission();
+      setShowAlarm(true);
+      alarmMsgRef.current = variables;
+    },
+  });
+
+  useEffect(() => {
+    if (!isSuccess0 && userInfo?.step === 5 && userInfo.stepStatus === 2) {
+      setShowStepModal(true);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['userInfo', 'roadMap5'],
+    });
+  }, []);
+
+  const onCloseStepModal = async () => {
+    try {
+      updateHanaMoney(true);
+      setShowStepModal(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const moveToTermination = () => {
     isSuccess &&
@@ -37,6 +104,23 @@ export const RoadMap5 = () => {
     <>
       {isSuccess && (
         <>
+          {showAlarm && (
+            <AlarmAnimation
+              message={alarmMsgRef.current}
+              showAlarm={showAlarm}
+              onClickShowAlarm={(status: boolean) => setShowAlarm(status)}
+            />
+          )}
+          {showStepModal && (
+            <AlertModal onClose={() => onCloseStepModal()}>
+              <div className='flex flex-col font-hanaMedium text-2xl text-center'>
+                <p>
+                  5단계 미션을 <span className='text-hanaDeepGreen'>완료</span>
+                  했습니다!
+                </p>
+              </div>
+            </AlertModal>
+          )}
           <Topbar
             title={roadmap.productName}
             onClick={() => navigate('/mission')}
@@ -46,7 +130,7 @@ export const RoadMap5 = () => {
               src='/images/pado.svg'
               className='w-full absolute top-[100px] z-10'
             />
-            <div className='flex flex-col items-center font-hanaMedium py-20 relative z-10'>
+            <div className='flex flex-col items-center font-hanaMedium py-[68px] relative z-10'>
               <div className='text-2xl'>
                 예금 만기까지 {differenceInDays(roadmap.endDate, Date.now())}일
                 남았습니다!
@@ -60,11 +144,14 @@ export const RoadMap5 = () => {
             <div className='relative ml-16 w-8/12 h-1 flex justify-center items-center text-center'>
               <img
                 src='/images/별돌이까꿍.svg'
-                className={`absolute left-[${Math.floor(
-                  (differenceInDays(new Date(), roadmap.startDate) /
-                    differenceInDays(roadmap.endDate, roadmap.startDate)) *
-                    100
-                )}%] top-[92px] w-20 z-10 rotate-90 `}
+                className={`absolute top-[92px] w-20 z-10 rotate-90 `}
+                style={{
+                  left: `${Math.floor(
+                    (differenceInDays(new Date(), roadmap.startDate) /
+                      differenceInDays(roadmap.endDate, roadmap.startDate)) *
+                      100
+                  )}%`,
+                }}
               />
             </div>
             <div className='relative top-[153px] flex flex-col items-center justify-center z-10'>
@@ -75,10 +162,10 @@ export const RoadMap5 = () => {
               </div>
             </div>
 
-            <div className='flex items-center justify-between font-hanaRegular bg-white rounded-3xl m-5 px-10 py-8 relative z-10 top-[180px]'>
+            <div className='flex items-center justify-between font-hanaRegular bg-white rounded-3xl m-5 px-10 py-6 relative z-10 top-[180px]'>
               <div className='text-xl'>{roadmap.startDate}</div>
               <div className='font-hanaMedium text-2xl'>예금 가입</div>
-              <div className='flex flex-col items-end'>
+              <div className='flex flex-col items-end gap-1'>
                 <div className='font-hanaBold text-2xl text-hanaGreen'>
                   {roadmap.initialAmount.toLocaleString()}
                 </div>
