@@ -7,7 +7,7 @@
   src:
     local('Hana2.0 H'),
     url('./assets/fonts/Hana2-Heavy.otf') format('opentype'),
-    url('./assets/fonts/Hana2-Heavy.ttf') format('ttf');
+    url('./assets/fonts/Hana2-Heavy.ttf') format('truetype');
 }
 
 @font-face {
@@ -17,15 +17,15 @@
     url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.otf')
       format('opentype'),
     url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.ttf')
-      format('ttf');
+      format('truetype');
 }
 
 @font-face {
   font-family: 'Hana-CM';
   src:
     local('Hana2.0 CM'),
-    url('../assets/fonts/Hana2-CM.otf') format('opentype'),
-    url('../assets/fonts/Hana2-CM.ttf') format('truetype');
+    url('./assets/fonts/Hana2-CM.otf') format('opentype'),
+    url('./assets/fonts/Hana2-CM.ttf') format('truetype');
 }
 
 @font-face {
@@ -48,8 +48,8 @@
   font-family: 'Hana-Light';
   src:
     local('Hana2.0 L'),
-    url('../assets/fonts/Hana2-Light.otf') format('opentype'),
-    url('../assets/fonts/Hana2-Light.ttf') format('truetype');
+    url('./assets/fonts/Hana2-Light.otf') format('opentype'),
+    url('./assets/fonts/Hana2-Light.ttf') format('truetype');
 }
 
 html,
