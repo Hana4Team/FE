@@ -15,6 +15,7 @@ import {
 import { AccountReqType, AccountType } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { AlarmType } from '../types/alarm';
 import { moneyBoxApi } from './interfaces/moneyBoxApi';
 import { moneyBoxType } from '../types/moneyBox';
 import { transactionApi } from './interfaces/transactionApi';
@@ -124,6 +125,14 @@ export class ApiClient
     return response.data;
   }
 
+  async getHanaMoney() {
+    const response = await this.axiosInstance.request<{ points: number }>({
+      method: 'get',
+      url: '/users/point',
+    });
+    return response.data;
+  }
+
   //---------account---------
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
@@ -144,6 +153,20 @@ export class ApiClient
       url: `/transaction/${accountId}
       ?year=${year}&month=${month}`,
     });
+    return response.data;
+  }
+
+  async postOpendMoneyBox(password: string, productsId: number) {
+    const response = await this.axiosInstance.request<{
+      accountId: number;
+      moneyboxId: number;
+    }>({
+      method: 'post',
+      url: '/account/moneybox',
+      data: {
+        password,
+        productsId,
+      }});
     return response.data;
   }
 
@@ -199,6 +222,14 @@ export class ApiClient
     return response.data;
   }
 
+  async getAlarm() {
+    const response = await this.axiosInstance.request<AlarmType[]>({
+      method: 'get',
+      url: '/alarm',
+    });
+    return response.data;
+  }
+
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
   }
@@ -229,7 +260,6 @@ export class ApiClient
         }
 
         config.headers['Content-Type'] = 'application/json';
-
         return config;
       },
       (error) => {

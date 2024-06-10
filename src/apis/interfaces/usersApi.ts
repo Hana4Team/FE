@@ -18,4 +18,5 @@ export interface usersApi {
   updateMissionCheck(): Promise<StepType>;
   updatePoint(isMission: boolean): Promise<SavePointType>;
   getUser(): Promise<UserType>;
+  getHanaMoney(): Promise<{ points: number }>;
 }
