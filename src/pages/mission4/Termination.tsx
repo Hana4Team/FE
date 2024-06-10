@@ -120,6 +120,7 @@ export const Termination = () => {
     clickedBalance: number,
     clickedName: string
   ) => {
+    console.log(clickedBalance, clickedName);
     setShowModal(false);
     setDate({
       ...data,

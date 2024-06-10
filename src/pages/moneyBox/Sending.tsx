@@ -135,6 +135,7 @@ export const Sending = () => {
     clickedBalance: number,
     clickedName: string
   ) => {
+    console.log(clickedAccountId, clickedName);
     SetData({
       ...data,
       sendAccount: clickedAccountNumber,

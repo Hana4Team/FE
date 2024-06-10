@@ -15,7 +15,7 @@ export const AlarmAnimation: FC<IProps> = ({
   const [activeAnimation, setActiveAnimation] = useState<boolean>(true);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer;
     if (activeAnimation) {
       timer = setTimeout(() => {
         setActiveAnimation(false);
@@ -34,7 +34,7 @@ export const AlarmAnimation: FC<IProps> = ({
     <div
       className={`fixed max-w-[500px] w-full z-[60] ${activeAnimation ? 'animate-slidedown' : 'animate-slideup'}`}
     >
-      <Alarm message={message} />
+      <Alarm contents={message} createdAt={new Date()} />
     </div>
   );
 };

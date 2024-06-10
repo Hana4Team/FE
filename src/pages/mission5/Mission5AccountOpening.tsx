@@ -11,7 +11,7 @@ import { ApiClient } from '../../apis/apiClient';
 import { add, format } from 'date-fns';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
 import { calMaturitDate } from '../../utils/calMaturitDate';
-import { error } from 'console';
+
 type userInfo = {
   maturitDate: number;
   maturitDateUnit: string;
