@@ -365,7 +365,7 @@ export class ApiClient
     }>({
       method: 'get',
       url: '/transaction/waste',
-    });
+      });
     return response.data;
   }
 

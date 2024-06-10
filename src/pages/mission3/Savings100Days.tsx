@@ -1,15 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Calendar } from '../../components/organisms/Calendar';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { differenceInDays, formatDate } from 'date-fns';
+import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
+import { AlertModal } from '../../components/AlertModal';
 
 export const Savings100Days = () => {
   const navigate = useNavigate();
-  const startDate = useRef<string>('');
-  const endDate = useRef<string>('');
+  const queryClient = useQueryClient();
+  const [showStepModal, setShowStepModal] = useState<boolean>(false);
+  const [showAlarm, setShowAlarm] = useState<boolean>(false);
+  const alarmMsgRef = useRef<string>('');
 
   const { data: saving100, isSuccess } = useQuery({
     queryKey: ['saving100'],
@@ -26,6 +30,67 @@ export const Savings100Days = () => {
       return res;
     },
   });
+
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getUser();
+      return res;
+    },
+  });
+
+  const { mutate: checkMission, isSuccess: isSuccess0 } = useMutation({
+    mutationKey: ['checkMission'],
+    mutationFn: () => {
+      const res = ApiClient.getInstance().updateMissionCheck();
+      return res;
+    },
+  });
+
+  const { mutate: updateHanaMoney } = useMutation({
+    mutationKey: ['updateHanaMoney'],
+    mutationFn: (isMission: boolean) => {
+      const res = ApiClient.getInstance().updatePoint(isMission);
+      return res;
+    },
+    onSuccess: (data) => {
+      postAlarm(`하나머니 ${data.points}원 적립!`);
+    },
+  });
+
+  const { mutate: postAlarm } = useMutation({
+    mutationKey: ['updateHanaMoney'],
+    mutationFn: (contents: string) => {
+      const res = ApiClient.getInstance().postAlarm(contents);
+      return res;
+    },
+    onSuccess: (_, variables) => {
+      checkMission();
+      setShowAlarm(true);
+      alarmMsgRef.current = variables;
+    },
+  });
+
+  useEffect(() => {
+    if (!isSuccess0 && userInfo?.step === 3 && userInfo.stepStatus === 2) {
+      setShowStepModal(true);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['userInfo', 'saving100', 'saving100Check'],
+    });
+  }, []);
+
+  const onCloseStepModal = async () => {
+    try {
+      updateHanaMoney(true);
+      setShowStepModal(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const moveToTermination = () => {
     isSuccess &&
@@ -48,6 +113,24 @@ export const Savings100Days = () => {
     <>
       {isSuccess && isCheckSuccess && (
         <>
+          {showAlarm && (
+            <AlarmAnimation
+              message={alarmMsgRef.current}
+              showAlarm={showAlarm}
+              onClickShowAlarm={(status: boolean) => setShowAlarm(status)}
+            />
+          )}
+          {showStepModal && (
+            <AlertModal onClose={() => onCloseStepModal()}>
+              <div className='flex flex-col font-hanaMedium text-2xl text-center'>
+                <p>
+                  3단계 미션을 <span className='text-hanaDeepGreen'>완료</span>
+                  했습니다!
+                </p>
+              </div>
+            </AlertModal>
+          )}
+
           <Topbar
             title={saving100.productName}
             onClick={() => navigate('/mission')}
@@ -76,11 +159,14 @@ export const Savings100Days = () => {
                       </div>
                       <div className='absolute bg-gray-100 w-[100%] h-5 rounded-lg border-2'></div>
                       <div
-                        className={`absolute bg-hanaGreen w-[${Math.floor(
-                          (differenceInDays(new Date(), saving100.startDate) /
-                            100) *
-                            100
-                        )}%] h-5 rounded-lg`}
+                        className={`absolute bg-hanaGreen h-5 rounded-lg`}
+                        style={{
+                          width: `${Math.floor(
+                            (differenceInDays(new Date(), saving100.startDate) /
+                              100) *
+                              100
+                          )}%`,
+                        }}
                       ></div>
                     </div>
                   </div>

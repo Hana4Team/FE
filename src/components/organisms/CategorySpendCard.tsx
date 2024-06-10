@@ -27,7 +27,6 @@ export const CategorySpendCard: FC<Iprops> = ({
 }) => {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [text, setText] = useState<string>('전체보기');
-  const [re, setRe] = useState<boolean>(false);
 
   Chart.register(ArcElement);
 
@@ -111,61 +110,68 @@ export const CategorySpendCard: FC<Iprops> = ({
           />
         )}
       </div>
-      {/* 차트  */}
-      <div className='flex flex-col w-full justify-center items-center'>
-        {/* 차트 영역 */}
-        <div className='z-10'>
-          <Doughnut
-            data={data}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  display: true,
-                  position: 'right',
-                },
-              },
-            }}
-            style={{
-              position: 'relative',
-              right: '0px',
-            }}
-            className='mb-6'
-          />
+      {datas.length == 0 && (
+        <div className='w-full h-40 flex justify-center items-center font-hanaMedium text-2xl whitespace-pre-wrap'>
+          <p className='flex flex-col'>지출 내역이 존재하지 않습니다.</p>
         </div>
-        {datas.slice(0, Math.min(datas.length, 4)).map((item, idx) => (
-          <CategoryItem
-            key={idx}
-            color={colors[idx]}
-            name={item.type}
-            balance={item.amount}
-          />
-        ))}
-        {extra && (
-          <>
-            {!showAll && (
-              <CategoryItem color={colors[4]} name='기타' balance={extra} />
-            )}
-            {showAll &&
-              datas
-                .slice(5)
-                .map((item, idx) => (
-                  <CategoryItem
-                    key={idx}
-                    color={colors[4]}
-                    name={item.type}
-                    balance={item.amount}
-                  />
-                ))}
-            <div
-              className='flex w-full mt-4 h-14 justify-center items-center border font-hanaRegular text-2xl rounded-xl'
-              onClick={() => onClickButton()}
-            >
-              {text}
-            </div>
-          </>
-        )}
-      </div>
+      )}
+      {datas.length > 1 && (
+        // 차트
+        <div className='flex flex-col w-full justify-center items-center'>
+          {/* 차트 영역 */}
+          <div className='z-10'>
+            <Doughnut
+              data={data}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: 'right',
+                  },
+                },
+              }}
+              style={{
+                position: 'relative',
+                right: '0px',
+              }}
+              className='mb-6'
+            />
+          </div>
+          {datas.slice(0, Math.min(datas.length, 4)).map((item, idx) => (
+            <CategoryItem
+              key={idx}
+              color={colors[idx]}
+              name={item.type}
+              balance={item.amount}
+            />
+          ))}
+          {extra && (
+            <>
+              {!showAll && (
+                <CategoryItem color={colors[4]} name='기타' balance={extra} />
+              )}
+              {showAll &&
+                datas
+                  .slice(5)
+                  .map((item, idx) => (
+                    <CategoryItem
+                      key={idx}
+                      color={colors[4]}
+                      name={item.type}
+                      balance={item.amount}
+                    />
+                  ))}
+              <div
+                className='flex w-full mt-4 h-14 justify-center items-center border font-hanaRegular text-2xl rounded-xl'
+                onClick={() => onClickButton()}
+              >
+                {text}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

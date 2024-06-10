@@ -50,7 +50,6 @@ export const Mission1StartPage = () => {
       const res = ApiClient.getInstance().getUser();
       return res;
     },
-    enabled: false,
   });
 
   const { mutate: checkMission, isSuccess: isSuccess0 } = useMutation({
@@ -79,13 +78,15 @@ export const Mission1StartPage = () => {
       return res;
     },
     onSuccess: (_, variables) => {
+      checkMission();
       setShowAlarm(true);
-      alarmMsgRef.current = `하나머니 ${variables}원 적립!`;
+      alarmMsgRef.current = variables;
     },
   });
 
   const [datas, setDatas] = useState<SpendType[]>([]);
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
+  const [initial, setInitial] = useState<boolean>(false);
   const [showAlarm, setShowAlarm] = useState<boolean>(false);
   const alarmMsgRef = useRef<string>('');
 
@@ -105,12 +106,7 @@ export const Mission1StartPage = () => {
   }, [isSuccessSpend]);
 
   useEffect(() => {
-    if (
-      !isSuccess0 &&
-      userQuery.data?.step === 1 &&
-      userQuery.data.stepStatus === 2
-    ) {
-      checkMission();
+    if (userQuery.data?.step === 1 && userQuery.data.stepStatus === 2) {
       setShowStepModal(true);
     }
   }, [userQuery.data]);
@@ -129,6 +125,15 @@ export const Mission1StartPage = () => {
       queryKey: ['budget', 'budget2', 'userInfo'],
     });
   }, []);
+
+  useEffect(() => {
+    if (initial) {
+      queryClient.invalidateQueries({
+        queryKey: ['userInfo'],
+      });
+      setInitial(false);
+    }
+  }, [initial]);
 
   return (
     <div className='relative w-full'>
@@ -155,7 +160,11 @@ export const Mission1StartPage = () => {
         title={`지난 달 지출을 확인하고\n이번 달 예산을 입력해보아요`}
       />
       <div className='flex flex-col gap-6'>
-        <BudgetInfo month={dateMonth} balance={budgetData?.sum} />
+        <BudgetInfo
+          month={dateMonth}
+          balance={budgetData?.sum}
+          initialFunc={() => setInitial(true)}
+        />
         <CategorySpendCard
           datas={datas}
           year={dateYear}
