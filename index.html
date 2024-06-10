@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#28B2A5" />
     <link rel="manifest" href="/manifest.json" />
     <title>똑똑하나</title>
   </head>
@@ -24,6 +25,24 @@
       } else {
         console.log('Service workers are not supported.');
       }
+
+      let defferedPrompt;
+      //설치 가능한지 확인
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        defferedPrompt = e;
+      });
+
+      //특정 버튼 클릭 시에 앱 설치
+      btn.addEventListener('click', (e) => {
+        defferedPrompt.prompt();
+        defferedPrompt.userChoice.then((res) => {
+          if (res === 'accepted') {
+            console.log('The app has been installed');
+          }
+          defferedPromts = null;
+        });
+      });
     </script>
   </body>
 </html>

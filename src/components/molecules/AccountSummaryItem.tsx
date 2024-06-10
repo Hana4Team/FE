@@ -15,7 +15,7 @@ export const AccountSummaryItem: FC<IProps> = ({
   const navigate = useNavigate();
 
   const movePageHandler = () => {
-    if (title === '머니박스') navigate('/moneyBox');
+    if (title === '머니박스 통장') navigate('/moneyBox');
     else if (title === '하나머니') return;
     else navigate('/account');
   };
