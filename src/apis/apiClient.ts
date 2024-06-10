@@ -12,16 +12,23 @@ import {
   LoginType,
   MsgCheckType,
 } from '../types/users';
-import {
-  AccountReqType,
-  AccountType,
-  AccountDetailType,
-} from '../types/account';
+import { AccountReqType, AccountType } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { moneyBoxApi } from './interfaces/moneyBoxApi';
+import { moneyBoxType } from '../types/moneyBox';
+import { transactionApi } from './interfaces/transactionApi';
+import {
+  RemmitanceMoneyBoxType,
+  RemmitanceType,
+  TransactionHistoryType,
+} from '../types/transaction';
+
 const TOKEN = getCookie('token');
 
-export class ApiClient implements usersApi, accountApi, alarmApi {
+export class ApiClient
+  implements usersApi, accountApi, moneyBoxApi, transactionApi, alarmApi
+{
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
 
@@ -91,6 +98,24 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
     return response.data;
   }
 
+  async postMessage(phoneNumber: string) {
+    const response = await this.axiosInstance.request<number>({
+      method: 'post',
+      url: '/users/message',
+      data: { phoneNumber },
+    });
+    return response.data;
+  }
+
+  async postMsgCheck({ code, inputCode }: { code: number; inputCode: number }) {
+    const response = await this.axiosInstance.request<string>({
+      method: 'post',
+      url: '/users/msgCheck',
+      data: { code: code, input: inputCode },
+    });
+    return response.data;
+  }
+
   async getUser() {
     const response = await this.axiosInstance.request<UserType>({
       method: 'get',
@@ -103,17 +128,63 @@ export class ApiClient implements usersApi, accountApi, alarmApi {
   async getAccount(type: AccountReqType) {
     const response = await this.axiosInstance.request<AccountType[]>({
       method: 'get',
-      url: '/account',
-      data: type,
+      url: `/account?depositWithdrawalAccount=${type.depositWithdrawalAccount}
+      &depositAccount=${type.depositAccount}&
+      &saving100Account=${type.saving100Account}&
+      &savingAccount=${type.savingsAccount}&
+      &moneyboxAccount=${type.moneyboxAccount}`,
     });
     return response.data;
   }
 
-  async getAccountDetail(accountId: number, year: number, month: number) {
-    const response = await this.axiosInstance.request<AccountDetailType>({
+  //---------transaction---------
+  async getTransactionHistory(accountId: number, year: number, month: number) {
+    const response = await this.axiosInstance.request<TransactionHistoryType>({
       method: 'get',
-      url: `/account/${accountId}
+      url: `/transaction/${accountId}
       ?year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
+  async getMoneyBoxHistory(type: string, year: number, month: number) {
+    const response = await this.axiosInstance.request<TransactionHistoryType>({
+      method: 'get',
+      url: `/transaction/moneybox?type=${type}
+      &year=${year}&month=${month}`,
+    });
+    return response.data;
+  }
+
+  async postRemittance(TransactionSaveReq: RemmitanceType) {
+    console.log(TransactionSaveReq);
+    const response = await this.axiosInstance.request<{
+      transactionId: number;
+    }>({
+      method: 'post',
+      url: '/transaction',
+      data: TransactionSaveReq,
+    });
+    return response.data;
+  }
+
+  async postRemittanceMoneyBox(
+    TransactionMoneyboxSaveReq: RemmitanceMoneyBoxType
+  ) {
+    const response = await this.axiosInstance.request<{
+      transactionId: number;
+    }>({
+      method: 'post',
+      url: '/transaction/moneybox',
+      data: TransactionMoneyboxSaveReq,
+    });
+    return response.data;
+  }
+  //---------moneyBox---------
+  async getMoneyBox(): Promise<moneyBoxType> {
+    const response = await this.axiosInstance.request<moneyBoxType>({
+      method: 'get',
+      url: '/moneybox',
     });
     return response.data;
   }
