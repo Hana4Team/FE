@@ -11,7 +11,7 @@ export const Landing = () => {
       setVisible(true);
     }, 1500);
     const timeout = setTimeout(() => {
-      if (getCookie('phone')) {
+      if (getCookie('phoneNumber')) {
         navigate('/home');
       } else {
         navigate('/join');
