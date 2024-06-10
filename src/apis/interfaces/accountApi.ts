@@ -1,4 +1,5 @@
 import {
+  AccountDelType,
   AccountPwdCheckType,
   AccountReqType,
   AccountType,
@@ -31,4 +32,5 @@ export interface accountApi {
     data: OpenedDepositSavingReqType,
     initialAmount: number
   ): Promise<OpendDepositSavingSuccessResType>;
+  deleteAccount(reqData: AccountDelType): Promise<{ message: string }>;
 }

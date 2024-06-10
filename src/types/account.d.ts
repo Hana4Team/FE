@@ -1,3 +1,9 @@
+export type TransactionType = {
+  isSender: boolean;
+  title: string;
+  amount: number;
+  createdAt: Date;
+};
 export type AccountType = {
   accountId: number;
   name: string;
@@ -14,6 +20,10 @@ export type AccountReqType = {
 export type AccountPwdCheckType = {
   accountNumber: string;
   password: string;
+};
+export type AccountDelType = {
+  deleteAccountId: number;
+  depositAccountId: number;
 };
 export type OpenedDepositSavingReqType = {
   payment: number;

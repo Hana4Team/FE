@@ -12,7 +12,6 @@ export type RemmitanceMoneyBoxType = {
   senderMoneybox: string;
   recipientMoneybox: string;
 };
-
 export type TransactionHistoryType = {
   name: string;
   accountNumber: string;
@@ -24,4 +23,10 @@ export type TransactionType = {
   title: string;
   amount: number;
   dateTime: Date;
+};
+export type SpendType = {
+  amount: number;
+  senderTitle: string;
+  senderAccountType: string;
+  spendType: string;
 };

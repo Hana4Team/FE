@@ -1,4 +1,5 @@
 import {
+  SpendType,
   RemmitanceMoneyBoxType,
   RemmitanceType,
   TransactionHistoryType,
@@ -10,6 +11,13 @@ export interface transactionApi {
     year: number,
     month: number
   ): Promise<TransactionHistoryType>;
+  getSaving100Check(): Promise<{
+    successCount: number;
+    failCount: number;
+  }>;
+  postSpend(
+    spendReq: SpendType
+  ): Promise<{ transactionId: number; spendId: number }>;
   getMoneyBoxHistory(
     type: string,
     year: number,

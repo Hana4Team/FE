@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
   const isExistToken = getCookie('token');
 
-  const fixedList = ['/roadmap4', '/roadmap5', '/myhome', '/savings100Days'];
+  const fixedList = ['/roadmap4', '/roadmap5', '/myhome', '/savings100days'];
 
   return (
     <div>
