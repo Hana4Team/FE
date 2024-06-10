@@ -14,8 +14,8 @@
   font-family: 'Hana-Bold';
   src:
     local('Hana2.0 B'),
-    url('./assets/fonts/Hana2-Bold.otf') format('otf'),
-    url('./assets/fonts/Hana2-Bold.ttf') format('ttf');
+    url('/assets/fonts/Hana2-Bold.otf') format('otf'),
+    url('/assets/fonts/Hana2-Bold.ttf') format('ttf');
 }
 
 @font-face {
