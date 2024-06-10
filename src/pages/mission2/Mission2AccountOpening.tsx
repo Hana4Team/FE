@@ -59,7 +59,6 @@ export const Mission2AccountOpening = () => {
     onSuccess: (data) => {
       realCertificatioNnumber.current = data.code;
       setCurrentNumber((prev) => prev + 1);
-      setBtnActive(false);
     },
   });
 
@@ -94,6 +93,7 @@ export const Mission2AccountOpening = () => {
 
   const nextHandler = () => {
     if (currentNumber === 1) {
+      setBtnActive(false);
       if (
         btnActive &&
         info.name &&
@@ -105,7 +105,6 @@ export const Mission2AccountOpening = () => {
         postMessage.mutate(info.phone_number.split('-').join(''));
         return;
       } else {
-        setBtnActive(false);
         return;
       }
     }

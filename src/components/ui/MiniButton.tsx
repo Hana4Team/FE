@@ -26,18 +26,18 @@ export const MiniButton: FC<IProps> = ({
   });
 
   const onClick = () => {
-    if (step === 1 && userStepStatus === 0) {
+    if (step === 1 && userStep === 1 && userStepStatus === 0) {
       missionStart();
-    } else if (step === 2 && userStepStatus !== 0) {
+    } else if (step === 2 && userStep === 2 && userStepStatus !== 0) {
       navigate('/moneyBox');
       return;
-    } else if (step === 3 && userStepStatus !== 0) {
+    } else if (step === 3 && userStep === 3 && userStepStatus !== 0) {
       navigate('/savings100Days');
       return;
-    } else if (step === 4 && userStepStatus !== 0) {
+    } else if (step === 4 && userStep === 4 && userStepStatus !== 0) {
       navigate('/roadmap4');
       return;
-    } else if (step === 5 && userStepStatus !== 0) {
+    } else if (step === 5 && userStep === 5 && userStepStatus !== 0) {
       navigate('/roadmap5');
       return;
     }

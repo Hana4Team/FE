@@ -24,6 +24,8 @@ export const CategoryEditItem: FC<IProps> = ({
   };
 
   const onBlur = () => {
+    inputRef.current!.value = inputRef.current!.value.replace(/[^0-9]/g, '');
+
     if (inputRef.current!.value == '') {
       inputRef.current!.value = '0';
     }
@@ -32,7 +34,6 @@ export const CategoryEditItem: FC<IProps> = ({
   };
 
   useEffect(() => {
-    console.log('값변경', balance);
     inputRef.current!.value = balance.toString();
   }, [balance]);
 

@@ -34,7 +34,7 @@ export const AlarmAnimation: FC<IProps> = ({
     <div
       className={`fixed max-w-[500px] w-full z-[60] ${activeAnimation ? 'animate-slidedown' : 'animate-slideup'}`}
     >
-      <Alarm contents={message} createdAt={new Date()} />
+      <Alarm contents={message} createdAt={new Date()} isAlarm={true} />
     </div>
   );
 };

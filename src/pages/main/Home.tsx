@@ -52,9 +52,7 @@ export const Home = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ['userInfo'],
-    });
+    queryClient.invalidateQueries({ queryKey: ['userInfo'] });
   }, []);
 
   return (
