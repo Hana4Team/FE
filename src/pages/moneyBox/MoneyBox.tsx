@@ -16,6 +16,14 @@ export const MoneyBox = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [showStepModal, setShowStepModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showChoiceModal, setShowChoiceModal] = useState<boolean>(false);
+  const [clickedName, setClickedName] = useState<string>('파킹');
+  const [showAlarm, setShowAlarm] = useState<boolean>(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [checkExpense, setCheckExpense] = useState<boolean>(false);
+  const alarmMsgRef = useRef<string>('');
 
   const locationState = location.state as {
     prev: boolean;
@@ -73,21 +81,27 @@ export const MoneyBox = () => {
     if (!isSuccess0 && userInfo?.step === 2 && userInfo.stepStatus === 2) {
       checkMission();
       setShowStepModal(true);
+      setCheckExpense(true);
     }
   }, [userInfo]);
 
+  const { data: waste, isSuccess: wasteSuccess } = useQuery({
+    queryKey: ['waste'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getWaste();
+      return res;
+    },
+    enabled: checkExpense,
+  });
+
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+    if (
+      userInfo?.step !== 2 ||
+      (userInfo.step === 2 && userInfo.stepStatus !== 2)
+    )
+      setCheckExpense(false);
   }, []);
-
-  const [showStepModal, setShowStepModal] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showChoiceModal, setShowChoiceModal] = useState<boolean>(false);
-  const [clickedName, setClickedName] = useState<string>('파킹');
-  const [showAlarm, setShowAlarm] = useState<boolean>(false);
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  const [checkExpense, setCheckExpense] = useState<boolean>(true);
-  const alarmMsgRef = useRef<string>('');
 
   const openChoiceModalHandler = () => setShowChoiceModal(true);
   const closeChoiceModalHandler = () => {
@@ -106,7 +120,6 @@ export const MoneyBox = () => {
     try {
       updateHanaMoney(true);
       setShowStepModal(false);
-      // setCheckExpense(true);
     } catch (e) {
       console.log(e);
     }
@@ -299,10 +312,12 @@ export const MoneyBox = () => {
         <MdAccountBalance size={22} color='#FFCE56' />
         통장쪼개기로 적정소비 도전하기!
       </div>
-      {checkExpense && (
+      {wasteSuccess && checkExpense && (
         <div className='text-center bg-white mb-4 font-hanaMedium text-2xl py-5 px-3'>
           당신의 과소비지수는{' '}
-          <span className='font-hanaBold text-red-600'>{'과소비'}</span>
+          <span className='font-hanaBold text-hanaDeepGreen'>
+            {waste?.wasteType}
+          </span>
           입니다.
           <p className='text-lg text-gray-500 font-hanaRegular text-center mt-2 leading-relaxed'>
             과소비지수란 월급에서 저축하는 금액을 뺀 금액을 월급으로 나누는
