@@ -10,6 +10,11 @@ export interface transactionApi {
     year: number,
     month: number
   ): Promise<TransactionHistoryType>;
+  getMoneyBoxHistory(
+    type: string,
+    year: number,
+    month: number
+  ): Promise<TransactionHistoryType>;
   postRemittance(TransactionSaveReq: RemmitanceType): Promise<{
     transactionId: number;
   }>;

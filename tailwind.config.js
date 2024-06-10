@@ -89,6 +89,22 @@ export default {
             transform: 'translate3d(0, 0, 0)',
           },
         },
+        'slide-down': {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(0, 60%, 0)',
+          },
+        },
+        'slide-up': {
+          '0%': {
+            transform: 'translate3d(0, 0, 0)',
+          },
+          '100%': {
+            transform: 'translate3d(0, -200%, 0)',
+          },
+        },
       },
       animation: {
         fadein1: 'fade-in 1.5s ease-in-out 0.5s 1',
@@ -98,6 +114,8 @@ export default {
         fadeinbounceup: 'fade-in-bounceup 1s ease-in-out 1s 1',
         tada: 'tada 1s ease-in-out 0.25s 1',
         flyinup: 'fly-in-up 0.6s ease-in-out 0.25s 1',
+        slidedown: 'slide-down 1s forwards',
+        slideup: 'slide-up 1.3s forwards',
       },
     },
     minHeight: {

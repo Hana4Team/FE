@@ -7,7 +7,8 @@ interface Iprops {
   balance?: number;
   color1: string;
   color2: string;
-  onClick?: () => void;
+  onClick: (name: string) => void;
+  onClick2: () => void;
   onClickQuestion?: () => void;
   isLimit?: boolean;
 }
@@ -18,6 +19,7 @@ export const MoneyBoxItem: FC<Iprops> = ({
   color1,
   color2,
   onClick,
+  onClick2,
   onClickQuestion,
   isLimit,
 }) => {
@@ -25,6 +27,7 @@ export const MoneyBoxItem: FC<Iprops> = ({
     <div className='flex h-[10rem]'>
       <div
         className={`flex flex-col justify-between w-full bg-[#${color1}] p-6 font-hanaMedium rounded-l-2xl`}
+        onClick={() => onClick2()}
       >
         <div className='flex flex-row gap-4'>
           <p className='text-xl'>{title}</p>
@@ -45,7 +48,7 @@ export const MoneyBoxItem: FC<Iprops> = ({
       </div>
       <div
         className={`flex flex-col justify-end items-end w-28 bg-[#${color2}] rounded-r-2xl p-5 font-hanaMedium cursor-pointer`}
-        onClick={() => onClick!()}
+        onClick={() => onClick(title)}
       >
         <IoIosArrowRoundForward size={20} />
         금액이동

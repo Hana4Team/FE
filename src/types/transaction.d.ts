@@ -23,5 +23,5 @@ export type TransactionType = {
   isSender: boolean;
   title: string;
   amount: number;
-  createdAt: Date;
+  dateTime: Date;
 };

@@ -15,3 +15,13 @@ export type AccountPwdCheckType = {
   accountNumber: string;
   password: string;
 };
+export type OpenedDepositSavingReqType = {
+  payment: number;
+  endDate: string;
+  productsId: number;
+  withdrawalAccountId: number;
+};
+export type OpendDepositSavingSuccessResType = {
+  depositSavingId: number;
+  accountId: number;
+};

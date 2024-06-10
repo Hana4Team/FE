@@ -35,12 +35,14 @@ export const AccountCheck: FC<IProps> = ({
           {interest.toFixed(2)} %
         </span>
       </div>
-      {automatic_payment_date && (
+      {automatic_payment_money && (
         <div className='flex justify-between font-hanaRegular text-2xl'>
           자동이체
           <span className='font-hanaLight'>
-            매월 {automatic_payment_date}일(
-            {automatic_payment_money?.toLocaleString('ko-KR')}원)
+            {automatic_payment_date
+              ? `매월 ${automatic_payment_date}일 `
+              : '매일 '}
+            ({automatic_payment_money?.toLocaleString('ko-KR')}원)
           </span>
         </div>
       )}
