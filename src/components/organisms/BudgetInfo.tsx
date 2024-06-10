@@ -56,6 +56,7 @@ export const BudgetInfo: FC<Iprops> = ({
   }, [isSuccessUpdate]);
 
   useEffect(() => {
+    console.log(balance);
     setValue(balance?.toLocaleString());
   }, [balance]);
 

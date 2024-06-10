@@ -33,7 +33,7 @@ export const Mission1StartPage = () => {
   });
 
   const { data: budgetData } = useQuery({
-    queryKey: ['budget'],
+    queryKey: ['budget13'],
     queryFn: () => {
       const res = ApiClient.getInstance().getTotalBudget();
       return res;
@@ -129,6 +129,8 @@ export const Mission1StartPage = () => {
       console.log(e);
     }
   };
+
+  console.log(budgetData);
 
   return (
     <>
