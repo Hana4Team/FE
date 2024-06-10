@@ -60,6 +60,7 @@ export const MyPage = () => {
       <div className='flex flex-col items-center gap-7'>
         {hanaMoney && (
           <AccountSummaryItem
+            accountId={1}
             title='하나머니'
             totalMoney={hanaMoney.points}
             icons='icons/piggybank.svg'
@@ -69,6 +70,7 @@ export const MyPage = () => {
           accounts.map((item: AccountType) => (
             <AccountSummaryItem
               key={item.accountId}
+              accountId={item.accountId}
               title={item.name}
               totalMoney={item.balance}
               icons={

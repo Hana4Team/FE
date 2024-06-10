@@ -32,6 +32,7 @@ export const CategoryEditItem: FC<IProps> = ({
   };
 
   useEffect(() => {
+    console.log('값변경', balance);
     inputRef.current!.value = balance.toString();
   }, [balance]);
 

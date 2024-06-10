@@ -20,7 +20,7 @@
             console.log('Service worker registration succeeded:', registration);
           })
           .catch((err) => {
-            console.log('Service worker registration failed:', error);
+            console.log('Service worker registration failed:', err);
           });
       } else {
         console.log('Service workers are not supported.');
@@ -33,7 +33,7 @@
         defferedPrompt = e;
       });
 
-      //특정 버튼 클릭 시에 앱 설치
+      // 특정 버튼 클릭 시에 앱 설치
       btn.addEventListener('click', (e) => {
         defferedPrompt.prompt();
         defferedPrompt.userChoice.then((res) => {

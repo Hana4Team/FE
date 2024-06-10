@@ -85,7 +85,7 @@ export const Mission5AccountOpening = () => {
       return;
     }
     if (currentNumber === 4) {
-      navigate('/home');
+      navigate('/roadmap5');
       return;
     }
     setCurrentNumber((prev) => prev + 1);

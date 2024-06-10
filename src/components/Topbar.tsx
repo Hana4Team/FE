@@ -18,7 +18,11 @@ const Topbar: FC<IProps> = ({ title, isModal, onClick }) => {
       <div
         className='absolute left-2 cursor-pointer'
         onClick={() => {
-          onClick ? onClick() : navigate(-1);
+          if (onClick) {
+            onClick();
+          } else {
+            navigate(-1);
+          }
         }}
       >
         <GoChevronLeft size={25} />

@@ -17,7 +17,7 @@ export const Alarm: FC<AlarmType> = ({ contents, createdAt }) => {
         <p className='text-xl font-hanaRegular'>{contents}</p>
       </div>
       <div className='h-20 mr-5 mt-1 text-sm font-hanaRegular text-gray-500'>
-        {`${createdDate.getFullYear()}.${(createdDate.getMonth() + 1).toString().padStart(2, '0')}.${createdDate.getDay().toString().padStart(2, '0')}`}
+        {`${createdDate.getFullYear()}.${(createdDate.getMonth() + 1).toString().padStart(2, '0')}.${createdDate.getDate().toString().padStart(2, '0')}`}
       </div>
     </div>
   );

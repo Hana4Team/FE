@@ -22,6 +22,7 @@ export const RoadMap4 = () => {
     percent.current = Math.floor(
       (roadmap.balance / roadmap.targetAmount) * 100
     );
+    console.log(percent.current);
   }
 
   console.log(roadmap);
@@ -100,22 +101,22 @@ export const RoadMap4 = () => {
               <div className='absolute'>
                 <IoLocationSharp
                   size={55}
-                  color={`${percent.current >= 100 ? '#28B2A5' : percent.current >= 80 ? '#F2777E' : '#C7C7C7'}`}
+                  color={`${percent.current >= 100 ? '#28B2A5' : percent.current > 80 ? '#F2777E' : '#C7C7C7'}`}
                   className='absolute top-[145px] left-[128px]'
                 />
                 <IoLocationSharp
                   size={55}
-                  color={`${percent.current > 80 ? '#28B2A5' : percent.current >= 60 ? '#F2777E' : '#C7C7C7'}`}
+                  color={`${percent.current > 80 ? '#28B2A5' : percent.current > 60 ? '#F2777E' : '#C7C7C7'}`}
                   className='absolute top-[230px] left-[242px]'
                 />
                 <IoLocationSharp
                   size={55}
-                  color={`${percent.current > 60 ? '#28B2A5' : percent.current >= 40 ? '#F2777E' : '#C7C7C7'}`}
+                  color={`${percent.current > 60 ? '#28B2A5' : percent.current > 40 ? '#F2777E' : '#C7C7C7'}`}
                   className='absolute top-[328px] left-[76px]'
                 />
                 <IoLocationSharp
                   size={55}
-                  color={`${percent.current > 40 ? '#28B2A5' : percent.current >= 20 ? '#F2777E' : '#C7C7C7'}`}
+                  color={`${percent.current > 40 ? '#28B2A5' : percent.current > 20 ? '#F2777E' : '#C7C7C7'}`}
                   className='absolute top-[404px] left-[298px]'
                 />
                 <IoLocationSharp
@@ -128,7 +129,13 @@ export const RoadMap4 = () => {
 
             <button
               className='absolute top-[210px] right-[10px] font-hanaCM text-lg border px-10 py-2 bg-white rounded-2xl'
-              onClick={() => navigate('/account')}
+              onClick={() =>
+                navigate('/account', {
+                  state: {
+                    accountId: roadmap.accountId,
+                  },
+                })
+              }
             >
               상세조회
             </button>

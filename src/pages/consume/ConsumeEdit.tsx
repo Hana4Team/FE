@@ -46,7 +46,7 @@ export const ConsumeEdit = () => {
     },
   });
 
-  const { data: budgetData, isSuccess: successBudget } = useQuery({
+  const budgetQuery = useQuery({
     queryKey: ['budget2'],
     queryFn: () => {
       const res = ApiClient.getInstance().getCategoryBudget();
@@ -161,24 +161,24 @@ export const ConsumeEdit = () => {
   }, [data]);
 
   useEffect(() => {
-    if (successBudget) {
+    if (budgetQuery.isSuccess) {
       setInitData([
-        { ...initData[0], balance: budgetData.shopping },
-        { ...initData[1], balance: budgetData.food },
-        { ...initData[2], balance: budgetData.traffic },
-        { ...initData[3], balance: budgetData.hospital },
-        { ...initData[4], balance: budgetData.fee },
-        { ...initData[5], balance: budgetData.education },
-        { ...initData[6], balance: budgetData.leisure },
-        { ...initData[7], balance: budgetData.society },
-        { ...initData[8], balance: budgetData.daily },
-        { ...initData[9], balance: budgetData.overseas },
+        { ...initData[0], balance: budgetQuery.data.shopping },
+        { ...initData[1], balance: budgetQuery.data.food },
+        { ...initData[2], balance: budgetQuery.data.traffic },
+        { ...initData[3], balance: budgetQuery.data.hospital },
+        { ...initData[4], balance: budgetQuery.data.fee },
+        { ...initData[5], balance: budgetQuery.data.education },
+        { ...initData[6], balance: budgetQuery.data.leisure },
+        { ...initData[7], balance: budgetQuery.data.society },
+        { ...initData[8], balance: budgetQuery.data.daily },
+        { ...initData[9], balance: budgetQuery.data.overseas },
       ]);
     }
-  }, [successBudget]);
+  }, [budgetQuery.isSuccess]);
 
   useEffect(() => {
-    if (successBudget) {
+    if (budgetQuery.isSuccess) {
       setData({
         shopping: initData[0].balance,
         food: initData[1].balance,
@@ -192,7 +192,12 @@ export const ConsumeEdit = () => {
         overseas: initData[9].balance,
       });
     }
+    console.log(initData);
   }, [initData]);
+
+  useEffect(() => {
+    budgetQuery.refetch();
+  }, []);
 
   useEffect(() => {
     if (successSpend) {
@@ -248,49 +253,53 @@ export const ConsumeEdit = () => {
 
   return (
     <>
-      <Topbar title='이번 달 예산' />
-      <div className='flex flex-col gap-6'>
-        {/* 예산 카드 영역 */}
-        <BudgetInfo
-          month={dateMonth}
-          balance={budgetData?.sum}
-          lastSpend={spendData?.sum}
-        />
-        {/* 예산 입력 영역 */}
-        <div className='flex flex-col w-full p-7 bg-white'>
-          <div className='flex flex-row mt-4 justify-between'>
-            <p className='font-hanaBold text-2xl text-gray-500'>
-              카테고리별 예산
-            </p>
-            <div className='flex flex-col items-end gap-1'>
-              <p
-                className={`font-hanaRegular text-3xl ${sum > budgetData?.sum! && 'text-hanaRed'}`}
-              >
-                {sum.toLocaleString()}원
-              </p>
-              <p className='font-hanaRegular text-2xl text-gray-400'>
-                전체 예산 {budgetData?.sum.toLocaleString()}원
-              </p>
+      {budgetQuery.isSuccess && successSpend && (
+        <>
+          <Topbar title='이번 달 예산' />
+          <div className='flex flex-col gap-6'>
+            {/* 예산 카드 영역 */}
+            <BudgetInfo
+              month={dateMonth}
+              balance={budgetQuery.data.sum}
+              lastSpend={spendData.sum}
+            />
+            {/* 예산 입력 영역 */}
+            <div className='flex flex-col w-full p-7 bg-white'>
+              <div className='flex flex-row mt-4 justify-between'>
+                <p className='font-hanaBold text-2xl text-gray-500'>
+                  카테고리별 예산
+                </p>
+                <div className='flex flex-col items-end gap-1'>
+                  <p
+                    className={`font-hanaRegular text-3xl ${sum > budgetQuery.data.sum && 'text-hanaRed'}`}
+                  >
+                    {sum.toLocaleString()}원
+                  </p>
+                  <p className='font-hanaRegular text-2xl text-gray-400'>
+                    전체 예산 {budgetQuery.data.sum.toLocaleString()}원
+                  </p>
+                </div>
+              </div>
+              <div className='w-full my-5 h-[0.12rem] bg-gray-200'></div>
+              <div>
+                {initData.map((item, idx) => (
+                  <CategoryEditItem
+                    key={idx}
+                    icon={item.icon}
+                    name={item.name}
+                    lastSpend={item.lastSpend}
+                    balance={item.balance}
+                    updateValue={updateValue}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className='mt-2 flex justify-center'>
+              <Button text='설정' onClick={onClickButton} />
             </div>
           </div>
-          <div className='w-full my-5 h-[0.12rem] bg-gray-200'></div>
-          <div>
-            {initData.map((item, idx) => (
-              <CategoryEditItem
-                key={idx}
-                icon={item.icon}
-                name={item.name}
-                lastSpend={item.lastSpend}
-                balance={item.balance}
-                updateValue={updateValue}
-              />
-            ))}
-          </div>
-        </div>
-        <div className='mt-2 flex justify-center'>
-          <Button text='설정' onClick={onClickButton} />
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };

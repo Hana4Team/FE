@@ -2,12 +2,14 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
+  accountId: number;
   title: string;
   totalMoney: number;
   icons: string;
 }
 
 export const AccountSummaryItem: FC<IProps> = ({
+  accountId,
   title,
   totalMoney,
   icons,
@@ -17,7 +19,12 @@ export const AccountSummaryItem: FC<IProps> = ({
   const movePageHandler = () => {
     if (title === '머니박스 통장') navigate('/moneyBox');
     else if (title === '하나머니') return;
-    else navigate('/account');
+    else
+      navigate('/account', {
+        state: {
+          accountId: accountId,
+        },
+      });
   };
 
   return (

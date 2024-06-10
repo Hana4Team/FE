@@ -99,7 +99,13 @@ export const Savings100Days = () => {
               </div>
               <div className='flex w-full justify-center'>
                 <button
-                  onClick={() => navigate('/account')}
+                  onClick={() =>
+                    navigate('/account', {
+                      state: {
+                        accountId: saving100.accountId,
+                      },
+                    })
+                  }
                   className='absolute bg-white font-hanaMedium text-2xl rounded-xl py-5 px-20 border-2 cursor-pointer'
                 >
                   상세조회
