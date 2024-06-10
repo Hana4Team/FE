@@ -22,7 +22,6 @@ import { newsApi } from './interfaces/newsApi';
 import { NewsItemsType } from '../types/news';
 import { productsApi } from './interfaces/productsApi';
 import { ProductsType } from '../types/products';
-import { moneyboxApi } from './interfaces/moneyboxApi';
 import { depositsavingType } from '../types/depositsaving';
 import {
   UserType,
@@ -43,6 +42,7 @@ import {
   RemmitanceType,
   TransactionHistoryType,
 } from '../types/transaction';
+import { moneyboxApi } from './interfaces/moneyboxApi';
 
 const TOKEN = getCookie('token');
 
