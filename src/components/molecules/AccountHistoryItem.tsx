@@ -5,7 +5,7 @@ interface Iprops {
   date: string;
   time: string;
   balance: number;
-  type: number;
+  type: boolean;
 }
 
 export const AccountHistoryItem: FC<Iprops> = ({
@@ -26,13 +26,13 @@ export const AccountHistoryItem: FC<Iprops> = ({
       </div>
       <div className='flex flex-col items-end gap-2'>
         <p
-          className={`font-hanaBold text-3xl ${type === 2 ? 'text-hanaGreen' : 'text-hanaRed'}`}
+          className={`font-hanaBold text-3xl ${!type ? 'text-hanaGreen' : 'text-hanaRed'}`}
         >
-          {type === 2 ? '+' : '-'}
-          {balance.toLocaleString()}원
+          {!type ? '+' : '-'}
+          {balance!.toLocaleString()}원
         </p>
         <p className='font-hanaMedium text-2xl text-gray-400'>
-          {type === 2 ? '입금' : '출금'}
+          {!type ? '입금' : '출금'}
         </p>
       </div>
     </div>

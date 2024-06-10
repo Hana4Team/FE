@@ -25,10 +25,10 @@ export const SendingModal: FC<IProps> = ({
   return (
     <>
       <div
-        className='fixed flex flex-col items-center justify-center bg-black bg-opacity-50 w-[500px] h-full z-10'
+        className='fixed flex flex-col items-center justify-center bg-black bg-opacity-50 w-[500px] h-full z-[60]'
         onClick={onClose}
       ></div>
-      <div className='absolute z-20 bottom-0 bg-white w-full h-auto pb-10 rounded-t-[3rem]'>
+      <div className='absolute z-[70] bottom-0 bg-white w-full h-auto pb-10 rounded-t-[3rem]'>
         <div className='flex flex-row w-full h-20 justify-end items-end px-7'>
           <IoCloseOutline
             size={28}
