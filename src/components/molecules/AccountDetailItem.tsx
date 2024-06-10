@@ -1,29 +1,30 @@
 import { FC } from 'react';
 
 interface Iprops {
+  accountId: number;
   title: string;
-  account: string;
+  accountNumber: string;
   balance: number;
   onClick: (
-    clikedAccount: string,
-    clickedName?: string | undefined,
-    clickedBalance?: number | undefined
+    clickedAccountId: number,
+    clikedAccountNumber: string,
+    clickedBalance: number,
+    clickedName: string
   ) => void;
-  isThreeData?: boolean;
 }
 
 export const AccountDetailItem: FC<Iprops> = ({
+  accountId,
   title,
-  account,
+  accountNumber,
   balance,
-  isThreeData,
   onClick,
 }) => {
   return (
     <div
       className='flex flex-col px-5 cursor-pointer'
       onClick={() => {
-        !isThreeData ? onClick(account) : onClick(account, title, balance);
+        onClick(accountId, accountNumber, balance, title);
       }}
     >
       <div className='flex flex-row h-28 justify-between'>
@@ -31,7 +32,7 @@ export const AccountDetailItem: FC<Iprops> = ({
           <img src='/images/logo.svg' alt='logo' className='w-10 h-10 mr-4' />
           <div className='flex flex-col font-hanaLight text-2xl'>
             <p>{title}</p>
-            <p className='text-gray-500 tracking-tight'>{account}</p>
+            <p className='text-gray-500 tracking-tight'>{accountNumber}</p>
           </div>
         </div>
         <div className='flex flex-col justify-end iems-end'>

@@ -16,7 +16,7 @@ export const AccountOutputChoice: FC<IProps> = ({ onClick }) => {
     money: 0,
   });
 
-  const clickedAccount = (account: string, name?: string, balance?: number) => {
+  const clickedAccount = (account: string, balance?: number, name?: string) => {
     setChoiceAccount({
       name: name || '',
       accountNumber: account,
