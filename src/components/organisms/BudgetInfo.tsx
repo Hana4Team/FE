@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FC, useEffect, useState } from 'react';
 import { RiPencilFill } from 'react-icons/ri';
 import { ApiClient } from '../../apis/apiClient';
@@ -7,15 +7,11 @@ interface Iprops {
   month: number;
   balance?: number;
   lastSpend?: number;
-  initialFunc?: () => void;
 }
 
-export const BudgetInfo: FC<Iprops> = ({
-  month,
-  balance,
-  lastSpend,
-  initialFunc,
-}) => {
+export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
+  const queryClient = useQueryClient();
+
   const [isEdit, SetIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState(balance?.toLocaleString());
 
@@ -29,6 +25,7 @@ export const BudgetInfo: FC<Iprops> = ({
       const res = ApiClient.getInstance().updateTotalBudget(sum);
       return res;
     },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['budget1'] }),
   });
 
   const valueChangeHandler = (e: any) => {
@@ -48,12 +45,6 @@ export const BudgetInfo: FC<Iprops> = ({
     updateBudget(realValue);
     SetIsEdit(false);
   };
-
-  useEffect(() => {
-    if (isSuccessUpdate && budgetRes.isInitialUpdate) {
-      initialFunc!();
-    }
-  }, [isSuccessUpdate]);
 
   useEffect(() => {
     console.log(balance);

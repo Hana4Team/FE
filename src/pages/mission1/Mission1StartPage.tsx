@@ -3,11 +3,12 @@ import Topbar from '../../components/Topbar';
 import { BudgetInfo } from '../../components/organisms/BudgetInfo';
 import { dateMonth, dateYear } from '../../utils/getDate';
 import { CategorySpendCard } from '../../components/organisms/CategorySpendCard';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SpendType } from '../../types/spend';
 import { AlertModal } from '../../components/AlertModal';
+import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
 
 const Category = {
   SHOPPING: '쇼핑',
@@ -23,6 +24,8 @@ const Category = {
 } as const;
 
 export const Mission1StartPage = () => {
+  const queryClient = useQueryClient();
+
   const { data: spendList, isSuccess: isSuccessSpend } = useQuery({
     queryKey: ['budget'],
     queryFn: () => {
@@ -33,7 +36,7 @@ export const Mission1StartPage = () => {
   });
 
   const { data: budgetData } = useQuery({
-    queryKey: ['budget13'],
+    queryKey: ['budget2'],
     queryFn: () => {
       const res = ApiClient.getInstance().getTotalBudget();
       return res;
@@ -58,29 +61,33 @@ export const Mission1StartPage = () => {
     },
   });
 
-  const {
-    mutate: updateHanaMoney,
-    isSuccess: isSuccess1,
-    data: hanaMoney,
-  } = useMutation({
+  const { mutate: updateHanaMoney } = useMutation({
     mutationKey: ['updateHanaMoney2'],
     mutationFn: (isMission: boolean) => {
       const res = ApiClient.getInstance().updatePoint(isMission);
       return res;
     },
+    onSuccess: (data) => {
+      postAlarm(`하나머니 ${data.points}원 적립!`);
+    },
   });
 
-  const { mutate: postAlarm, isSuccess: isSuccess2 } = useMutation({
+  const { mutate: postAlarm } = useMutation({
     mutationKey: ['updateHanaMoney3'],
     mutationFn: (contents: string) => {
       const res = ApiClient.getInstance().postAlarm(contents);
       return res;
     },
+    onSuccess: (_, variables) => {
+      setShowAlarm(true);
+      alarmMsgRef.current = `하나머니 ${variables}원 적립!`;
+    },
   });
 
   const [datas, setDatas] = useState<SpendType[]>([]);
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
-  const [initial, setInitial] = useState<boolean>(false);
+  const [showAlarm, setShowAlarm] = useState<boolean>(false);
+  const alarmMsgRef = useRef<string>('');
 
   useEffect(() => {
     if (isSuccessSpend) {
@@ -108,19 +115,6 @@ export const Mission1StartPage = () => {
     }
   }, [userQuery.data]);
 
-  useEffect(() => {
-    if (isSuccess1 && !isSuccess2) {
-      postAlarm(`하나머니 ${hanaMoney?.points}원 적립!`);
-    }
-  }, [isSuccess1]);
-
-  useEffect(() => {
-    if (initial) {
-      userQuery.refetch();
-      setInitial(false);
-    }
-  }, [initial]);
-
   const onCloseStepModal = async () => {
     try {
       updateHanaMoney(true);
@@ -130,10 +124,21 @@ export const Mission1StartPage = () => {
     }
   };
 
-  console.log(budgetData);
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['budget', 'budget2', 'userInfo'],
+    });
+  }, []);
 
   return (
-    <>
+    <div className='relative w-full'>
+      {showAlarm && (
+        <AlarmAnimation
+          message={alarmMsgRef.current}
+          showAlarm={showAlarm}
+          onClickShowAlarm={(status: boolean) => setShowAlarm(status)}
+        />
+      )}
       {showStepModal && (
         <AlertModal onClose={() => onCloseStepModal()}>
           <div className='flex flex-col font-hanaMedium text-2xl text-center'>
@@ -150,11 +155,7 @@ export const Mission1StartPage = () => {
         title={`지난 달 지출을 확인하고\n이번 달 예산을 입력해보아요`}
       />
       <div className='flex flex-col gap-6'>
-        <BudgetInfo
-          month={dateMonth}
-          balance={budgetData?.sum}
-          initialFunc={() => setInitial(true)}
-        />
+        <BudgetInfo month={dateMonth} balance={budgetData?.sum} />
         <CategorySpendCard
           datas={datas}
           year={dateYear}
@@ -163,6 +164,6 @@ export const Mission1StartPage = () => {
           isMission
         />
       </div>
-    </>
+    </div>
   );
 };
