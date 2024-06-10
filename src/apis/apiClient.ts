@@ -3,6 +3,7 @@ import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
 import {
+  AccountPwdCheckType,
   AccountReqType,
   AccountType,
   OpenedDepositSavingReqType,
@@ -175,6 +176,15 @@ export class ApiClient
       &saving100Account=${type.saving100Account}&
       &savingAccount=${type.savingsAccount}&
       &moneyboxAccount=${type.moneyboxAccount}`,
+    });
+    return response.data;
+  }
+
+  async postAccountPasswordCheck(reqData: AccountPwdCheckType) {
+    const response = await this.axiosInstance.request<{ message: string }>({
+      method: 'post',
+      url: '/account/password',
+      data: reqData,
     });
     return response.data;
   }

@@ -1,4 +1,5 @@
 import {
+  AccountPwdCheckType,
   AccountReqType,
   AccountType,
   OpenedDepositSavingReqType,
@@ -7,6 +8,9 @@ import {
 
 export interface accountApi {
   getAccount(type: AccountReqType): Promise<AccountType[]>;
+  postAccountPasswordCheck(
+    reqData: AccountPwdCheckType
+  ): Promise<{ message: string }>;
   postOpendMoneyBox(
     password: string,
     productsId: number

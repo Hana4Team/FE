@@ -11,6 +11,10 @@ export type AccountReqType = {
   savingsAccount: boolean;
   moneyboxAccount: boolean;
 };
+export type AccountPwdCheckType = {
+  accountNumber: string;
+  password: string;
+};
 export type OpenedDepositSavingReqType = {
   payment: number;
   endDate: string;
