@@ -6,6 +6,7 @@ interface IProps {
   pubDate: string;
   keyword: string;
   link: string;
+  onClickedNews: () => void;
 }
 
 export const NewsItem: FC<IProps> = ({
@@ -14,15 +15,20 @@ export const NewsItem: FC<IProps> = ({
   pubDate,
   keyword,
   link,
+  onClickedNews,
 }) => {
   return (
     <div
       className='w-11/12 bg-[#F9FAFB] flex flex-col justify-between p-7 gap-5 rounded-3xl'
-      onClick={() => window.open(link)}
+      onClick={() => {
+        window.open(link);
+        onClickedNews();
+      }}
     >
-      <h1 className='font-hanaBold text-[1.7rem] text-ellipsis line-clamp-2'>
-        {title}
-      </h1>
+      <h1
+        className='font-hanaBold text-[1.7rem] text-ellipsis line-clamp-2'
+        dangerouslySetInnerHTML={{ __html: title }}
+      ></h1>
       <p
         className='font-hanaRegular text-xl text-ellipsis line-clamp-3'
         dangerouslySetInnerHTML={{ __html: desc }}

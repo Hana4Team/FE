@@ -10,6 +10,8 @@ import {
 } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
+import { newsApi } from './interfaces/newsApi';
+import { NewsItemsType } from '../types/news';
 import { productsApi } from './interfaces/productsApi';
 import { ProductsType } from '../types/products';
 import { moneyboxApi } from './interfaces/moneyboxApi';
@@ -44,7 +46,8 @@ export class ApiClient
     productsApi,
     moneyboxApi,
     transactionApi,
-    depositsavingApi
+    depositsavingApi,
+    newsApi,
 {
   private static instance: ApiClient;
   private axiosInstance: AxiosInstance;
@@ -140,6 +143,18 @@ export class ApiClient
       method: 'get',
       url: '/users',
     });
+    return response.data;
+  }
+
+  async putCheckNews() {
+    const response = await this.axiosInstance.request<{
+      success: boolean;
+      type?: string;
+      message?: string;
+    }>({
+      method: 'put',
+      url: '/users/news',
+      });
     return response.data;
   }
 
@@ -335,6 +350,21 @@ export class ApiClient
 
   static getInstance(): ApiClient {
     return this.instance || (this.instance = new this());
+  }
+
+  //---------news---------
+  async getNews(query: string) {
+    const response = await this.axiosInstance.request<{
+      lastBuildDate: Date;
+      total: number;
+      start: number;
+      display: number;
+      items: NewsItemsType[];
+    }>({
+      method: 'get',
+      url: `/news?query=${query}`,
+    });
+    return response.data;
   }
 
   // registerToken(newToken: string) {
