@@ -12,9 +12,7 @@
 
 @font-face {
   font-family: 'Hana-Bold';
-  src:
-    url('./assets/fonts/Hana2-Bold.otf') format('otf'),
-    url('./assets/fonts/Hana2-Bold.ttf') format('ttf');
+  src: url('./assets/fonts/Hana2-Bold.ttf') format('ttf');
 }
 
 @font-face {
