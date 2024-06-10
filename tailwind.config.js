@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html, ts, tsx}'],
+  content: ['./src/**/*.{html,ts,tsx}'],
   safelist: [
     'bg-[#28B2A5]',
     'bg-[#E90061]',
