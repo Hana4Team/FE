@@ -7,9 +7,15 @@ interface Iprops {
   month: number;
   balance?: number;
   lastSpend?: number;
+  initialFunc?: () => void;
 }
 
-export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
+export const BudgetInfo: FC<Iprops> = ({
+  month,
+  balance,
+  lastSpend,
+  initialFunc,
+}) => {
   const queryClient = useQueryClient();
 
   const [isEdit, SetIsEdit] = useState<boolean>(false);
@@ -25,7 +31,8 @@ export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
       const res = ApiClient.getInstance().updateTotalBudget(sum);
       return res;
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['budget1'] }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['budget', 'userInfo'] }),
   });
 
   const valueChangeHandler = (e: any) => {
@@ -47,7 +54,12 @@ export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
   };
 
   useEffect(() => {
-    console.log(balance);
+    if (isSuccessUpdate && budgetRes.isInitialUpdate) {
+      initialFunc!();
+    }
+  }, [isSuccessUpdate]);
+
+  useEffect(() => {
     setValue(balance ? balance?.toLocaleString() : '0');
   }, [balance]);
 
@@ -85,7 +97,7 @@ export const BudgetInfo: FC<Iprops> = ({ month, balance, lastSpend }) => {
           </div>
         </div>
       )}
-      {lastSpend && (
+      {lastSpend != undefined && (
         <div className='flex flex-row justify-between mt-4 font-hanaLight'>
           <p className='text-2xl text-gray-400'>지난 달 지출</p>
           <p className='text-2xl'>{lastSpend.toLocaleString()}원</p>

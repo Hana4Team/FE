@@ -34,7 +34,7 @@ export const ConsumeEdit = () => {
   const queryClient = useQueryClient();
 
   const { data: spendData, isSuccess: successSpend } = useQuery({
-    queryKey: ['spend3'],
+    queryKey: ['spend'],
     queryFn: () => {
       let lastYear = dateYear;
       let lastMonth = dateMonth - 1;
@@ -53,6 +53,7 @@ export const ConsumeEdit = () => {
       const res = ApiClient.getInstance().getCategoryBudget();
       return res;
     },
+    staleTime: 100,
   });
 
   const { mutate: setBudget } = useMutation({
@@ -61,6 +62,8 @@ export const ConsumeEdit = () => {
       const res = ApiClient.getInstance().updateCategoryBudget(data);
       return res;
     },
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['spend', 'budget2'] }),
   });
 
   const [initData, setInitData] = useState<BudgetEditType[]>([
@@ -158,28 +161,15 @@ export const ConsumeEdit = () => {
   };
 
   useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['spend', 'budget2'] });
+  }, []);
+
+  useEffect(() => {
     setSum(Object.values(data).reduce((acc, val) => acc + val));
   }, [data]);
 
   useEffect(() => {
-    if (budgetQuery.isSuccess) {
-      setInitData([
-        { ...initData[0], balance: budgetQuery.data.shopping },
-        { ...initData[1], balance: budgetQuery.data.food },
-        { ...initData[2], balance: budgetQuery.data.traffic },
-        { ...initData[3], balance: budgetQuery.data.hospital },
-        { ...initData[4], balance: budgetQuery.data.fee },
-        { ...initData[5], balance: budgetQuery.data.education },
-        { ...initData[6], balance: budgetQuery.data.leisure },
-        { ...initData[7], balance: budgetQuery.data.society },
-        { ...initData[8], balance: budgetQuery.data.daily },
-        { ...initData[9], balance: budgetQuery.data.overseas },
-      ]);
-    }
-  }, [budgetQuery.isSuccess]);
-
-  useEffect(() => {
-    if (budgetQuery.isSuccess) {
+    if (budgetQuery.data) {
       setData({
         shopping: initData[0].balance,
         food: initData[1].balance,
@@ -193,15 +183,33 @@ export const ConsumeEdit = () => {
         overseas: initData[9].balance,
       });
     }
-    console.log(initData);
   }, [initData]);
 
   useEffect(() => {
-    budgetQuery.refetch();
-  }, []);
+    if (budgetQuery.data) {
+      console.log(budgetQuery.data);
+      setInitData([
+        {
+          icon: initData[0].icon,
+          name: initData[0].name,
+          lastSpend: initData[0].lastSpend,
+          balance: budgetQuery.data.shopping,
+        },
+        { ...initData[1], balance: budgetQuery.data.food },
+        { ...initData[2], balance: budgetQuery.data.traffic },
+        { ...initData[3], balance: budgetQuery.data.hospital },
+        { ...initData[4], balance: budgetQuery.data.fee },
+        { ...initData[5], balance: budgetQuery.data.education },
+        { ...initData[6], balance: budgetQuery.data.leisure },
+        { ...initData[7], balance: budgetQuery.data.society },
+        { ...initData[8], balance: budgetQuery.data.daily },
+        { ...initData[9], balance: budgetQuery.data.overseas },
+      ]);
+    }
+  }, [budgetQuery.data]);
 
   useEffect(() => {
-    if (successSpend) {
+    if (successSpend && budgetQuery.data) {
       let tmp = new Array(10);
       spendData.spendFindByTypeResList.forEach((data) => {
         switch (data.type) {
@@ -238,23 +246,51 @@ export const ConsumeEdit = () => {
         }
       });
       setInitData([
-        { ...initData[0], lastSpend: tmp[0] },
-        { ...initData[1], lastSpend: tmp[1] },
-        { ...initData[2], lastSpend: tmp[2] },
-        { ...initData[3], lastSpend: tmp[3] },
-        { ...initData[4], lastSpend: tmp[4] },
-        { ...initData[5], lastSpend: tmp[5] },
-        { ...initData[6], lastSpend: tmp[6] },
-        { ...initData[7], lastSpend: tmp[7] },
-        { ...initData[8], lastSpend: tmp[8] },
-        { ...initData[9], lastSpend: tmp[9] },
+        {
+          ...initData[0],
+          lastSpend: tmp[0],
+          balance: budgetQuery.data.shopping,
+        },
+        { ...initData[1], lastSpend: tmp[1], balance: budgetQuery.data.food },
+        {
+          ...initData[2],
+          lastSpend: tmp[2],
+          balance: budgetQuery.data.traffic,
+        },
+        {
+          ...initData[3],
+          lastSpend: tmp[3],
+          balance: budgetQuery.data.hospital,
+        },
+        { ...initData[4], lastSpend: tmp[4], balance: budgetQuery.data.fee },
+        {
+          ...initData[5],
+          lastSpend: tmp[5],
+          balance: budgetQuery.data.education,
+        },
+        {
+          ...initData[6],
+          lastSpend: tmp[6],
+          balance: budgetQuery.data.leisure,
+        },
+        {
+          ...initData[7],
+          lastSpend: tmp[7],
+          balance: budgetQuery.data.society,
+        },
+        { ...initData[8], lastSpend: tmp[8], balance: budgetQuery.data.daily },
+        {
+          ...initData[9],
+          lastSpend: tmp[9],
+          balance: budgetQuery.data.overseas,
+        },
       ]);
     }
-  }, [successSpend]);
+  }, [spendData, budgetQuery.data]);
 
   return (
     <>
-      {budgetQuery.isSuccess && successSpend && (
+      {budgetQuery.data && spendData && (
         <>
           <Topbar title='이번 달 예산' />
           <div className='flex flex-col gap-6'>
