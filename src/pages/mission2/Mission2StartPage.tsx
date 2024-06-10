@@ -4,11 +4,12 @@ import { MissionStartHeader } from '../../components/molecules/MissionStartHeade
 import { MoneyBoxIntroItem } from '../../components/molecules/MoneyBoxIntroItem';
 import Topbar from '../../components/Topbar';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 
 export const Mission2StartPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [animation, setAnimation] = useState<number>(0);
 
   const { data: moneyBoxInfo } = useQuery({
@@ -30,6 +31,10 @@ export const Mission2StartPage = () => {
       clearInterval(timerId);
       clearTimeout(timeoutId);
     };
+  }, []);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['moneyBoxInfo'] });
   }, []);
 
   return (

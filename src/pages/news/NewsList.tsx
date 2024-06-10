@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import { NewsCategory } from '../../components/molecules/NewsCategory';
 import { NewsItem } from '../../components/molecules/NewsItem';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
 

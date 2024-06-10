@@ -1,8 +1,11 @@
 import { Alarm } from '../../components/molecules/Alarm';
 import { ApiClient } from '../../apis/apiClient';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export const AlarmPage = () => {
+  const queryClient = useQueryClient();
+
   const { data: alarms } = useQuery({
     queryKey: ['alarms'],
     queryFn: () => {
@@ -10,6 +13,10 @@ export const AlarmPage = () => {
       return res;
     },
   });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['alarms'] });
+  }, []);
 
   return (
     <>
