@@ -1,8 +1,5 @@
 import { moneyBoxType } from '../../types/moneyBox';
 
-export interface moneyboxApi {
+export interface moneyBoxApi {
   getMoneyBox(): Promise<moneyBoxType>;
-  getMoneyboxSaving(): Promise<{
-    savingBalance: number;
-  }>;
 }
