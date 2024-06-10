@@ -1,6 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,ts,tsx}'],
+  safelist: [
+    'bg-[#28B2A5]',
+    'bg-[#E90061]',
+    'bg-[#FFC700]',
+    'bg-[#AD9A5F]',
+    'bg-[#B5B5B5]',
+    'bg-[#9BDEDF]',
+    'bg-[#5CB6B7]',
+    'bg-[#FFB2B7]',
+    'bg-[#F2777E]',
+    'bg-[#9CDAB8]',
+    'bg-[#74BE96]',
+  ],
   theme: {
     fontFamily: {
       hanaHeavy: ['Hana-Heavy'],
@@ -159,7 +172,7 @@ export default {
           '100%': {
             opacity: '1',
             transform: 'scale3d(1, 1, 1)',
-            },
+          },
         },
         'slide-down': {
           '0%': {
