@@ -12,7 +12,12 @@
 
 @font-face {
   font-family: 'Hana-Bold';
-  src: url('./assets/fonts/Hana2-Bold.ttf') format('ttf');
+  src:
+    local('Hana2.0 B'),
+    url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.otf')
+      format('otf'),
+    url('https://ddok-bucket.s3.ap-northeast-2.amazonaws.com/fonts/Hana2-Bold.ttf')
+      format('ttf');
 }
 
 @font-face {
