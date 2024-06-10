@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Topbar from '../../components/Topbar';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { ConfirmCard } from '../../components/molecules/ConfirmCard';
 import { AccountOutputChoice } from '../../components/organisms/accounts/AccountOutputChoice';
@@ -10,7 +10,7 @@ import {
   checkAmountMoney,
   checkAmountUnitMoney,
 } from '../../utils/checkAmountUnit';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { add, format } from 'date-fns';
 
@@ -22,6 +22,7 @@ type userInfo = {
 
 export const Mission3AccountOpening = () => {
   const navigate = useNavigate();
+  const queryClient = new QueryClient();
   const location = useLocation();
   const product = location.state.product;
   const [currentNumber, setCurrentNumber] = useState<number>(0);
@@ -132,6 +133,10 @@ export const Mission3AccountOpening = () => {
     }
     return true;
   };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['moneyboxMoney'] });
+  }, []);
 
   return (
     <div className='bg-white flex flex-col items-center h-screen w-full'>

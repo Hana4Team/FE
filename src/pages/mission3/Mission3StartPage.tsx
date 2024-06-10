@@ -2,12 +2,14 @@ import { BankBookIntro } from '../../components/molecules/BankBookIntro';
 import { MissionStartHeader } from '../../components/molecules/MissionStartHeader';
 import Topbar from '../../components/Topbar';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { CheckAccountMoney } from '../../components/organisms/accounts/CheckAccountMoney';
+import { useEffect } from 'react';
 
 export const Mission3StartPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data: moneyboxMoney } = useQuery({
     queryKey: ['moneyboxMoney'],
@@ -24,6 +26,10 @@ export const Mission3StartPage = () => {
       return res;
     },
   });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['moneyboxMoney'] });
+  }, []);
 
   return (
     <>
