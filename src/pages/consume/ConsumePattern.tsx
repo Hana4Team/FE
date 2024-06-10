@@ -1,30 +1,91 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Topbar from '../../components/Topbar';
 import { dateMonth, dateYear } from '../../utils/getDate';
 import { RiPencilFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { CategoryItem } from '../../components/molecules/CategoryItem';
 import { CategorySpendCard } from '../../components/organisms/CategorySpendCard';
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { SpendType } from '../../types/spend';
+
+const Category = {
+  SHOPPING: '쇼핑',
+  FOOD: '요식',
+  TRAFFIC: '교통',
+  HOSPITAL: '의료',
+  FEE: '납부',
+  EDUCATION: '교육',
+  LEISURE: '여유생활',
+  SOCIETY: '사교활동',
+  DAILY: '일상생활',
+  OVERSEAS: '해외',
+} as const;
 
 export const ConsumePattern = () => {
-  const datas = [
-    { name: '교통', balance: 70000 },
-    { name: '요식', balance: 20000 },
-    { name: '납부', balance: 5000 },
-    { name: '쇼핑', balance: 3000 },
-    { name: '여유생활', balance: 3000 },
-    { name: '사교생활', balance: 3000 },
-    { name: '일상생활', balance: 3000 },
-    { name: '해외', balance: 2000 },
-    { name: '사교생활', balance: 2000 },
-    { name: '일상생활', balance: 1000 },
-    { name: '해외', balance: 1000 },
-  ];
-
   const navigate = useNavigate();
 
   const [year, setYear] = useState<number>(dateYear);
   const [month, setMonth] = useState<number>(dateMonth);
+  const [spend, setSpend] = useState<number>(0);
+  const [budget, setBudget] = useState<number>(0);
+  const [percent, setPercent] = useState<number>(0);
+
+  const spendQuery = useQuery({
+    queryKey: ['category', year, month],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getSpendList(year, month);
+      return res;
+    },
+    staleTime: 100,
+  });
+
+  const { data: budgetData, isSuccess: successBudget } = useQuery({
+    queryKey: ['budget'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getTotalBudget();
+      return res;
+    },
+    staleTime: 100,
+  });
+
+  const [datas, setDatas] = useState<SpendType[]>([]);
+
+  useEffect(() => {
+    if (spendQuery.data) {
+      setDatas(
+        spendQuery.data.spendFindByTypeResList
+          .map((item) => {
+            return {
+              type: Category[item.type as keyof typeof Category],
+              amount: item.amount,
+            };
+          })
+          .filter((item) => item.amount > 0)
+      );
+    }
+  }, [spendQuery.data]);
+
+  useEffect(() => {
+    if (spendQuery.isSuccess && successBudget) {
+      try {
+        ApiClient.getInstance()
+          .getSpendList(dateYear, dateMonth)
+          .then((res) => {
+            setSpend(res.sum);
+            setPercent(Math.round((res.sum / budget) * 100));
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [spendQuery.isSuccess, successBudget]);
+
+  useEffect(() => {
+    if (successBudget) {
+      setBudget(budgetData.sum);
+    }
+  }, [successBudget]);
 
   const onClickButton = () => {
     navigate('/consumeEdit');
@@ -44,9 +105,11 @@ export const ConsumePattern = () => {
       <div className='flex flex-col gap-6'>
         {/* 지출 카드 영역 */}
         <div className='flex flex-col w-full mt-6 p-7 bg-white'>
-          <p className='font-hanaRegular text-2xl mb-3'>{month}월 지출</p>
+          <p className='font-hanaRegular text-2xl mb-3'>{dateMonth}월 지출</p>
           <div className='flex flex-row mt-2 mb-3 items-center gap-2'>
-            <p className='font-hanaHeavy text-5xl'>500,000원</p>
+            <p className='font-hanaHeavy text-5xl'>
+              {spend.toLocaleString()}원
+            </p>
           </div>
         </div>
         {/* 예산 영역 */}
@@ -54,7 +117,9 @@ export const ConsumePattern = () => {
           <div className='flex flex-row w-full justify-between'>
             <p className='flex items-center font-hanaBold text-3xl'>예산</p>
             <div className='flex flex-row gap-3 items-center'>
-              <p className='font-hanaMedium text-3xl'>500,000원</p>
+              <p className='font-hanaMedium text-3xl'>
+                {budget.toLocaleString()}원
+              </p>
               <RiPencilFill
                 size={20}
                 color='545454'
@@ -65,13 +130,21 @@ export const ConsumePattern = () => {
           </div>
           {/* 프로그래스바 */}
           <div className='flex flex-row h-8 w-full my-6'>
-            <div className='bg-hanaGreen w-[22%] h-full rounded-l-lg'></div>
-            <div className='bg-gray-200 w-[78%] h-full rounded-r-lg border-2 flex items-center'>
-              <p className='ml-1 font-hanaMedium text-xl'>22%</p>
+            <div
+              className={`bg-hanaGreen w-[${percent}%] h-full rounded-l-lg`}
+            ></div>
+            <div
+              className={`bg-gray-200 w-[${100 - percent}%] h-full rounded-r-lg border-2 flex items-center`}
+            >
+              <p className='ml-1 font-hanaMedium text-xl'>{percent}%</p>
             </div>
           </div>
-          <CategoryItem color='#28B2A5' name='지출' balance={100000} />
-          <CategoryItem color='#B5B5B5' name='남은 예산' balance={400000} />
+          <CategoryItem color='#28B2A5' name='지출' balance={spend} />
+          <CategoryItem
+            color='#B5B5B5'
+            name='남은 예산'
+            balance={budget - spend}
+          />
           <div
             className='flex w-full mt-7 h-14 justify-center items-center border font-hanaRegular text-2xl rounded-xl'
             onClick={() => onClickButton()}
@@ -84,7 +157,7 @@ export const ConsumePattern = () => {
           datas={datas}
           year={year}
           month={month}
-          balance={500000}
+          balance={datas.reduce((acc, data) => acc + data.amount, 0)}
           setYearFunc={setYearFunc}
           setMonthFunc={setMonthFunc}
         />

@@ -33,7 +33,7 @@ export const CategoryEditItem: FC<IProps> = ({
 
   useEffect(() => {
     inputRef.current!.value = balance.toString();
-  }, []);
+  }, [balance]);
 
   return (
     <div className='flex flex-row w-full py-3 justify-between items-center'>
