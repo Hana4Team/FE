@@ -2,7 +2,16 @@ import axios, { AxiosInstance } from 'axios';
 import { getCookie } from '../utils/cookie';
 import { usersApi } from './interfaces/usersApi';
 import { accountApi } from './interfaces/accountApi';
-import { UserType, SavePointType, StepType } from '../types/users';
+import {
+  UserType,
+  SavePointType,
+  StepType,
+  JoinType,
+  JoinReqType,
+  LoginReqType,
+  LoginType,
+  MsgCheckType,
+} from '../types/users';
 import { AccountReqType, AccountType } from '../types/account';
 import { alarmApi } from './interfaces/alarmApi';
 import { API_BASE_URL } from './url';
@@ -28,6 +37,42 @@ export class ApiClient
   }
 
   //---------users---------
+  async postLogin(user: LoginReqType) {
+    const response = await this.axiosInstance.request<LoginType>({
+      method: 'post',
+      url: '/users/login',
+      data: user,
+    });
+    return response.data;
+  }
+
+  async postJoin(user: JoinReqType) {
+    const response = await this.axiosInstance.request<JoinType>({
+      method: 'post',
+      url: '/users/join',
+      data: user,
+    });
+    return response.data;
+  }
+
+  async postMessage(phoneNumber: string) {
+    const response = await this.axiosInstance.request<{ code: string }>({
+      method: 'post',
+      url: '/users/message',
+      data: { phoneNumber },
+    });
+    return response.data;
+  }
+
+  async postMsgCheck(codeReq: MsgCheckType) {
+    const response = await this.axiosInstance.request<{ check: string }>({
+      method: 'post',
+      url: '/users/msgCheck',
+      data: codeReq,
+    });
+    return response.data;
+  }
+
   async updateMissionStart() {
     const response = await this.axiosInstance.request<StepType>({
       method: 'put',

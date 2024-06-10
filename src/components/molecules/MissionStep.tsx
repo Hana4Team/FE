@@ -9,9 +9,16 @@ interface IProps {
   title: string;
   text: string;
   status: string;
+  userStep: number;
 }
 
-export const MissionStep: FC<IProps> = ({ step, title, text, status }) => {
+export const MissionStep: FC<IProps> = ({
+  step,
+  title,
+  text,
+  status,
+  userStep,
+}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const showModalHandler = () => setShowModal(!showModal);
@@ -35,13 +42,15 @@ export const MissionStep: FC<IProps> = ({ step, title, text, status }) => {
           </div>
           <div className='mt-2 text-gray-600'>{text}</div>
         </div>
-        <MiniButton step={step} text={status} />
-        {/* <div className='absolute left-0 top-0 w-full h-full '>
-          <div className='absolute top-1/4 left-1/3 -rotate-12 z-10 font-hanaHeavy text-hanaRed text-5xl'>
-            미션 성공
+        <MiniButton step={step} text={status} userStep={userStep} />
+        {status === '완료' && (
+          <div className='absolute left-0 top-0 w-full h-full '>
+            <div className='absolute top-1/4 left-1/3 -rotate-12 z-10 font-hanaHeavy text-hanaRed text-5xl'>
+              미션 성공
+            </div>
+            <div className='absolute bg-white opacity-50 w-full h-full  rounded-2xl text-black'></div>
           </div>
-          <div className='absolute bg-white opacity-50 w-full h-full  rounded-2xl text-black'></div>
-        </div> */}
+        )}
       </div>
     </div>
   );
