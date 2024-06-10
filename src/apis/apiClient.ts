@@ -44,8 +44,6 @@ import {
 } from '../types/transaction';
 import { moneyboxApi } from './interfaces/moneyboxApi';
 
-const TOKEN = getCookie('token');
-
 export class ApiClient
   implements
     usersApi,
@@ -478,6 +476,7 @@ export class ApiClient
 
     newInstance.interceptors.request.use(
       (config) => {
+        const TOKEN = getCookie('token');
         if (TOKEN) {
           config.headers['Authorization'] = `Bearer ${TOKEN}`;
         }
