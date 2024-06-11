@@ -66,6 +66,7 @@ export const MyPage = () => {
       <div className='flex flex-col items-center gap-7'>
         {hanaMoney && (
           <AccountSummaryItem
+            accountId={1}
             title='하나머니'
             totalMoney={hanaMoney.points}
             icons='icons/piggybank.svg'
@@ -76,6 +77,7 @@ export const MyPage = () => {
           accounts.map((item: AccountType) => (
             <AccountSummaryItem
               key={item.accountId}
+              accountId={item.accountId}
               title={item.name}
               totalMoney={item.balance}
               icons={
@@ -84,13 +86,13 @@ export const MyPage = () => {
                   : 'icons/bankbook.svg'
               }
               link={
-                item.type === 'moneybox'
-                  ? '/moneyBox'
-                  : item.type === 'saving100'
+                item.type === 'DEPOSITWITHDRAWL'
+                  ? '/account'
+                  : item.type === 'SAVING100'
                     ? '/saving100'
-                    : item.type === 'saving'
+                    : item.type === 'SAVING'
                       ? '/roadmap4'
-                      : item.type === 'deposit'
+                      : item.type === 'DEPOSIT'
                         ? '/roadmap5'
                         : ''
               }
