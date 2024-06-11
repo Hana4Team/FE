@@ -9,19 +9,16 @@ export function formatter(date: Date): string {
 }
 
 export function formatter2(date: Date) {
-  const newDate = toLocale(date);
   const monthDate =
-    (newDate.getMonth() + 1 < 9
-      ? '0' + (newDate.getMonth() + 1)
-      : newDate.getMonth() + 1) +
+    (date.getMonth() + 1 < 9
+      ? '0' + (date.getMonth() + 1)
+      : date.getMonth() + 1) +
     '. ' +
-    (newDate.getDate() < 9 ? '0' + newDate.getDate() : newDate.getDate());
+    (date.getDate() < 9 ? '0' + date.getDate() : date.getDate());
   const time =
-    (newDate.getHours() < 9 ? '0' + newDate.getHours() : newDate.getHours()) +
+    (date.getHours() < 9 ? '0' + date.getHours() : date.getHours()) +
     ':' +
-    (newDate.getMinutes() < 9
-      ? '0' + newDate.getMinutes()
-      : newDate.getMinutes());
+    (date.getMinutes() < 9 ? '0' + date.getMinutes() : date.getMinutes());
   return { monthDate, time };
 }
 

@@ -50,7 +50,7 @@ export const MyHome = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <img src='/images/kakao.svg' className='w-20' />
                 <div className='font-hanaBold text-white text-lg drop-shadow-[0px_0px_1px_rgba(0,0,0,1)] text-center -m-2'>
                   카톡공유
@@ -62,7 +62,7 @@ export const MyHome = () => {
                 <div className='font-hanaBold text-white text-lg drop-shadow-[0px_0px_1px_rgba(0,0,0,1)] text-center -m-2'>
                   링크공유
                 </div>
-              </div>
+              </div> */}
 
               <div onClick={() => navigate('/myhome/capture')}>
                 <img src='/images/capture.svg' className='w-20' />
