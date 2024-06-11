@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Topbar from '../../components/Topbar';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { differenceInDays, formatDate } from 'date-fns';
@@ -10,11 +10,16 @@ import { AlertModal } from '../../components/AlertModal';
 
 export const RoadMap4 = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const percent = useRef<number>(0);
   const queryClient = useQueryClient();
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
   const [showAlarm, setShowAlarm] = useState<boolean>(false);
   const alarmMsgRef = useRef<string>('');
+
+  const locationState = location.state as {
+    prev: boolean;
+  };
 
   const { data: roadmap, isSuccess } = useQuery({
     queryKey: ['roadMap4'],
@@ -85,6 +90,15 @@ export const RoadMap4 = () => {
     }
   };
 
+  const onClickBack = () => {
+    if (locationState != null && locationState.prev) {
+      navigate('/mission');
+      return;
+    }
+
+    navigate(-1);
+  };
+
   if (isSuccess) {
     percent.current = Math.floor(
       (differenceInDays(new Date(), roadmap.startDate) /
@@ -132,10 +146,7 @@ export const RoadMap4 = () => {
               </div>
             </AlertModal>
           )}
-          <Topbar
-            title={roadmap.productName}
-            onClick={() => navigate('/mission')}
-          />
+          <Topbar title={roadmap.productName} onClick={() => onClickBack()} />
           <div className='bg-hanaSky min-h-real-screen2'>
             <div className='absolute top-[70px] left-[15px] w-[150px]'>
               <div className='font-hanaMedium text-lg mb-2'>

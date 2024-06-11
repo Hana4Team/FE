@@ -53,6 +53,7 @@ export const MoneyBox = () => {
       const res = ApiClient.getInstance().updateMissionCheck();
       return res;
     },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['userInfo'] }),
   });
 
   const { mutate: updateHanaMoney } = useMutation({

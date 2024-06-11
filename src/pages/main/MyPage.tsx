@@ -86,10 +86,10 @@ export const MyPage = () => {
                   : 'icons/bankbook.svg'
               }
               link={
-                item.type === 'DEPOSITWITHDRAWL'
+                item.type === 'DEPOSITWITHDRAWAL'
                   ? '/account'
                   : item.type === 'SAVING100'
-                    ? '/saving100'
+                    ? '/savings100Days'
                     : item.type === 'SAVING'
                       ? '/roadmap4'
                       : item.type === 'DEPOSIT'

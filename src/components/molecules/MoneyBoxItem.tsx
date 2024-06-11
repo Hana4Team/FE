@@ -20,7 +20,6 @@ export const MoneyBoxItem: FC<Iprops> = ({
   color2,
   onClick,
   onClick2,
-  onClickQuestion,
   isLimit,
 }) => {
   return (
@@ -38,9 +37,6 @@ export const MoneyBoxItem: FC<Iprops> = ({
               >
                 출금제한
               </div>
-              <button onClick={() => onClickQuestion!()}>
-                <GoQuestion size={13} />
-              </button>
             </>
           )}
         </div>

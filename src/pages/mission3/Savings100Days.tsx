@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar } from '../../components/organisms/Calendar';
 import Topbar from '../../components/Topbar';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { differenceInDays, formatDate } from 'date-fns';
@@ -10,10 +10,15 @@ import { AlertModal } from '../../components/AlertModal';
 
 export const Savings100Days = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
   const [showAlarm, setShowAlarm] = useState<boolean>(false);
   const alarmMsgRef = useRef<string>('');
+
+  const locationState = location.state as {
+    prev: boolean;
+  };
 
   const { data: saving100, isSuccess } = useQuery({
     queryKey: ['saving100'],
@@ -92,6 +97,15 @@ export const Savings100Days = () => {
     }
   };
 
+  const onClickBack = () => {
+    if (locationState != null && locationState.prev) {
+      navigate('/mission');
+      return;
+    }
+
+    navigate(-1);
+  };
+
   const moveToTermination = () => {
     isSuccess &&
       navigate('/termination', {
@@ -132,10 +146,7 @@ export const Savings100Days = () => {
             </AlertModal>
           )}
 
-          <Topbar
-            title={saving100.productName}
-            onClick={() => navigate('/mission')}
-          />
+          <Topbar title={saving100.productName} onClick={() => onClickBack()} />
           <div className='bg-hanaAqua pb-[100px]'>
             <div className='bg-white font-hanaMedium p-8'>
               <div className='text-3xl mb-2'>생활비</div>

@@ -87,7 +87,11 @@ export const Mission3AccountOpening = () => {
       return;
     }
     if (currentNumber === 5) {
-      navigate('/savings100Days');
+      navigate('/savings100Days', {
+        state: {
+          prev: true,
+        },
+      });
       return;
     }
     setCurrentNumber((prev) => prev + 1);
