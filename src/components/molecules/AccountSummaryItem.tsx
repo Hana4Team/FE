@@ -25,9 +25,12 @@ export const AccountSummaryItem: FC<IProps> = ({
           accountId: accountId,
         },
       });
+      return;
     }
-    if (title === '머니박스 통장') navigate('/moneyBox');
-    else if (title === '하나머니') return;
+    if (title === '머니박스 통장') {
+      navigate('/moneyBox');
+      return;
+    } else if (title === '하나머니') return;
     else navigate(link);
   };
 

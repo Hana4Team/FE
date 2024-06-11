@@ -68,7 +68,7 @@ export const Home = () => {
         </AlertModal>
       )}
 
-      <div className='fixed w-full'>
+      <div className='w-full'>
         <div className='w-full flex items-center pt-24 px-10'>
           <img
             src={isExistToken ? 'icons/moneybox_icon.svg' : 'icons/person.svg'}
