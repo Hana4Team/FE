@@ -18,7 +18,7 @@ const Navbar = () => {
       <div
         className={`bottom-0 z-20 flex items-end text-2xl w-full h-[100px] ${fixedList.includes(location.pathname) ? 'fixed' : 'sticky'} ${location.pathname == 'roadmap' && 'bg-hanaSky'}`}
       >
-        <div className='flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
+        <div className='relative flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
           <Link to={`${isExistToken ? '/alarm' : '/login'}`}>
             <GoBell size={40} className='text-slate-500' />
           </Link>
