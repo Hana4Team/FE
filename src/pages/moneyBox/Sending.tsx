@@ -172,12 +172,11 @@ export const Sending = () => {
       setRe(!re);
       return;
     } else if (page === 5) {
-      navigate('/moneyBox'),
-        {
-          state: {
-            prev: true,
-          },
-        };
+      navigate('/moneyBox', {
+        state: {
+          prev: true,
+        },
+      });
     }
   };
 

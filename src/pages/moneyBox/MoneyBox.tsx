@@ -9,13 +9,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { AlarmAnimation } from '../../components/organisms/AlarmAnimation';
 import { MdAccountBalance } from 'react-icons/md';
-import { FcLock, FcMoneyTransfer, FcNews } from 'react-icons/fc';
+import { FcLock, FcMoneyTransfer } from 'react-icons/fc';
 import { PiSirenFill } from 'react-icons/pi';
 
 export const MoneyBox = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const [showStepModal, setShowStepModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showChoiceModal, setShowChoiceModal] = useState<boolean>(false);
@@ -28,6 +29,8 @@ export const MoneyBox = () => {
   const locationState = location.state as {
     prev: boolean;
   };
+
+  console.log(locationState);
 
   const { data: moneyBoxData, isSuccess: querySuccess } = useQuery({
     queryKey: ['moneyBox'],
