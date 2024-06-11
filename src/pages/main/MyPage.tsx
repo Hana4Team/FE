@@ -66,23 +66,33 @@ export const MyPage = () => {
       <div className='flex flex-col items-center gap-7'>
         {hanaMoney && (
           <AccountSummaryItem
-            accountId={1}
             title='하나머니'
             totalMoney={hanaMoney.points}
             icons='icons/piggybank.svg'
+            link={''}
           />
         )}
         {accounts &&
           accounts.map((item: AccountType) => (
             <AccountSummaryItem
               key={item.accountId}
-              accountId={item.accountId}
               title={item.name}
               totalMoney={item.balance}
               icons={
                 item.name == '머니박스 통장'
                   ? 'icons/moneybox_icon.svg'
                   : 'icons/bankbook.svg'
+              }
+              link={
+                item.type === 'moneybox'
+                  ? '/moneyBox'
+                  : item.type === 'saving100'
+                    ? '/saving100'
+                    : item.type === 'saving'
+                      ? '/roadmap4'
+                      : item.type === 'deposit'
+                        ? '/roadmap5'
+                        : ''
               }
             />
           ))}

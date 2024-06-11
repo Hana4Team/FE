@@ -96,6 +96,7 @@ export const Savings100Days = () => {
     isSuccess &&
       navigate('/termination', {
         state: {
+          type: 'saving100',
           accountId: saving100.accountId,
           accountName: saving100.productName,
           sendAccount: saving100.accountNumber,

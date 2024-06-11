@@ -11,8 +11,10 @@ import { differenceInDays } from 'date-fns';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { AccountDelType, AccountPwdCheckType } from '../../types/account';
+import { AlertModal } from '../../components/AlertModal';
 
 interface RequestType {
+  type: string;
   accountId: number;
   accountName: string;
   sendAccount: string;
@@ -33,6 +35,7 @@ export const Termination = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [isPwdCheck, setIsPwdCheck] = useState<boolean>(true);
+  const [showStepModal, setShowStepModal] = useState<boolean>(false);
 
   const { mutate: postAccountPasswordCheck } = useMutation({
     mutationFn: (reqData: AccountPwdCheckType) => {
@@ -70,6 +73,7 @@ export const Termination = () => {
   });
 
   const locationState = location.state as {
+    type: string;
     accountId: number;
     accountName: string;
     sendAccount: string;
@@ -80,6 +84,7 @@ export const Termination = () => {
   };
 
   const [data, setDate] = useState<RequestType>({
+    type: locationState.type,
     accountId: locationState.accountId,
     accountName: locationState.accountName,
     sendAccount: locationState.sendAccount,
@@ -111,7 +116,15 @@ export const Termination = () => {
         depositAccountId: data.sendAccountId,
       });
     } else if (step === 3) {
-      navigate('/mission');
+      if (data.terminationType === '중도해지') {
+        if (data.type === 'deposit') {
+          navigate('/mission');
+        } else {
+          setShowStepModal(true);
+        }
+      } else if (data.terminationType === '만기해지') {
+        navigate('/mission');
+      }
     }
   };
   const clickAccount = (
@@ -135,6 +148,15 @@ export const Termination = () => {
     else setIsActive(false);
   };
 
+  const onCloseStepModal = async () => {
+    try {
+      setShowStepModal(false);
+      navigate('/mission');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className='bg-white h-screen flex flex-col items-center'>
       {showModal && isSuccess && (
@@ -153,6 +175,28 @@ export const Termination = () => {
         </ChoiceMenu>
       )}
       <Topbar title='예적금 해지' />
+      {data.type === 'saving100' && showStepModal ? (
+        <AlertModal onClose={() => onCloseStepModal()}>
+          <div className='flex flex-col font-hanaMedium text-2xl text-center'>
+            <p>
+              3단계 미션을 <span className='text-hanaRed'>실패</span>
+              했습니다!
+            </p>
+          </div>
+        </AlertModal>
+      ) : (
+        data.type === 'savings' &&
+        showStepModal && (
+          <AlertModal onClose={() => onCloseStepModal()}>
+            <div className='flex flex-col font-hanaMedium text-2xl text-center'>
+              <p>
+                4단계 미션을 <span className='text-hanaRed'>실패</span>
+                했습니다!
+              </p>
+            </div>
+          </AlertModal>
+        )
+      )}
 
       {step === 1 ? (
         <div className='flex flex-col justify-between items-center w-full h-full p-10'>

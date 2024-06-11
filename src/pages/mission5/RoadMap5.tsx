@@ -87,6 +87,7 @@ export const RoadMap5 = () => {
     isSuccess &&
       navigate('/termination', {
         state: {
+          type: 'deposit',
           accountId: roadmap.accountId,
           accountName: roadmap.productName,
           sendAccount: roadmap.accountNumber,

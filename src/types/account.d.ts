@@ -9,6 +9,7 @@ export type AccountType = {
   name: string;
   balance: number;
   accountNumber: string;
+  type: string;
 };
 export type AccountReqType = {
   depositWithdrawalAccount: boolean;
