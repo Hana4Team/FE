@@ -79,6 +79,7 @@ export const PasswordForm: FC<IProps> = ({
             key={index}
             placeholder='●'
             type='password'
+            pattern='\d*'
             maxLength={1}
             className='text-4xl w-12 text-center mx-1 caret-transparent'
             ref={(el) => (inputRef.current[index] = el)}

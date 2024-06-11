@@ -52,6 +52,12 @@ export const Join = () => {
       const res = ApiClient.getInstance().postJoin(input);
       return res;
     },
+    onError: (e) => {
+      console.log(e);
+      alert('이미 가입된 번호입니다.');
+      setCookie('phoneNumber', inputs.phoneNumber);
+      navigate('/login');
+    },
     onSuccess: (data) => {
       setCookie('phoneNumber', data.phoneNumber);
       setIsActive(true);
@@ -160,7 +166,10 @@ export const Join = () => {
       setIsActive(false);
     }
     if (step === 2 && isBirth) {
-      setInputs({ ...inputs, birthDate: birthRef.current!.value });
+      setInputs({
+        ...inputs,
+        birthDate: birthRef.current!.value,
+      });
       setStep((prev) => prev + 1);
       setIsActive(false);
     }

@@ -30,8 +30,6 @@ export const MoneyBox = () => {
     prev: boolean;
   };
 
-  console.log(locationState);
-
   const { data: moneyBoxData, isSuccess: querySuccess } = useQuery({
     queryKey: ['moneyBox'],
     queryFn: () => {
