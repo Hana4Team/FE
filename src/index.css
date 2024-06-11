@@ -81,6 +81,8 @@ a {
 }
 input {
   outline: none;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
 }
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
