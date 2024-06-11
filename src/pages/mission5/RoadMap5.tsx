@@ -68,11 +68,7 @@ export const RoadMap5 = () => {
   });
 
   useEffect(() => {
-    if (
-      !isSuccess0 &&
-      userInfo?.step === 5 &&
-      (userInfo.stepStatus === 1 || userInfo.stepStatus === 2)
-    ) {
+    if (!isSuccess0 && userInfo?.step === 5 && userInfo.stepStatus === 2) {
       setShowStepModal(true);
     }
   }, [userInfo]);
