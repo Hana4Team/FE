@@ -16,7 +16,7 @@ const Navbar = () => {
         <Outlet />
       </div>
       <div
-        className={`bottom-0 z-20 flex items-end text-2xl w-full h-[100px] ${fixedList.includes(location.pathname) ? 'fixed' : 'sticky'} ${location.pathname == 'roadmap' && 'bg-hanaSky'}`}
+        className={`bottom-0 z-20 flex items-end text-2xl max-w-[500px] w-full h-[100px] ${fixedList.includes(location.pathname) ? 'fixed' : 'sticky'} ${location.pathname == 'roadmap' && 'bg-hanaSky'}`}
       >
         <div className='relative flex flex-row justify-around gap-40 items-center rounded-t-[25px] bg-white w-full drop-shadow-3xl py-5'>
           <Link to={`${isExistToken ? '/alarm' : '/login'}`}>
